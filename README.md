@@ -1,2 +1,2 @@
-<url>mohui666.github.io
+<mohui666.top>
 自用
