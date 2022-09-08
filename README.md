@@ -1,3 +1,3 @@
 <mohui666.top>
-<https://markdown.com.cn>
+<mohui666.top>
 自用
