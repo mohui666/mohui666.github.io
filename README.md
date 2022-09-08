@@ -1,3 +1,3 @@
-###    mohui666的个人主页\n
+###    mohui666的个人主页
 ##   <https://mohui666.top>
 
