@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+
+        <meta charset="utf-8" />
+
+        <title>菜单</title>
+
+        
+
+        <!-- JS -->
+
+        <script language="javascript">
+
+            function init()
+
+            {//先隐藏二级菜单
+
+                document.getElementById("sub_menu_1").hidden=true;
+
+                document.getElementById("sub_menu_2").hidden=true;
+
+                document.getElementById("sub_menu_3").hidden=true;
+
+                document.getElementById("sub_menu_4").hidden=true;
+
+                document.getElementById("sub_menu_5").hidden=true;
+
+            }
+
+            function f(str)
+
+            {//点击展开折叠效果
+
+                var sub_menu = document.getElementById(str);
+
+                var dis_v = sub_menu.style.display;
+
+                
+
+                if(dis_v == "block")
+
+                    sub_menu.style.display = "none";
+
+                else
+
+                    sub_menu.style.display = "block";
+
+            }
+
+        </script>
+
+        <!-- CSS -->
+
+        <style type="text/css">
+
+            body{
+
+                background-color: #f2f2f3;
+
+                text-align: center;
+
+            }
+
+            tr{
+
+                text-align: center;
+
+            }
+
+            table{
+
+                border-top:1px solid;
+
+                border-bottom:1px solid;
+
+                border-bottom-color: #c3daee;
+
+                border-top-color: #c3daee;
+
+            }
+
+            .table{
+
+                margin-left:40px;
+
+                border-left:1px solid;
+
+                border-right:1px solid;
+
+                border-left-color: #c3daee;
+
+                border-right-color: #c3daee;
+
+            }
+
+            /*一级标题*/
+
+            .one{
+
+                height: 30px;
+
+                width: 135px;
+
+                background-color: #e4e6e7;
+
+                color: #ff8b1a;
+
+                cursor: pointer;/*小手*/
+
+            }
+
+            /*二级标题*/
+
+            .two tr{
+
+                background-color: #f2f2f3;
+
+                color: #000;
+
+            }
+
+            .two a{
+
+                /*margin-left: 50px;*/
+
+                /*float: right;*/
+
+                text-decoration: none;
+
+                color: #000;
+
+            }
+
+            .two td{
+
+                height: 25px;
+
+                width: 135px;
+
+            }
+
+        </style>
+
+    </head>
+
+    <body onload="init()">
+
+            <table cellspacing="0" cellpadding="0" class="table">
+
+                <tbody>
+
+                	<tr onclick = "f('sub_menu_1')">                        <td class="one">个人中心</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td class="two">
+
+                            <table id="sub_menu_1">
+
+                                <tbody>
+
+                                    <tr><td><a href="modify_password.html" target="main">修改密码</a></td></tr>
+
+                                    <tr><td><a href="my_information.html" target="main">我的资料</a></td></tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </td>
+
+                    </tr>
+
+                    <tr height="1px"></tr>
+
+                    <tr onclick = "f('sub_menu_2')">
+
+                        <td class="one">考试成绩</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td class="two">
+
+                            <table id="sub_menu_2" >
+
+                                <tbody>
+
+                                    <tr><td><a href="" target="main">大一学年</a></td></tr>
+
+                                    <tr><td><a href="" target="main">大二学年</a></td></tr>
+
+                                    <tr><td><a href="" target="main">大三学年</a></td></tr>
+
+                                    <tr><td><a href="" target="main">大四学年</a></td></tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </td>
+
+                    </tr>
+
+                    
+
+                    <tr height="1px"></tr>
+
+                    <tr onclick = "f('sub_menu_3')">
+
+                        <td class="one">平时成绩</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td class="two">
+
+                            <table id="sub_menu_3" >
+
+                                <tbody>
+
+                                    <tr><td><a href="" target="main">宿舍</a></td></tr>
+
+                                    <tr><td><a href="" target="main">考勤</a></td></tr>
+
+                                    <tr><td><a href="" target="main">作业</a></td></tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </td>
+
+                    </tr>
+
+                    <tr height="1px"></tr>
+
+                    <tr onclick = "f('sub_menu_4')">
+
+                        <td class="one">奖项</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td class="two">
+
+                            <table id="sub_menu_4" >
+
+                                <tbody>
+
+                                    <tr><td><a href="" target="main">材料上传</a></td></tr>
+
+     
