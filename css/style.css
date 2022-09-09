@@ -1,0 +1,26 @@
+hl
+{
+    color:pink;
+
+    font-size: 4ch;
+
+}
+
+body
+{
+    background-image:url('../images/background.jpg');
+
+    background-repeat:no-repeat;
+    
+    background-position:middle top;
+
+    color:pink;
+
+    font-size: 3ch;
+
+    margin: 0 auto; 
+    
+    text-align: center;
+
+    background-color: blueviolet;
+}
