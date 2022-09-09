@@ -1,59 +1,81 @@
-divText = document.getElementById("clock");
+function date() {
 
-showTime();
+    var date = new Date();
 
-timer = setInterval(showTime, 1000);
+    var year = date.getFullYear();
 
-function showTime() {
+    var month = date.getMonth() + 1;
 
-	var today = new Date();
+    var day = date.getDate();
 
-	var date = today.getDate();
+    var hour = "00" + date.getHours();
 
-	var day = today.getDay();
+    hour = hour.substr(hour.length - 2);
 
-	var month = today.getMonth() + 1;
+    var minute = "00" + date.getMinutes();
 
-	var year = today.getFullYear();
+    minute = minute.substr(minute.length - 2);
 
-	var hour = addZero(today.getHours());
+    var second = "00" + date.getSeconds();
 
-	var min = addZero(today.getMinutes());
+    second = second.substr(second.length - 2);
 
-	var sec = addZero(today.getSeconds());
+    var week = date.getDay();
 
-	var week = "";
+    switch (week) {
 
-	if (true) {};
+        case 1:
 
-	if (day == 0) week = '星期日';
+            week = "星期一 ";
 
-	if (day == 1) week = '星期一';
+            break;
 
-	if (day == 2) week = '星期二';
+        case 2:
 
-	if (day == 3) week = '星期三';
+            week = "星期二 ";
 
-	if (day == 4) week = '星期四';
+            break;
 
-	if (day == 5) week = '星期五';
+        case 3:
 
-	if (day == 6) week = '星期六';
+            week = "星期三 ";
 
-	divText.innerHTML = "当前时间：" + year + "年" + month + "月" + date + "日 " + week + " " + "(" + hour + ":" + min + ":" + sec + ")";
+            break;
+
+        case 4:
+
+            week = "星期四 ";
+
+            break;
+
+        case 5:
+
+            week = "星期五 ";
+
+            break;
+
+        case 6:
+
+            week = "星期六 ";
+
+            break;
+
+        case 0:
+
+            week = "星期日 ";
+
+            break;
+
+        default:
+
+            week = "";
+
+            break;
+
+    }
+
+    document.getElementById("divBottom").innerHTML = year + "年" + month + "月" + day + "日" + " " + hour + ":" + minute + ":" + second + " " + week;
 
 }
 
-function addZero(num) {
-
-	if (num <= 9) {
-
-		return "0" + num;
-
-	} else {
-
-		return num;
-
-	}
-
-}
+setInterval("date()", 1000);
