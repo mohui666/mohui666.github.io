@@ -19,8 +19,18 @@ body
     font-size: 3ch;
 
     margin: 0 auto; 
-    
+
     text-align: center;
 
+    line-height: normal;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
     background-color: blueviolet;
+
+
 }
