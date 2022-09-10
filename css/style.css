@@ -1,22 +1,22 @@
-hl
+h1
 {
     color:pink;
 
-    font-size: 4ch;
+    font-size: 3ch;
 
 }
 
 body
 {
-    background-image:url('../images/background.jpg');
+    background-image:url('../images/bakcground2.png');
 
     background-repeat:no-repeat;
     
-    background-position:middle top;
+    background-position:center;
 
-    color:pink;
+    color: rgb(205, 216, 44);
 
-    font-size: 3ch;
+    font-size: 2ch;
 
     margin: 0 auto; 
 
@@ -29,6 +29,23 @@ body
     justify-content: center;
 
     align-items: center;
-
-
 }
+
+.button1 {
+    
+    background-color: rgba(236, 44, 172, 0.911); 
+   
+    color: black; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button1:hover {
+   
+    background-color: #8b4caf;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
