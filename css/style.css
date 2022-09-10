@@ -6,14 +6,15 @@ h1
 
 }
 
+p{
+    text-align: center;
+
+    color: #27b39b;
+}
+
 body
 {
-    background-image:url('../images/bakcground2.png');
-
-    background-repeat:no-repeat;
-    
-    background-position:center;
-
+   
     color: rgb(205, 216, 44);
 
     font-size: 2ch;
@@ -41,6 +42,96 @@ body
 }
 
 .button1:hover {
+   
+    background-color: #8b4caf;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button2 {
+    
+    background-color: white; 
+   
+    color: #9AC8E2; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button2:hover {
+   
+    background-color: #9AC8E2;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button3 {
+    
+    background-color: rgba(236, 44, 172, 0.911); 
+   
+    color: black; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button3:hover {
+   
+    background-color: #8b4caf;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button4 {
+    
+    background-color: rgba(236, 44, 172, 0.911); 
+   
+    color: black; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button4:hover {
+   
+    background-color: #8b4caf;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button5{
+    
+    background-color: rgba(236, 44, 172, 0.911); 
+   
+    color: black; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button5:hover {
+   
+    background-color: #8b4caf;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button6 {
+    
+    background-color: rgba(236, 44, 172, 0.911); 
+   
+    color: black; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button6:hover {
    
     background-color: #8b4caf;
     
