@@ -1,22 +1,22 @@
-h1
+hl
 {
     color:pink;
 
-    font-size: 3ch;
+    font-size: 4ch;
 
 }
 
 body
 {
-    background-image:url('../images/background1.png');
+    background-image:url('../images/background.jpg');
 
     background-repeat:no-repeat;
     
     background-position:middle top;
 
-    color: rgb(205, 216, 44);
+    color:pink;
 
-    font-size: 2ch;
+    font-size: 3ch;
 
     margin: 0 auto; 
 
@@ -30,23 +30,5 @@ body
 
     align-items: center;
 
+
 }
-
-.button1 {
-    
-    background-color: rgba(236, 44, 172, 0.911); 
-   
-    color: black; 
-    
-    border: 1px solid hsl(310, 39%, 49%);
-}
-
-.button1:hover {
-   
-    background-color: #8b4caf;
-    
-    color: white;
-
-    border: 1px solid hsl(310, 39%, 49%);
-}
-
