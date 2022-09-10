@@ -1,8 +1,8 @@
-hl
+h1
 {
     color:pink;
 
-    font-size: 4ch;
+    font-size: 3ch;
 
 }
 
@@ -14,9 +14,9 @@ body
     
     background-position:middle top;
 
-    color:pink;
+    color: rgb(205, 216, 44);
 
-    font-size: 3ch;
+    font-size: 4ch;
 
     margin: 0 auto; 
 
@@ -30,7 +30,23 @@ body
 
     align-items: center;
 
-    background-color: blueviolet;
-
-
 }
+
+.button1 {
+    
+    background-color: rgba(236, 44, 172, 0.911); 
+   
+    color: black; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button1:hover {
+   
+    background-color: #8b4caf;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
