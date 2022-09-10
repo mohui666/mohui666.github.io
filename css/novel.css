@@ -1,0 +1,11 @@
+.next {
+    position:absolute;
+
+    right: 0px;
+}
+
+.before {
+    position:absolute;
+
+    left: 0px;
+}

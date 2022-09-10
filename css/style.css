@@ -34,16 +34,16 @@ body
 
 .button1 {
     
-    background-color: rgba(236, 44, 172, 0.911); 
+    background-color: white; 
    
-    color: black; 
+    color: #FC966E; 
     
     border: 1px solid hsl(310, 39%, 49%);
 }
 
 .button1:hover {
    
-    background-color: #8b4caf;
+    background-color: #FC966E;
     
     color: white;
 
@@ -70,16 +70,16 @@ body
 
 .button3 {
     
-    background-color: rgba(236, 44, 172, 0.911); 
+    background-color: white; 
    
-    color: black; 
+    color: #DB7D74; 
     
     border: 1px solid hsl(310, 39%, 49%);
 }
 
 .button3:hover {
    
-    background-color: #8b4caf;
+    background-color: #DB7D74;
     
     color: white;
 
@@ -88,16 +88,16 @@ body
 
 .button4 {
     
-    background-color: rgba(236, 44, 172, 0.911); 
+    background-color: white; 
    
-    color: black; 
+    color: #B8A6D9; 
     
     border: 1px solid hsl(310, 39%, 49%);
 }
 
 .button4:hover {
    
-    background-color: #8b4caf;
+    background-color: #B8A6D9;
     
     color: white;
 
@@ -106,16 +106,16 @@ body
 
 .button5{
     
-    background-color: rgba(236, 44, 172, 0.911); 
+    background-color: white; 
    
-    color: black; 
+    color: #E799B0; 
     
     border: 1px solid hsl(310, 39%, 49%);
 }
 
 .button5:hover {
    
-    background-color: #8b4caf;
+    background-color: #E799B0;
     
     color: white;
 
@@ -124,16 +124,16 @@ body
 
 .button6 {
     
-    background-color: rgba(236, 44, 172, 0.911); 
+    background-color: white; 
    
-    color: black; 
+    color: #576690; 
     
     border: 1px solid hsl(310, 39%, 49%);
 }
 
 .button6:hover {
    
-    background-color: #8b4caf;
+    background-color: #576690;
     
     color: white;
 
