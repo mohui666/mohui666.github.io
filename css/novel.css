@@ -9,3 +9,13 @@
 
     left: 0px;
 }
+
+.text{
+    text-indent: 2em;
+    line-height: 1em;
+    margin:1em 0;
+}
+
+h1{
+    text-align: center;
+}
