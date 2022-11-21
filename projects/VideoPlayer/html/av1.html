@@ -1,0 +1,46 @@
+<!doctype html>
+
+<html>
+
+	<head>
+		<link rel="icon" href="../images/cover.ico" type="image/x-icon">
+		
+		<div id="dplayer"></div>
+
+		<script src="../js/DPlayer.min.js"></script>
+
+		<script src="../js/hls.min.js"></script>
+
+        <title>Hamood</title>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+        
+		<script>
+			const dp = new DPlayer({
+			container: document.getElementById('dplayer'),
+			video: {
+				url: "../videos/av1.mp4",		
+				playbackSpeed:[0.5, 0.75, 1, 1.25, 1.5, 2]		
+			}})
+		</script>
+	</head>
+
+	<body>
+		
+		<h1>HAMOOD</h1><h2>av1</h2>
+
+		<div border: 1px solid black>
+
+			<h3>简介</h3>
+		
+			<p>妈妈</p>
+
+		</div>
+		<a href="../videos/av1.mp4" download="hamood"><button>下载视频</button></a><br>
+		
+		<a href="main.html"><button>返回播放列表</button></a><br>	
+	</body>
+
+</html>

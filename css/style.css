@@ -1,0 +1,142 @@
+h1
+{
+    color:pink;
+
+    font-size: 3ch;
+
+}
+
+p{
+    text-align: center;
+
+    color: #27b39b;
+}
+
+body
+{
+   
+    color: rgb(205, 216, 44);
+
+    font-size: 2ch;
+
+    margin: 0 auto; 
+
+    text-align: center;
+
+    line-height: normal;
+
+    justify-items: center;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+.button1 {
+    
+    background-color: white; 
+   
+    color: #FC966E; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button1:hover {
+   
+    background-color: #FC966E;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button2 {
+    
+    background-color: white; 
+   
+    color: #9AC8E2; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button2:hover {
+   
+    background-color: #9AC8E2;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button3 {
+    
+    background-color: white; 
+   
+    color: #DB7D74; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button3:hover {
+   
+    background-color: #DB7D74;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button4 {
+    
+    background-color: white; 
+   
+    color: #B8A6D9; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button4:hover {
+   
+    background-color: #B8A6D9;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button5{
+    
+    background-color: white; 
+   
+    color: #E799B0; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button5:hover {
+   
+    background-color: #E799B0;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button6 {
+    
+    background-color: white; 
+   
+    color: #576690; 
+    
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
+.button6:hover {
+   
+    background-color: #576690;
+    
+    color: white;
+
+    border: 1px solid hsl(310, 39%, 49%);
+}
+
