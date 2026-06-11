@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+<title>雪峰冲刺｜原创浏览器跑酷</title>
+<style>
+  :root{
+    --ink:#17191f;--paper:#f5f0e5;--red:#df3f35;--yellow:#f2c94c;--blue:#68a4cc;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#121319;color:var(--paper);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Noto Sans Mono CJK SC",monospace}
+  body{display:grid;place-items:center;touch-action:none}
+  #shell{position:relative;width:min(100vw,1200px);aspect-ratio:16/9;max-height:100vh;background:#1a1c22;overflow:hidden;box-shadow:0 0 0 1px #ffffff1a,0 24px 80px #0009}
+  canvas{display:block;width:100%;height:100%;image-rendering:pixelated;background:#82b5d5}
+  #hud{position:absolute;inset:0;pointer-events:none;padding:clamp(12px,2vw,24px);display:flex;align-items:flex-start;justify-content:space-between;text-shadow:3px 3px 0 #0008;font-weight:800;letter-spacing:.06em}
+  #hud .brand{font-size:clamp(14px,2.2vw,28px)}
+  #hud .score{text-align:right;font-size:clamp(13px,1.8vw,24px);line-height:1.45}
+  #meter{position:absolute;left:50%;top:clamp(14px,2.2vw,28px);transform:translateX(-50%);width:min(32vw,320px);height:10px;border:2px solid #17191f;background:#f5f0e5aa;box-shadow:3px 3px 0 #0004;pointer-events:none}
+  #meter>i{display:block;width:0;height:100%;background:var(--red)}
+  .panel{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(#1114,#1118);padding:20px;text-align:center}
+  .card{width:min(92%,620px);background:#f5f0e5;color:#17191f;border:4px solid #17191f;box-shadow:10px 10px 0 #17191f;padding:clamp(22px,4vw,44px)}
+  h1{margin:0 0 12px;font-size:clamp(34px,7vw,76px);line-height:.9;letter-spacing:-.08em}
+  .sub{font-weight:800;color:#df3f35;margin-bottom:20px;font-size:clamp(14px,2vw,22px)}
+  .help{line-height:1.8;font-size:clamp(12px,1.5vw,17px);margin:18px 0 22px}
+  button{appearance:none;border:3px solid #17191f;background:#f2c94c;color:#17191f;font:900 clamp(16px,2vw,22px) inherit;padding:12px 30px;box-shadow:5px 5px 0 #17191f;cursor:pointer;transform:translate(0,0)}
+  button:active{transform:translate(4px,4px);box-shadow:1px 1px 0 #17191f}
+  #gameOver{display:none}
+  #touch{position:absolute;inset:auto 0 max(12px,env(safe-area-inset-bottom)) 0;display:none;justify-content:space-between;padding:0 18px;pointer-events:none}
+  #touch button{pointer-events:auto;width:84px;height:64px;padding:0;opacity:.82;font-size:14px;user-select:none;-webkit-user-select:none}
+  #touch .right{display:flex;gap:12px}
+  .tiny{font-size:12px;opacity:.62;margin-top:16px}
+  @media (hover:none),(pointer:coarse){#touch{display:flex}.help .desktop{display:none}}
+</style>
+</head>
+<body>
+<div id="shell">
+  <canvas id="game" width="960" height="540" aria-label="雪峰冲刺跑酷游戏"></canvas>
+  <div id="hud">
+    <div class="brand">雪峰冲刺</div>
+    <div class="score"><div id="score">00000</div><div>HI <span id="hi">00000</span></div></div>
+  </div>
+  <div id="meter"><i></i></div>
+
+  <section id="start" class="panel">
+    <div class="card">
+      <h1>雪峰<br>冲刺</h1>
+      <div class="sub">原创像素风无尽跑酷</div>
+      <div class="help">
+        <span class="desktop">空格 / ↑ / W：跳跃，长按跳得更高<br>↓ / S：下蹲，R：重新开始</span>
+        <span>跳过路障，蹲过飞来的汽水罐，坚持越久速度越快。</span>
+      </div>
+      <button id="startBtn">开始冲刺</button>
+      <div class="tiny">使用原创图形与程序，不含原游戏素材。</div>
+    </div>
+  </section>
+
+  <section id="gameOver" class="panel">
+    <div class="card">
+      <div class="sub">本次冲刺结束</div>
+      <h1 id="finalScore">00000</h1>
+      <div class="help" id="comment">再来一次，节奏会更稳。</div>
+      <button id="retryBtn">重新开始</button>
+    </div>
+  </section>
+
+  <div id="touch">
+    <button id="duckBtn">下蹲</button>
+    <div class="right"><button id="jumpBtn">跳跃</button></div>
+  </div>
+</div>
+<script>
+(() => {
+  'use strict';
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+
+  const W=960,H=540,GROUND=416;
+  const scoreEl=document.getElementById('score'), hiEl=document.getElementById('hi');
+  const startPanel=document.getElementById('start'), overPanel=document.getElementById('gameOver');
+  const meter=document.querySelector('#meter i');
+  const finalScore=document.getElementById('finalScore'), comment=document.getElementById('comment');
+  let high=Number(localStorage.getItem('xuefengRunnerHi')||0); hiEl.textContent=fmt(high);
+
+  const state={running:false,dead:false,t:0,score:0,speed:330,spawn:1.0,shake:0,flash:0};
+  const input={jump:false,duck:false,jumpPressed:false};
+  const player={x:150,y:GROUND-82,w:50,h:82,vy:0,onGround:true,ducking:false,run:0,coyote:0};
+  let obstacles=[], particles=[], clouds=[];
+  for(let i=0;i<7;i++) clouds.push({x:Math.random()*W,y:55+Math.random()*155,s:0.7+Math.random()*1.6});
+
+  let audio=null;
+  function beep(freq,dur,type='square',vol=.035,slide=0){
+    try{
+      audio ||= new (window.AudioContext||window.webkitAudioContext)();
+      const o=audio.createOscillator(), g=audio.createGain();
+      o.type=type;o.frequency.setValueAtTime(freq,audio.currentTime);
+      o.frequency.linearRampToValueAtTime(freq+slide,audio.currentTime+dur);
+      g.gain.setValueAtTime(vol,audio.currentTime);g.gain.exponentialRampToValueAtTime(.0001,audio.currentTime+dur);
+      o.connect(g).connect(audio.destination);o.start();o.stop(audio.currentTime+dur);
+    }catch(e){}
+  }
+
+  function fmt(n){return String(Math.floor(n)).padStart(5,'0').slice(-5)}
+  function reset(){
+    state.running=true;state.dead=false;state.t=0;state.score=0;state.speed=330;state.spawn=.95;state.shake=0;state.flash=0;
+    Object.assign(player,{x:150,y:GROUND-82,w:50,h:82,vy:0,onGround:true,ducking:false,run:0,coyote:0});
+    obstacles=[];particles=[];overPanel.style.display='none';startPanel.style.display='none';
+    scoreEl.textContent='00000';meter.style.width='0%';beep(220,.07,'square',.03,90);
+  }
+  function die(){
+    if(state.dead)return;
+    state.dead=true;state.running=false;state.shake=14;state.flash=1;
+    beep(180,.35,'sawtooth',.055,-120);
+    for(let i=0;i<28;i++) particles.push({x:player.x+25,y:player.y+35,vx:(Math.random()-.5)*360,vy:-Math.random()*360-30,life:.5+Math.random()*.6,size:4+Math.random()*8,c:'#df3f35'});
+    const s=Math.floor(state.score);
+    if(s>high){high=s;localStorage.setItem('xuefengRunnerHi',high);hiEl.textContent=fmt(high)}
+    setTimeout(()=>{
+      finalScore.textContent=fmt(s);
+      comment.textContent=s<500?'先熟悉跳跃高度：轻按是小跳，长按是大跳。':s<1500?'节奏不错。注意空中汽水罐必须下蹲。':'速度已经很快，这一局相当稳。';
+      overPanel.style.display='grid';
+    },520);
+  }
+
+  function spawnObstacle(){
+    const difficulty=Math.min(1,state.score/1800);
+    const r=Math.random();
+    if(r<.37){
+      obstacles.push({type:'crate',x:W+50,y:GROUND-58,w:52,h:58,passed:false});
+    }else if(r<.68){
+      obstacles.push({type:'books',x:W+50,y:GROUND-42,w:74,h:42,passed:false});
+    }else{
+      obstacles.push({type:'can',x:W+50,y:GROUND-94-(Math.random()<.25?10:0),w:50,h:32,passed:false,spin:0});
+    }
+    state.spawn=(1.02+Math.random()*.72)*(1-difficulty*.25);
+  }
+
+  function jumpStart(){
+    if((player.onGround||player.coyote>0)&&!player.ducking){
+      player.vy=-660;player.onGround=false;player.coyote=0;beep(390,.08,'square',.03,110);
+      for(let i=0;i<8;i++) particles.push({x:player.x+18+Math.random()*25,y:GROUND-5,vx:-50-Math.random()*150,vy:-20-Math.random()*100,life:.25+Math.random()*.2,size:3+Math.random()*5,c:'#e7d9b9'});
+    }
+  }
+
+  function update(dt){
+    state.t+=dt;
+    if(state.flash>0)state.flash=Math.max(0,state.flash-dt*3.2);
+    if(state.shake>0)state.shake=Math.max(0,state.shake-dt*34);
+    clouds.forEach(c=>{c.x-=dt*(12+state.speed*.025)*c.s;if(c.x<-180)c.x=W+100+Math.random()*220});
+
+    particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=900*dt;p.life-=dt});
+    particles=particles.filter(p=>p.life>0);
+    if(!state.running)return;
+
+    state.score+=dt*100*(state.speed/330);
+    state.speed=Math.min(680,330+state.score*.095);
+    scoreEl.textContent=fmt(state.score);
+    meter.style.width=(Math.min(100,state.score/20))+'%';
+
+    player.ducking=input.duck&&player.onGround;
+    player.h=player.ducking?48:82;
+    player.w=player.ducking?66:50;
+    if(player.onGround)player.y=GROUND-player.h;
+    if(input.jumpPressed){jumpStart();input.jumpPressed=false}
+
+    const gravity=(input.jump&&player.vy<0)?1450:2450;
+    player.vy+=gravity*dt;
+    player.y+=player.vy*dt;
+    if(player.y+player.h>=GROUND){
+      if(!player.onGround&&player.vy>220){
+        beep(120,.035,'square',.018,0);
+        for(let i=0;i<5;i++)particles.push({x:player.x+15+Math.random()*30,y:GROUND-3,vx:-30-Math.random()*100,vy:-20-Math.random()*70,life:.18+Math.random()*.14,size:3+Math.random()*4,c:'#e7d9b9'});
+      }
+      player.y=GROUND-player.h;player.vy=0;player.onGround=true;player.coyote=.08;
+    }else{player.coyote=Math.max(0,player.coyote-dt);player.onGround=false}
+    player.run+=dt*(state.speed/54);
+
+    state.spawn-=dt;
+    if(state.spawn<=0)spawnObstacle();
+    obstacles.forEach(o=>{
+      o.x-=state.speed*dt;
+      if(o.spin!==undefined)o.spin+=dt*8;
+      if(!o.passed&&o.x+o.w<player.x){o.passed=true;state.score+=25;beep(760,.035,'square',.012,50)}
+    });
+    obstacles=obstacles.filter(o=>o.x>-120);
+
+    const px=player.x+8,py=player.y+6,pw=player.w-16,ph=player.h-8;
+    for(const o of obstacles){
+      const ox=o.x+5,oy=o.y+4,ow=o.w-10,oh=o.h-8;
+      if(px<ox+ow&&px+pw>ox&&py<oy+oh&&py+ph>oy){die();break}
+    }
+  }
+
+  function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
+  function text(str,x,y,size,align='left',color='#17191f'){
+    ctx.fillStyle=color;ctx.font=`900 ${size}px ui-monospace,monospace`;ctx.textAlign=align;ctx.textBaseline='middle';ctx.fillText(str,x,y);
+  }
+
+  function drawBackground(){
+    const dusk=Math.min(1,state.score/3500), sky=`rgb(${Math.round(126-76*dusk)},${Math.round(181-103*dusk)},${Math.round(215-92*dusk)})`;
+    rect(0,0,W,H,sky);
+    ctx.beginPath();ctx.arc(790,92,38,0,Math.PI*2);ctx.fillStyle=dusk>.55?'#efe9c9':'#f2c94c';ctx.fill();
+    clouds.forEach(c=>{
+      const x=c.x,y=c.y,s=c.s;ctx.fillStyle='#f5f0e5cc';
+      ctx.fillRect(x,y,72*s,20*s);ctx.fillRect(x+14*s,y-13*s,28*s,18*s);ctx.fillRect(x+38*s,y-8*s,25*s,15*s);
+    });
+    const off=-(state.t*state.speed*.06)%240;
+    ctx.fillStyle=dusk>.55?'#35384b':'#6f8fa2';
+    for(let x=off-240;x<W+240;x+=240){
+      ctx.beginPath();ctx.moveTo(x,GROUND);ctx.lineTo(x+105,240);ctx.lineTo(x+210,GROUND);ctx.fill();
+    }
+    ctx.fillStyle=dusk>.55?'#252838':'#57798d';
+    const off2=-(state.t*state.speed*.13)%180;
+    for(let x=off2-180;x<W+180;x+=180){
+      ctx.beginPath();ctx.moveTo(x,GROUND);ctx.lineTo(x+75,310);ctx.lineTo(x+165,GROUND);ctx.fill();
+    }
+    ctx.fillStyle=dusk>.55?'#181b28':'#3f6478';
+    const cityOff=-(state.t*state.speed*.24)%110;
+    for(let x=cityOff-110,i=0;x<W+110;x+=110,i++){
+      const bh=50+(i%4)*18;rect(x,GROUND-bh,78,bh,ctx.fillStyle);rect(x+80,GROUND-bh*.7,25,bh*.7,ctx.fillStyle);
+      if(dusk>.45){ctx.fillStyle='#f2c94c';for(let wy=GROUND-bh+12;wy<GROUND-12;wy+=18)for(let wx=x+12;wx<x+65;wx+=20)rect(wx,wy,6,7,ctx.fillStyle);ctx.fillStyle=dusk>.55?'#181b28':'#3f6478'}
+    }
+    rect(0,GROUND,W,H-GROUND,dusk>.55?'#20212a':'#343942');
+    rect(0,GROUND,W,7,'#f5f0e5');
+    const stripe=-(state.t*state.speed)%96;
+    for(let x=stripe-96;x<W+96;x+=96)rect(x,GROUND+34,56,8,'#f2c94c');
+    ctx.globalAlpha=Math.min(.42,(state.speed-330)/700);
+    for(let i=0;i<14;i++){const yy=50+(i*37+state.t*210)%(GROUND-100);const xx=(i*173-state.t*state.speed*1.4)%W;rect(xx,yy,45+i%3*24,2,'#f5f0e5')}
+    ctx.globalAlpha=1;
+  }
+
+  function drawPlayer(){
+    const x=Math.round(player.x),y=Math.round(player.y);ctx.save();
+    if(state.dead){ctx.translate(x+25,y+40);ctx.rotate(-.8);ctx.translate(-25,-40)}
+    if(player.ducking){
+      rect(x+8,y+36,22,10,'#17191f');rect(x+34,y+36,24,10,'#17191f');
+      rect(x+10,y+10,48,29,'#23314d');rect(x+14,y+13,10,24,'#df3f35');
+      rect(x+1,y+2,25,25,'#e2b389');rect(x+3,y,22,7,'#17191f');rect(x+19,y+11,5,4,'#17191f');
+    }else{
+      const step=Math.sin(player.run)*7*(player.onGround?1:0);
+      rect(x+25,y+58,14,20+Math.max(0,-step),'#26324a');rect(x+25,y+75-step,25,9,'#17191f');
+      rect(x+10,y+58,14,20+Math.max(0,step),'#33466b');rect(x+2,y+75+step,24,9,'#17191f');
+      rect(x+8,y+29,34,35,'#263b61');rect(x+12,y+31,8,30,'#df3f35');rect(x+28,y+29,9,18,'#f5f0e5');
+      rect(x+35,y+35+step*.35,13,9,'#263b61');rect(x+45,y+36+step*.35,9,8,'#e2b389');
+      rect(x+10,y+5,27,27,'#e2b389');rect(x+9,y+2,29,8,'#17191f');rect(x+31,y+15,5,4,'#17191f');
+      rect(x+23,y+13,15,3,'#17191f');rect(x+27,y+10,3,8,'#17191f');
+    }
+    ctx.restore();
+  }
+
+  function drawObstacle(o){
+    const x=Math.round(o.x),y=Math.round(o.y);
+    if(o.type==='crate'){
+      rect(x,y,o.w,o.h,'#a96635');rect(x+5,y+5,o.w-10,o.h-10,'#c37a42');rect(x+9,y+8,6,o.h-16,'#7d4829');rect(x+o.w-15,y+8,6,o.h-16,'#7d4829');
+      text('卷',x+o.w/2,y+o.h/2+1,19,'center','#f5f0e5');
+    }else if(o.type==='books'){
+      rect(x,y+24,74,18,'#df3f35');rect(x+7,y+8,61,17,'#f2c94c');rect(x+15,y,54,10,'#f5f0e5');
+      rect(x+6,y+28,9,4,'#17191f');rect(x+60,y+12,6,4,'#17191f');
+    }else{
+      ctx.save();ctx.translate(x+o.w/2,y+o.h/2);ctx.rotate(Math.sin(o.spin)*.13);
+      rect(-24,-14,48,28,'#44a66d');rect(-18,-14,36,5,'#dbe7da');rect(-18,9,36,5,'#dbe7da');
+      text('汽水',0,1,12,'center','#f5f0e5');ctx.restore();
+    }
+  }
+
+  function render(){
+    ctx.save();
+    const sx=state.shake?(Math.random()-.5)*state.shake:0,sy=state.shake?(Math.random()-.5)*state.shake:0;ctx.translate(sx,sy);
+    drawBackground();obstacles.forEach(drawObstacle);drawPlayer();
+    particles.forEach(p=>{ctx.globalAlpha=Math.max(0,p.life*1.6);rect(p.x,p.y,p.size,p.size,p.c)});ctx.globalAlpha=1;
+    ctx.restore();
+    if(state.flash>0){ctx.globalAlpha=state.flash*.55;rect(0,0,W,H,'#f5f0e5');ctx.globalAlpha=1}
+  }
+
+  let last=performance.now();
+  function frame(now){const dt=Math.min(.032,(now-last)/1000);last=now;update(dt);render();requestAnimationFrame(frame)}
+  requestAnimationFrame(frame);
+
+  function down(code){
+    if(['Space','ArrowUp','KeyW'].includes(code)){if(!input.jump){input.jumpPressed=true}input.jump=true}
+    if(['ArrowDown','KeyS'].includes(code))input.duck=true;
+    if(code==='KeyR'&&state.dead)reset();
+  }
+  function up(code){if(['Space','ArrowUp','KeyW'].includes(code))input.jump=false;if(['ArrowDown','KeyS'].includes(code))input.duck=false}
+  addEventListener('keydown',e=>{if(['Space','ArrowUp','ArrowDown'].includes(e.code))e.preventDefault();down(e.code)});
+  addEventListener('keyup',e=>up(e.code));
+  addEventListener('blur',()=>{input.jump=false;input.duck=false});
+  document.getElementById('startBtn').onclick=reset;document.getElementById('retryBtn').onclick=reset;
+
+  function bindHold(el,on,off){
+    const a=e=>{e.preventDefault();on()};const b=e=>{e.preventDefault();off()};
+    el.addEventListener('pointerdown',a);el.addEventListener('pointerup',b);el.addEventListener('pointercancel',b);el.addEventListener('pointerleave',b);
+  }
+  bindHold(document.getElementById('jumpBtn'),()=>{if(!input.jump)input.jumpPressed=true;input.jump=true},()=>input.jump=false);
+  bindHold(document.getElementById('duckBtn'),()=>input.duck=true,()=>input.duck=false);
+})();
+</script>
+</body>
+</html>
