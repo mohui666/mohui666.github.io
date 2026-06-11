@@ -27,6 +27,20 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Add arcade extension
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path('games/index.html')
+          if page.exists():
+              text = page.read_text(encoding='utf-8')
+              tag = '<script src="./arcade-extra.js"></script>'
+              if tag not in text:
+                  text = text.replace('</body>', f'{tag}\n</body>')
+                  page.write_text(text, encoding='utf-8')
+          PY
+
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
