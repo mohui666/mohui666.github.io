@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="mohui666 的个人主页，收录项目、ASOUL 相关内容与友情链接。">
+    <meta name="description" content="mohui666 的个人主页，收录个人项目、ASOUL 相关内容、小说和友情链接。">
     <link rel="icon" href="images/cover.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <script src="js/background.js" type="text/javascript" defer></script>
@@ -11,57 +11,100 @@
     <title>mohui666 的个人主页</title>
 </head>
 <body>
-    <main class="page-shell">
-        <section class="hero card">
-            <p class="eyebrow">Welcome to my homepage</p>
-            <h1>关注嘉然，顿顿解馋</h1>
-            <p class="intro">大家好啊，我是 <strong>mohui666</strong>。这里整理了我的项目、兴趣内容和常用链接。</p>
-            <div id="divBottom" class="time-pill" aria-live="polite">正在加载时间…</div>
+    <div class="background-dim" aria-hidden="true"></div>
+
+    <main class="site-shell">
+        <section class="hero-panel" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="kicker">mohui666 · Personal Homepage</p>
+                <h1 id="hero-title">关注嘉然，<span>顿顿解馋</span></h1>
+                <p class="hero-text">大家好啊，我是 mohui666。这里是我的个人主页：项目入口、ASOUL 相关收藏、友站和联系方式都放在这里。</p>
+                <div class="hero-actions" aria-label="主要入口">
+                    <a class="action primary" href="projects/index.html">浏览 Projects</a>
+                    <a class="action ghost" href="html/contact.html">联系我</a>
+                </div>
+            </div>
+
+            <aside class="profile-card" aria-label="个人信息卡片">
+                <img class="avatar" src="images/Dianafufu.jpg" alt="mohui666 头像">
+                <div>
+                    <p class="profile-name">mohui666</p>
+                    <p class="profile-note">写点项目，收点链接，也喜欢 ASOUL。</p>
+                </div>
+                <div id="divBottom" class="time-pill" aria-live="polite">正在加载时间…</div>
+            </aside>
         </section>
 
-        <section class="card link-section" aria-labelledby="about-title">
-            <div class="section-heading">
-                <span class="section-icon">✨</span>
-                <h2 id="about-title">关于我</h2>
+        <section class="quick-strip" aria-label="快捷信息">
+            <div>
+                <strong>Projects</strong>
+                <span>个人项目与工具入口</span>
             </div>
-            <div class="button-grid">
-                <a class="button button1" href="projects/index.html">Projects</a>
-                <a class="button button1" href="projects/VideoPlayer/html/main.html">大家想看的东西</a>
-                <a class="button button1" href="https://b23.tv/NfPPuQr">B站</a>
-                <a class="button button1" href="https://mcbbs.wiki/wiki/mohui666">MCBBSWIKI</a>
-                <a class="button button1" href="projects/ShanHaiJing/index.html">山海经</a>
+            <div>
+                <strong>ASOUL</strong>
+                <span>官方与成员主页合集</span>
             </div>
-            <a class="github-badge" href="https://github.com/mohui666" target="_blank" rel="noopener noreferrer" aria-label="访问 mohui666 的 GitHub 主页">
-                <img src="https://img.shields.io/badge/github-%2324292e.svg?&style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
-            </a>
-        </section>
-
-        <section class="card link-section" aria-labelledby="asoul-title">
-            <div class="section-heading">
-                <span class="section-icon">🎤</span>
-                <h2 id="asoul-title">ASOUL 相关</h2>
-            </div>
-            <div class="button-grid asoul-grid">
-                <a class="button button1" href="https://space.bilibili.com/703007996">ASOUL-Official</a>
-                <a class="button button2" href="https://space.bilibili.com/672346917">向晚</a>
-                <a class="button button3" href="https://space.bilibili.com/672353429">贝拉</a>
-                <a class="button button4" href="https://space.bilibili.com/351609538">珈乐</a>
-                <a class="button button5" href="https://space.bilibili.com/672328094">嘉然</a>
-                <a class="button button6" href="https://space.bilibili.com/672342685">乃琳</a>
-                <a class="button button1 wide" href="projects/Novel/-1.html">ASOUL 同人小说 · 魂归故里</a>
+            <div>
+                <strong>Friends</strong>
+                <span>友站传送门</span>
             </div>
         </section>
 
-        <section class="card link-section" aria-labelledby="friends-title">
-            <div class="section-heading">
-                <span class="section-icon">🌐</span>
-                <h2 id="friends-title">友站</h2>
-            </div>
-            <div class="button-grid">
-                <a class="button button1" href="https://mcbbs.wiki/wiki/">MCBBSWIKI</a>
-                <a class="button button1" href="https://jimmma.top">JimaLink</a>
-                <a class="button button1" href="https://steve7811d.github.io">Steve7811D</a>
-            </div>
+        <section class="content-grid" aria-label="主页内容入口">
+            <article class="link-card feature-card">
+                <div class="card-head">
+                    <span class="icon-badge">✨</span>
+                    <div>
+                        <p class="label">About</p>
+                        <h2>关于我</h2>
+                    </div>
+                </div>
+                <p class="card-desc">常用入口、项目合集和个人站外主页。</p>
+                <div class="link-list">
+                    <a href="projects/index.html">Projects</a>
+                    <a href="projects/VideoPlayer/html/main.html">大家想看的东西</a>
+                    <a href="https://b23.tv/NfPPuQr">B站</a>
+                    <a href="https://mcbbs.wiki/wiki/mohui666">MCBBSWIKI</a>
+                    <a href="projects/ShanHaiJing/index.html">山海经</a>
+                </div>
+                <a class="github-link" href="https://github.com/mohui666" target="_blank" rel="noopener noreferrer">GitHub @mohui666</a>
+            </article>
+
+            <article class="link-card asoul-card">
+                <div class="card-head">
+                    <span class="icon-badge">🎤</span>
+                    <div>
+                        <p class="label">A-SOUL</p>
+                        <h2>ASOUL 相关</h2>
+                    </div>
+                </div>
+                <p class="card-desc">一键直达官方账号、成员主页和同人小说。</p>
+                <div class="member-grid">
+                    <a class="member official" href="https://space.bilibili.com/703007996">Official</a>
+                    <a class="member ava" href="https://space.bilibili.com/672346917">向晚</a>
+                    <a class="member bella" href="https://space.bilibili.com/672353429">贝拉</a>
+                    <a class="member carol" href="https://space.bilibili.com/351609538">珈乐</a>
+                    <a class="member diana" href="https://space.bilibili.com/672328094">嘉然</a>
+                    <a class="member eileen" href="https://space.bilibili.com/672342685">乃琳</a>
+                </div>
+                <a class="novel-link" href="projects/Novel/-1.html">ASOUL 同人小说 · 魂归故里</a>
+            </article>
+
+            <article class="link-card friends-card">
+                <div class="card-head">
+                    <span class="icon-badge">🌐</span>
+                    <div>
+                        <p class="label">Links</p>
+                        <h2>友站</h2>
+                    </div>
+                </div>
+                <p class="card-desc">一些值得逛逛的朋友与社区链接。</p>
+                <div class="link-list compact">
+                    <a href="https://mcbbs.wiki/wiki/">MCBBSWIKI</a>
+                    <a href="https://jimmma.top">JimaLink</a>
+                    <a href="https://steve7811d.github.io">Steve7811D</a>
+                </div>
+            </article>
         </section>
     </main>
 
