@@ -78,4 +78,5 @@ function date() {
 
 }
 
-setInterval("date()", 1000);
+date();
+setInterval(date, 1000);
