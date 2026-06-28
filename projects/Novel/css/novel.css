@@ -1,21 +1,153 @@
-.next {
-    position:absolute;
-
-    right: 0px;
+:root {
+    --ink: #1f2433;
+    --muted: #667085;
+    --pink: #ff78aa;
+    --orange: #ff9f67;
+    --paper: rgba(255, 255, 255, 0.84);
+    --line: rgba(255, 255, 255, 0.62);
+    --shadow: 0 24px 70px rgba(21, 24, 44, 0.18);
 }
 
-.before {
-    position:absolute;
+* { box-sizing: border-box; }
 
-    left: 0px;
+body {
+    min-height: 100vh;
+    margin: 0;
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Songti SC", "Microsoft YaHei", serif;
+    background:
+        radial-gradient(circle at 14% 10%, rgba(255, 255, 255, 0.9), transparent 24rem),
+        radial-gradient(circle at 86% 12%, rgba(255, 120, 170, 0.22), transparent 26rem),
+        linear-gradient(135deg, #fff4ea, #f7dce8 52%, #e8f7ff);
 }
 
-.text{
-    text-indent: 2em;
-    line-height: 1em;
-    margin:1em 0;
+a { color: inherit; text-decoration: none; }
+
+.reader-shell {
+    width: min(900px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 34px 0 46px;
 }
 
-h1{
+.reader-nav,
+.chapter-card,
+.catalog-card {
+    border: 1px solid var(--line);
+    background: var(--paper);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px) saturate(1.08);
+}
+
+.reader-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 12px;
+    border-radius: 24px;
+}
+
+.nav-pill,
+.chapter-actions a,
+button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 9px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.66);
+    border-radius: 999px;
+    color: #9f315e;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 10px 24px rgba(31, 36, 51, 0.08);
+    font: 900 0.98rem "Microsoft YaHei", sans-serif;
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.nav-pill:hover,
+.nav-pill:focus-visible,
+.chapter-actions a:hover,
+.chapter-actions a:focus-visible,
+button:hover,
+button:focus-visible {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 16px 32px rgba(31, 36, 51, 0.13);
+    outline: none;
+}
+
+.chapter-card,
+.catalog-card {
+    padding: clamp(24px, 5vw, 52px);
+    border-radius: 30px;
+}
+
+.kicker {
+    margin: 0 0 10px;
+    color: #bd4f79;
+    font: 950 0.78rem "Microsoft YaHei", sans-serif;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+h1 {
+    margin: 0 0 24px;
+    font-size: clamp(2.2rem, 7vw, 4.8rem);
+    line-height: 1.05;
+    letter-spacing: -0.06em;
     text-align: center;
+}
+
+h1 span {
+    color: transparent;
+    background: linear-gradient(90deg, var(--pink), var(--orange));
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
+.text {
+    margin: 1.15em 0;
+    color: #30364a;
+    font-size: clamp(1rem, 2vw, 1.14rem);
+    line-height: 2;
+    text-indent: 2em;
+}
+
+.catalog-list {
+    display: grid;
+    gap: 12px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.catalog-list a {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.64);
+    font: 900 1rem "Microsoft YaHei", sans-serif;
+}
+
+.catalog-list a::after { content: "开始阅读 →"; color: #bd4f79; }
+
+.chapter-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.before,
+.next { position: static; }
+
+@media (max-width: 640px) {
+    .reader-shell { width: min(100% - 20px, 900px); padding-top: 20px; }
+    .reader-nav,
+    .chapter-actions { justify-content: center; }
+    .chapter-card,
+    .catalog-card { border-radius: 24px; padding: 20px; }
 }
