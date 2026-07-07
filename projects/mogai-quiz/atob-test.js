@@ -1,1 +1,0 @@
-let s=atob('b2s=');console.log(s)
