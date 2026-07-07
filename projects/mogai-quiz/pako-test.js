@@ -1,1 +1,0 @@
-function loadLib(){let s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js';document.head.appendChild(s)}console.log('ok')
