@@ -1,1 +1,1 @@
-localStorage.setItem('x','y');console.log(localStorage.getItem('x'))
+console.log('removed')
