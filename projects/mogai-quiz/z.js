@@ -1,0 +1,1 @@
+localStorage.setItem('x','y');console.log(localStorage.getItem('x'))
