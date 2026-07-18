@@ -17,6 +17,12 @@
 .overlay{position:absolute;inset:0;z-index:9;display:grid;place-items:center;background:#05070cbb;padding:20px}.dialog{width:min(420px,92%);border:2px solid var(--line);background:#111522;padding:28px;text-align:center;box-shadow:10px 10px 0 #000}.dialog h2{font-size:36px;margin:0 0 8px}.dialog p{color:var(--muted);line-height:1.6}.actions{display:flex;justify-content:center;gap:10px;margin-top:20px}.actions button{border:0;padding:11px 18px;font-weight:900;cursor:pointer}.primary{background:var(--c);color:#111}.secondary{background:#293149;color:#fff}
 @media (hover:hover) and (pointer:fine){#touch{opacity:.32}.touchBtn{width:64px;height:50px}}
 @media (max-aspect-ratio:3/2){.shell{width:100vw;height:min(100vh,66.666vw)}}
+#app::after{content:"";position:fixed;inset:0;z-index:20;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 2px,#00000014 2px 4px)}
+.eyebrow{text-shadow:0 0 14px #73f7c788}
+.title{text-shadow:0 0 30px #73f7c744,4px 4px 0 #000;animation:titlePulse 4s ease-in-out infinite}
+@keyframes titlePulse{0%,100%{text-shadow:0 0 30px #73f7c744,4px 4px 0 #000}50%{text-shadow:0 0 46px #73f7c799,4px 4px 0 #000}}
+.card:hover{box-shadow:0 0 26px #73f7c726,0 8px 0 #0006}
+@media (prefers-reduced-motion:reduce){.title{animation:none}}
 </style>
 </head>
 <body>
@@ -27,7 +33,8 @@
       <h1 class="title">默绘<br>街机厅</h1>
       <p class="lead">无需下载，点开即玩。电脑支持键盘，手机支持触屏；每个游戏都会在本机保存最高分。</p>
       <div class="grid">
-        <button class="card link" onclick="location.href='../xuefeng/'"><span class="num">01 / 跑酷</span><h2>雪峰冲刺</h2><p>跳过路障，蹲过飞行物，速度会不断提升。</p><span class="tag">独立页面</span><span class="icon">🏃</span></button>
+        <button class="card link" style="border-color:#9f76c8" onclick="location.href='./emberfall/'"><span class="num">06 / 小队 CRPG</span><h2>余烬之门</h2><p>三人小队、回合制行动点、对话检定、技能状态、战利品与三章战役。</p><span class="tag">复杂游戏 · 独立页面</span><span class="icon">⬢</span></button>
+        <button class="card link" onclick="location.href='./xuefeng/'"><span class="num">01 / 跑酷</span><h2>雪峰冲刺</h2><p>跳过路障，蹲过飞行物，速度会不断提升。</p><span class="tag">独立页面</span><span class="icon">🏃</span></button>
         <button class="card" data-game="snake"><span class="num">02 / 经典</span><h2>霓虹贪吃蛇</h2><p>吃掉能量核，身体变长，节奏逐渐加快。</p><span class="tag">方向键 / 滑动</span><span class="icon">▰</span></button>
         <button class="card" data-game="dodge"><span class="num">03 / 生存</span><h2>陨石闪避</h2><p>在密集弹幕中横向穿梭，捡取星核获得加分。</p><span class="tag">A D / 左右触控</span><span class="icon">☄</span></button>
         <button class="card" data-game="breakout"><span class="num">04 / 反弹</span><h2>弹球拆墙</h2><p>控制挡板反弹能量球，连续击破整片砖墙。</p><span class="tag">鼠标拖动 / 左右键</span><span class="icon">◉</span></button>
