@@ -1,32 +1,28 @@
-<!DOCTYPE html>
-
-<html>
-
-	<head>
-        
-        <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-
-        <link rel="stylesheet" href="css/novel.css">
-
-		<meta charset="utf-8" />
-
-		<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
-
-        <title></title> <!--网页标题-->
-
-
-    </head>
-
-    <body>
-        <a href="-1.html"><button>返回目录</button></a>
-
-        <h1></h1> <!--文章标题-->
-
-        <p class="text"></p><br>   <!--正文-->
-
-        <a href=".html"><button class="before">上一章</button></a>
-
-        <a href=".html"><button class="next">下一章</button></a>
-
-        
-    </body>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/novel.css">
+    <script src="../../js/effects.js" type="text/javascript" defer></script>
+    <title></title> <!--网页标题-->
+</head>
+<body>
+    <main class="reader-shell">
+        <nav class="reader-nav" aria-label="阅读导航">
+            <a class="nav-pill" href="-1.html">← 返回目录</a>
+            <a class="nav-pill" href="../../index.html">主页</a>
+        </nav>
+        <article class="chapter-card">
+            <p class="kicker">Chapter 00</p> <!--章节编号-->
+            <h1></h1> <!--文章标题-->
+            <p class="text"></p> <!--正文，每段一个 <p class="text">-->
+            <div class="chapter-actions">
+                <a class="before" href=".html">上一章</a> <!--首章无上一章时改为空 <span></span> 占位-->
+                <a class="next" href=".html">下一章</a> <!--末章无下一章时改为空 <span></span> 占位-->
+            </div>
+        </article>
+    </main>
+</body>
+</html>

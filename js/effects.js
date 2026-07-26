@@ -1,5 +1,5 @@
 /*
- * 站点共享动效：粒子连线背景、滚动渐入、打字机标题、扫描线。
+ * 站点共享动效：柔和光斑背景、滚动渐入、打字机标题。
  * 所有功能都可独立降级：缺少对应元素或用户偏好减少动效时自动跳过。
  */
 (function () {
@@ -7,8 +7,8 @@
 
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    /* ---------- 粒子连线背景 ---------- */
-    function initParticles() {
+    /* ---------- 柔和光斑（bokeh）背景 ---------- */
+    function initBokeh() {
         var canvas = document.createElement("canvas");
         canvas.setAttribute("aria-hidden", "true");
         canvas.style.cssText = "position:fixed;inset:0;z-index:-1;pointer-events:none;";
@@ -18,8 +18,29 @@
         var dpr = Math.min(window.devicePixelRatio || 1, 2);
         var w = 0;
         var h = 0;
-        var points = [];
+        var orbs = [];
         var mouse = { x: -9999, y: -9999 };
+        var tints = [
+            [255, 255, 255],
+            [165, 180, 252],
+            [125, 211, 252],
+            [240, 171, 252]
+        ];
+
+        function makeOrb() {
+            var tint = tints[Math.floor(Math.random() * tints.length)];
+            return {
+                x: Math.random() * w,
+                y: Math.random() * h,
+                vx: (Math.random() - 0.5) * 0.16,
+                vy: (Math.random() - 0.5) * 0.12 - 0.04,
+                r: 8 + Math.random() * 42,
+                tint: tint,
+                alpha: 0.04 + Math.random() * 0.1,
+                phase: Math.random() * Math.PI * 2,
+                pulse: 0.4 + Math.random() * 0.8
+            };
+        }
 
         function resize() {
             w = window.innerWidth;
@@ -29,62 +50,42 @@
             canvas.style.width = w + "px";
             canvas.style.height = h + "px";
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            var count = Math.max(28, Math.min(80, Math.floor((w * h) / 22000)));
-            while (points.length < count) {
-                points.push({
-                    x: Math.random() * w,
-                    y: Math.random() * h,
-                    vx: (Math.random() - 0.5) * 0.22,
-                    vy: (Math.random() - 0.5) * 0.22,
-                    r: 1 + Math.random() * 1.4
-                });
-            }
-            points.length = count;
+            var count = Math.max(14, Math.min(34, Math.floor((w * h) / 52000)));
+            while (orbs.length < count) orbs.push(makeOrb());
+            orbs.length = count;
         }
 
-        function step() {
+        function drawOrb(o, t) {
+            var breathe = 1 + 0.12 * Math.sin(t * 0.0006 * o.pulse + o.phase);
+            var r = o.r * breathe;
+            var mdx = o.x - mouse.x;
+            var mdy = o.y - mouse.y;
+            var mdist = Math.hypot(mdx, mdy);
+            var glow = mdist < 240 ? 1 + 0.7 * (1 - mdist / 240) : 1;
+            var grad = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, r);
+            var c = o.tint;
+            grad.addColorStop(0, "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + (o.alpha * glow) + ")");
+            grad.addColorStop(0.6, "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + (o.alpha * glow * 0.35) + ")");
+            grad.addColorStop(1, "rgba(" + c[0] + "," + c[1] + "," + c[2] + ",0)");
+            ctx.beginPath();
+            ctx.arc(o.x, o.y, r, 0, Math.PI * 2);
+            ctx.fillStyle = grad;
+            ctx.fill();
+        }
+
+        function step(t) {
             ctx.clearRect(0, 0, w, h);
             var i;
-            var j;
-            var p;
-            for (i = 0; i < points.length; i++) {
-                p = points[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                if (p.x < -20) p.x = w + 20;
-                if (p.x > w + 20) p.x = -20;
-                if (p.y < -20) p.y = h + 20;
-                if (p.y > h + 20) p.y = -20;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(85, 230, 165, 0.4)";
-                ctx.fill();
-            }
-            for (i = 0; i < points.length; i++) {
-                for (j = i + 1; j < points.length; j++) {
-                    var dx = points[i].x - points[j].x;
-                    var dy = points[i].y - points[j].y;
-                    var dist = Math.hypot(dx, dy);
-                    if (dist < 120) {
-                        ctx.beginPath();
-                        ctx.moveTo(points[i].x, points[i].y);
-                        ctx.lineTo(points[j].x, points[j].y);
-                        ctx.strokeStyle = "rgba(95, 201, 255, " + (0.1 * (1 - dist / 120)) + ")";
-                        ctx.lineWidth = 1;
-                        ctx.stroke();
-                    }
-                }
-                var mdx = points[i].x - mouse.x;
-                var mdy = points[i].y - mouse.y;
-                var mdist = Math.hypot(mdx, mdy);
-                if (mdist < 160) {
-                    ctx.beginPath();
-                    ctx.moveTo(points[i].x, points[i].y);
-                    ctx.lineTo(mouse.x, mouse.y);
-                    ctx.strokeStyle = "rgba(85, 230, 165, " + (0.22 * (1 - mdist / 160)) + ")";
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                }
+            var o;
+            for (i = 0; i < orbs.length; i++) {
+                o = orbs[i];
+                o.x += o.vx;
+                o.y += o.vy;
+                if (o.x < -60) o.x = w + 60;
+                if (o.x > w + 60) o.x = -60;
+                if (o.y < -60) o.y = h + 60;
+                if (o.y > h + 60) o.y = -60;
+                drawOrb(o, t);
             }
             window.requestAnimationFrame(step);
         }
@@ -101,32 +102,14 @@
         });
 
         if (reduceMotion) {
-            /* 减少动效时只画一帧静态星点 */
+            /* 减少动效时只画一帧静态光斑 */
             var i;
-            for (i = 0; i < points.length; i++) {
-                ctx.beginPath();
-                ctx.arc(points[i].x, points[i].y, points[i].r, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(85, 230, 165, 0.3)";
-                ctx.fill();
+            for (i = 0; i < orbs.length; i++) {
+                drawOrb(orbs[i], 0);
             }
             return;
         }
         window.requestAnimationFrame(step);
-    }
-
-    /* ---------- 扫描线 ---------- */
-    function initScanline() {
-        if (reduceMotion) return;
-        var bar = document.createElement("div");
-        bar.setAttribute("aria-hidden", "true");
-        bar.style.cssText =
-            "position:fixed;left:0;right:0;top:-14vh;height:14vh;z-index:31;pointer-events:none;" +
-            "background:linear-gradient(180deg,transparent,rgba(103,232,190,0.05),transparent);";
-        document.body.appendChild(bar);
-        bar.animate(
-            [{ transform: "translateY(0)" }, { transform: "translateY(128vh)" }],
-            { duration: 9000, iterations: Infinity, easing: "linear" }
-        );
     }
 
     /* ---------- 滚动渐入 ---------- */
@@ -176,8 +159,8 @@
 
         var caret = document.createElement("span");
         caret.setAttribute("aria-hidden", "true");
-        caret.textContent = "▊";
-        caret.style.cssText = "color:#55e6a5;font-weight:400;-webkit-text-fill-color:#55e6a5;";
+        caret.textContent = "▏";
+        caret.style.cssText = "color:rgba(255,255,255,0.85);font-weight:300;-webkit-text-fill-color:rgba(255,255,255,0.85);";
         caret.animate([{ opacity: 1 }, { opacity: 0 }], {
             duration: 900,
             iterations: Infinity,
@@ -216,8 +199,7 @@
     }
 
     function init() {
-        initParticles();
-        initScanline();
+        initBokeh();
         initReveal();
         initTyping();
     }
