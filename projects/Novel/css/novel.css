@@ -1,22 +1,22 @@
 :root {
-    --bg: #0c1122;
-    --ink: #f4f6fb;
-    --muted: rgba(226, 232, 246, 0.68);
+    --bg: #0b0f1e;
+    --ink: #f5f7fd;
+    --muted: rgba(233, 238, 251, 0.82);
     --body-ink: rgba(236, 240, 250, 0.92);
-    --glass: rgba(255, 255, 255, 0.08);
-    --glass-soft: rgba(255, 255, 255, 0.05);
-    --glass-strong: rgba(255, 255, 255, 0.13);
-    --glass-border: rgba(255, 255, 255, 0.16);
-    --glass-border-bright: rgba(255, 255, 255, 0.32);
+    --glass: rgba(255, 255, 255, 0.09);
+    --glass-soft: rgba(255, 255, 255, 0.06);
+    --glass-strong: rgba(255, 255, 255, 0.14);
+    --glass-border: rgba(255, 255, 255, 0.17);
+    --glass-border-bright: rgba(255, 255, 255, 0.34);
     --accent: #a5b4fc;
     --accent-2: #7dd3fc;
     --accent-3: #f0abfc;
     --radius-lg: 28px;
     --radius-md: 20px;
     --radius-sm: 14px;
-    --blur: blur(26px) saturate(1.6);
+    --blur: blur(24px) saturate(1.5);
     --shadow: 0 24px 60px rgba(3, 7, 22, 0.45);
-    --inner-light: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+    --inner-light: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(255, 255, 255, 0.04);
 }
 
 * { box-sizing: border-box; }
