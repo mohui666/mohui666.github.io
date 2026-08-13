@@ -392,6 +392,34 @@ h2 {
     gap: 24px;
 }
 
+/* 最新项目：GitHub 开源项目卡片 */
+.project-section {
+    margin: 0 0 24px;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+a.project-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 220ms ease, border-color 220ms ease;
+}
+
+a.project-card:hover,
+a.project-card:focus-visible {
+    border-color: var(--fill-border-hi);
+    transform: translateY(-3px);
+}
+
+.project-card .card-desc {
+    margin-bottom: 0;
+}
+
 .link-card {
     position: relative;
     padding: 28px;
