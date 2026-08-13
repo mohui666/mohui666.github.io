@@ -420,6 +420,28 @@ a.project-card:focus-visible {
     margin-bottom: 0;
 }
 
+/* 项目卡文字：长仓库名安全换行，标题行始终左对齐 */
+.project-card .card-head {
+    justify-content: flex-start;
+}
+
+.project-card .card-head > div {
+    min-width: 0;
+    text-align: left;
+}
+
+.project-card .label {
+    margin-bottom: 6px;
+    letter-spacing: 0.08em;
+    overflow-wrap: anywhere;
+}
+
+.project-card h2 {
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
 .link-card {
     position: relative;
     padding: 28px;
@@ -514,7 +536,7 @@ a.project-card:focus-visible {
 }
 
 .member-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
 }
 
 .member {
@@ -533,7 +555,6 @@ a.project-card:focus-visible {
 }
 
 /* 成员色：加深到白字对比度 ≥ 4.5:1，纯色实底不再透明叠加 */
-.official { background: linear-gradient(135deg, #47516a, #39425a); }
 .ava { background: linear-gradient(135deg, #38688c, #2c5573); }
 .bella { background: linear-gradient(135deg, #ac5045, #93413a); }
 .carol { background: linear-gradient(135deg, #61519a, #504383); }
