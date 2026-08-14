@@ -4,10 +4,10 @@
   "posts": [
     {
       "id": "steam-doorstop-bepinex",
-      "title": "Steam 下 BepInEx 不提权就加载不了：Doorstop 被环境变量跳过",
+      "title": "Steam 环境下 Doorstop 引导被 DOORSTOP_INITIALIZED 短路",
       "date": "2026-08-14",
-      "tags": ["Doorstop", "BepInEx", "Steam", "活侠传"],
-      "summary": "活侠传从 Steam 普通启动时 Doorstop 进了进程，却在 mono_jit_init 之后跳过引导。根因是继承来的 DOORSTOP_INITIALIZED，不是写权限。",
+      "tags": ["Doorstop", "BepInEx", "Steam", "IAT"],
+      "summary": "ignore_disable_switch 只忽略 DOORSTOP_DISABLE。Steam 或自重启继承的 DOORSTOP_INITIALIZED 仍会让 mono_doorstop_bootstrap 在 fopen(target_assembly) 之前 return。",
       "url": "posts/steam-doorstop-bepinex.html"
     }
   ]

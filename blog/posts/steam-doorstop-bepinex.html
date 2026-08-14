@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Steam 普通启动活侠传时 BepInEx 不加载：Doorstop 被继承的 DOORSTOP_INITIALIZED 跳过。">
+    <meta name="description" content="Steam 启动的 Unity Mono 进程里，Doorstop 完成 IAT 钩子后仍可能跳过引导。ignore_disable_switch 只覆盖 DOORSTOP_DISABLE，不覆盖继承的 DOORSTOP_INITIALIZED。">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
     <link rel="stylesheet" href="../../css/subpage.css" type="text/css">
     <link rel="stylesheet" href="../../css/blog.css" type="text/css">
-    <title>Steam 下 BepInEx 不提权就加载不了 · 笔记</title>
+    <title>Steam 环境下 Doorstop 引导被 DOORSTOP_INITIALIZED 短路</title>
 </head>
 <body>
     <main class="subpage-shell">
@@ -16,139 +16,148 @@
             <a class="nav-pill" href="../../index.html">主页</a>
         </nav>
         <article class="content-card post-body">
-            <p class="kicker">Doorstop · Steam · BepInEx</p>
-            <h1>不提权就不加载</h1>
+            <p class="kicker">Unity · Doorstop · Steam</p>
+            <h1>DOORSTOP_INITIALIZED 短路</h1>
             <p class="blog-meta">
                 <time datetime="2026-08-14">2026-08-14</time>
-                <span>活侠传 / Legend of Mortal · Unity 2020.3 Mono x86</span>
+                <span>Unity Mono · Windows x86/x64 · Doorstop 4.x / BepInEx 6</span>
             </p>
             <div class="tag-row">
                 <span class="tag">Doorstop</span>
                 <span class="tag">BepInEx</span>
                 <span class="tag">Steam</span>
+                <span class="tag">IAT</span>
             </div>
 
-            <p>Steam 点「开始」进标题没有「活侠MOD」，F8 没菜单。同一套文件，勾了管理员兼容就能加载。看起来像权限，其实 Doorstop 在进 BepInEx 之前就被掐掉了。</p>
+            <p>适用范围：Steam 启动的 Unity Mono 游戏，用 UnityDoorstop 在 <code>mono_jit_init_version</code> 处注入托管程序集（BepInEx 是最常见的消费者）。症状是「同一套文件，从 Steam 普通启动不加载，用管理员兼容或绕过 Steam 就能加载」。这通常被当成 ACL / UAC / 写 <code>Program Files</code> 失败，但断点往往在 Doorstop 的环境变量协议上，托管代码根本没执行。</p>
 
-            <h2>加载链</h2>
-            <p>BepInEx 自己不负责钻进 Unity。顺序是：</p>
-            <p><strong>Steam → Mortal.exe → Doorstop（游戏目录 <code>version.dll</code>）→ 钩 <code>GetProcAddress</code> → <code>mono_jit_init_version</code> → <code>Doorstop.Entrypoint.Start</code> → BepInEx → MortalModHost</strong></p>
-            <p>哪一截断了，日志表现不一样：没有新的 <code>doorstop_*.log</code> 是 DLL 没进进程；有 Doorstop 日志但没有新的 <code>BepInEx/LogOutput.log</code> 是引导被跳过。</p>
-
-            <h2>误判</h2>
-            <ul>
-                <li>把 BepInEx 升到 785 / 迁 LTS：#1340、#1331 只是写配置失败别 abort，托管代码还没被叫到。</li>
-                <li>只改 BepInEx 的 C# 并覆盖 <code>BepInEx.Unity.Mono.Preloader.dll</code>：<code>LogOutput.log</code> 时间戳不动。</li>
-                <li>只开 <code>ignore_disable_switch</code>：能躲过 <code>DOORSTOP_DISABLE</code>，躲不过后面的 <code>DOORSTOP_INITIALIZED</code>。</li>
-            </ul>
-
-            <h2>三层原因</h2>
+            <h2>1. 注入模型</h2>
+            <p>Doorstop 不是调试器，也不改 <code>exe</code>。它做成 <code>version.dll</code> / <code>winhttp.dll</code> 的代理，放在游戏根目录。Windows 加载器解析 <code>UnityPlayer.dll</code> 的静态导入时，先搜 exe 所在目录，于是 Doorstop 的 <code>DllEntry</code> 比托管运行时更早上场。</p>
+            <p>Windows 入口随后做三件事：</p>
+            <ol>
+                <li><code>fix_cwd()</code>，保证配置和目标程序集按游戏根目录解析。</li>
+                <li><code>load_proxy()</code>，把真实系统 DLL 的导出转发出去（旁边通常要有 <code>version_alt.dll</code> / 系统副本）。</li>
+                <li>对 <code>UnityPlayer</code>（没有则对 exe）的 IAT 打 <code>GetProcAddress</code> 钩。当游戏去解析 <code>mono_jit_init_version</code>（以及若干 <code>mono_*</code> / <code>il2cpp_init</code>）时，先走到 Doorstop，再调真正的运行时函数。</li>
+            </ol>
+            <p>Mono 路径里，<code>init_mono</code> 在真正的 <code>mono_jit_init_version</code> 返回之后调用 <code>mono_doorstop_bootstrap</code>。引导函数打开 <code>target_assembly</code>（BepInEx 默认是 <code>BepInEx\core\BepInEx.Unity.Mono.Preloader.dll</code>），用 Mono API 加载镜像，反射调用 <code>Doorstop.Entrypoint.Start</code>。BepInEx 的 chainloader、写 <code>BepInEx.cfg</code>、扫 plugins，全部发生在这之后。</p>
+            <p>因此分层诊断可以直接看文件时间戳：</p>
             <table>
-                <thead>
-                    <tr><th>层</th><th>现象</th><th>做法</th></tr>
-                </thead>
+                <thead><tr><th>观察</th><th>含义</th></tr></thead>
+                <tbody>
+                    <tr><td>没有新的 verbose <code>doorstop_*.log</code></td><td>代理 DLL 没进这个进程（搜路失败、被别的模块抢先加载了系统同名 DLL，或进程根本不是游戏本体）。</td></tr>
+                    <tr><td>有 Doorstop 日志，没有新的 <code>BepInEx/LogOutput.log</code></td><td>原生层活着，<code>Entrypoint.Start</code> 没被调用。</td></tr>
+                    <tr><td><code>LogOutput.log</code> 有新的 Preloader / Chainloader 行</td><td>Doorstop 已完成，问题在 BepInEx 或插件。</td></tr>
+                </tbody>
+            </table>
+
+            <h2>2. 环境变量协议</h2>
+            <p>Doorstop 用进程环境做跨阶段、跨模块的状态，而不是只靠静态变量。和本问题相关的两个名字：</p>
+            <table>
+                <thead><tr><th>变量</th><th>谁写</th><th>谁读</th><th>语义</th></tr></thead>
                 <tbody>
                     <tr>
-                        <td>Steam 塞 <code>DOORSTOP_DISABLE</code></td>
-                        <td>Doorstop 进进程立刻自杀。管理员走 UAC，不继承这份环境。</td>
-                        <td><code>doorstop_config.ini</code> 里 <code>ignore_disable_switch = true</code>（官方注释本来就是给 Steam 破坏环境隔离用的）</td>
+                        <td><code>DOORSTOP_DISABLE</code></td>
+                        <td>启动器 / 上一次 Doorstop / 人工</td>
+                        <td><code>DllEntry</code> / 配置加载之后</td>
+                        <td>非空则整段禁用。官方提供 <code>ignore_disable_switch</code> 忽略它。</td>
                     </tr>
                     <tr>
-                        <td>代理 DLL 叫 <code>winhttp.dll</code></td>
-                        <td>overlay / steamclient 先加载系统 winhttp，游戏目录那份插不进去。</td>
-                        <td>Doorstop 4.x 同时导出 VERSION + WinHttp，改名为 <code>version.dll</code>。<code>UnityPlayer</code> 静态导入 <code>VERSION.dll</code>。</td>
-                    </tr>
-                    <tr>
-                        <td>继承了 <code>DOORSTOP_INITIALIZED</code></td>
-                        <td>钩子装上、Mono 进了，日志写 <code>DOORSTOP_INITIALIZED is set! Skipping!</code></td>
-                        <td>开了 ignore 开关时清掉继承变量；本进程是否引导过用静态标志，不信环境变量。</td>
+                        <td><code>DOORSTOP_INITIALIZED</code></td>
+                        <td><code>mono_doorstop_bootstrap</code> / CoreCLR 引导在真正 invoke 之前</td>
+                        <td>下一次 <code>mono_doorstop_bootstrap</code></td>
+                        <td>非空则认为已经引导过，直接 return。</td>
                     </tr>
                 </tbody>
             </table>
-            <p>真正钉死第三层的是 16:27 这份 verbose 日志（节选见附件）：</p>
-            <pre><code>CONFIG: General.ignore_disable_switch = true
+            <p><code>config.h</code> 对 <code>ignore_disable_switch</code> 的说明已经点名 Steam：「launchers that break env var isolation」。它只覆盖 <code>DOORSTOP_DISABLE</code>。<code>DOORSTOP_INITIALIZED</code> 走另一条 <code>getenv</code>，不受这个开关约束。</p>
+            <p>环境会随 <code>CreateProcess</code> 默认继承。因此下面几种情况会把「已初始化」带进一个<strong>从未引导过</strong>的新进程：</p>
+            <ul>
+                <li>Steam 客户端给游戏进程塞了一份被污染的环境块（实测可同时带上 <code>DOORSTOP_DISABLE</code> 和 <code>DOORSTOP_INITIALIZED</code>）。</li>
+                <li>游戏或插件用 <code>Process.Start</code> 拉起自身，子进程继承父进程环境（上游 <a href="https://github.com/NeighTools/UnityDoorstop/issues/73">#73</a>）。</li>
+                <li>同目录的 <code>UnityCrashHandler*.exe</code> 也会加载 <code>VERSION.dll</code>；它不是 Mono 进程，但会跑 Doorstop 的 <code>DllEntry</code>。真正要命的是父进程环境，不是 handler 自己有没有 bootstrap。</li>
+            </ul>
+            <p>「管理员就能好」是红鲱鱼。兼容层 <code>RUNASADMIN</code> 走 UAC，子进程不继承 Steam 那份环境，两个变量都消失，引导恢复。UIPI 挡住 overlay 是并列现象，不是 <code>Skipping!</code> 的充要条件。</p>
+
+            <h2>3. 代理 DLL 与 IAT</h2>
+            <p>和 env 正交的一层是：代理必须成为 <code>UnityPlayer</code> 实际绑定的那个模块。</p>
+            <p>BepInEx 的 Windows 发行包默认落地 <code>winhttp.dll</code>。Steam overlay / <code>steamclient</code> 经常先加载系统 <code>winhttp.dll</code>。进程里已有同名模块后，游戏目录那份不再参与 <code>UnityPlayer</code> 的导入绑定，Doorstop 整段缺席（连 verbose 日志都没有）。</p>
+            <p>Doorstop 4.x 的 <code>proxylist.txt</code> 同时列出 VERSION 与 WinHttp 导出。把同一份二进制命名为 <code>version.dll</code> 通常更稳：<code>UnityPlayer</code> 静态导入 <code>VERSION.dll</code>，加载器会绑到 exe 目录。转发真实实现时需要 <code>version_alt.dll</code>（系统 <code>VERSION.dll</code> 的副本）。不要同时再放一份游戏目录 <code>winhttp.dll</code> 去和 overlay 抢。</p>
+            <p>IAT 钩子本身用「槽里的指针是否等于 <code>&amp;GetProcAddress</code>」匹配。overlay 若先把该槽改成自己的 trampoline，按地址钩会失败。按 <code>OriginalFirstThunk</code> 的导入名钩可以扛住已经改过的 IAT；这是独立问题，和 <code>DOORSTOP_INITIALIZED</code> 短路不是同一处 return。</p>
+
+            <h2>4. 关键日志</h2>
+            <p>编译带 <code>VERBOSE</code> 的 Doorstop 时，游戏根目录会写出 <code>doorstop_&lt;pid&gt;.log</code>。下面是 Steam 普通启动、开关已经打开、代理也已经是 <code>VERSION.dll</code> 时的典型失败（全文见附件）：</p>
+            <pre><code>CONFIG: General.enabled = true
+CONFIG: General.ignore_disable_switch = true
+Doorstop enabled!
+Installing IAT hooks
+Hooks installed, marking DOORSTOP_DISALBE = TRUE
 Got mono_jit_init_version at 097B0000
 Starting mono domain "Unity Root Domain"
+Overriding mono DLL search path
 DOORSTOP_INITIALIZED is set! Skipping!</code></pre>
-            <p>同类问题上游已有 <a href="https://github.com/NeighTools/UnityDoorstop/issues/73">UnityDoorstop#73</a>（游戏自己重启也会继承这两个变量）。</p>
+            <p>对应源码是 <code>src/bootstrap.c</code> 里 <code>mono_doorstop_bootstrap</code> 开头的 <code>getenv("DOORSTOP_INITIALIZED")</code>。这条路径在 <code>fopen(target_assembly)</code> 之前就返回，所以不会出现 <code>Opening assembly</code>，BepInEx 侧也不会有新的 Preloader 行。</p>
+            <p>对照实验：同一构建，提升完整性级别再启动（或从非 Steam 的干净环境启动），同一行变成继续往下走，<code>LogOutput.log</code> 出现 <code>BepInEx 6.x</code> chainloader。差异只有进程环境，不是文件 ACL。</p>
 
-            <h2>改了哪些代码</h2>
-            <h3>1. UnityDoorstop（真正修好的地方）</h3>
-            <p>上游 PR：<a href="https://github.com/NeighTools/UnityDoorstop/pull/109">NeighTools/UnityDoorstop#109</a></p>
+            <h2>5. 修补</h2>
+            <p>正确语义：<code>ignore_disable_switch</code> 表示「不要信任从父进程继承来的 Doorstop 控制变量」。它应当同时作用于 <code>DOORSTOP_DISABLE</code> 和 <code>DOORSTOP_INITIALIZED</code>。本进程内的防重入改用静态标志，避免依赖一块会被 <code>CreateProcess</code> 复制的环境。</p>
+            <p>实现（已提交 <a href="https://github.com/NeighTools/UnityDoorstop/pull/109">NeighTools/UnityDoorstop#109</a>）：</p>
             <table>
-                <thead><tr><th>文件</th><th>改什么</th></tr></thead>
+                <thead><tr><th>位置</th><th>行为</th></tr></thead>
                 <tbody>
                     <tr>
-                        <td class="path"><code>src/bootstrap.c</code> · <code>mono_doorstop_bootstrap</code></td>
-                        <td>若 <code>ignore_disabled_env</code> 为真，不因继承的 <code>DOORSTOP_INITIALIZED</code> 直接 return；本进程用静态 <code>doorstop_bootstrapped</code> 防重入。</td>
-                    </tr>
-                    <tr>
-                        <td class="path"><code>src/windows/entrypoint.c</code> · <code>DllEntry</code> 在 <code>load_config()</code> 之后</td>
-                        <td><code>SetEnvironmentVariableW(L"DOORSTOP_INITIALIZED", NULL)</code> 以及 <code>DOORSTOP_DISABLE</code>。</td>
+                        <td class="path"><code>src/windows/entrypoint.c</code> · <code>DllEntry</code>，<code>load_config()</code> 之后</td>
+                        <td>若 <code>config.ignore_disabled_env</code>，<code>SetEnvironmentVariableW</code> 清掉 <code>DOORSTOP_INITIALIZED</code> 与 <code>DOORSTOP_DISABLE</code>。</td>
                     </tr>
                     <tr>
                         <td class="path"><code>src/nix/entrypoint.c</code> · <code>doorstop_ctor</code></td>
-                        <td>同样 <code>unsetenv</code>，Linux/mac Steam 同一类泄漏。</td>
+                        <td>对等的 <code>unsetenv</code>。Steam Proton / 原生 Linux 是同一类继承。</td>
+                    </tr>
+                    <tr>
+                        <td class="path"><code>src/bootstrap.c</code> · <code>mono_doorstop_bootstrap</code></td>
+                        <td>静态 <code>doorstop_bootstrapped</code> 处理进程内二次进入；仅当开关为关时，才把已存在的 <code>DOORSTOP_INITIALIZED</code> 当成硬跳过。</td>
                     </tr>
                 </tbody>
             </table>
-            <p>本地游戏用的是这份源码编出来的 x86 <code>doorstop.dll</code>，复制成游戏根目录 <code>version.dll</code>。本机副本在 <code>lom_modkit/third_party/UnityDoorstop/</code>。</p>
+            <p>上游默认 <code>ignore_disable_switch</code> 仍是 <code>false</code>，避免改变非 Steam、主动用 <code>DOORSTOP_DISABLE</code> 的流程。Steam 发行或自重启场景在 ini 里打开开关即可同时覆盖两个变量。</p>
+            <p>游戏根目录最小配置：</p>
+            <pre><code>[General]
+enabled = true
+target_assembly = BepInEx\core\BepInEx.Unity.Mono.Preloader.dll
+ignore_disable_switch = true</code></pre>
+            <p>BepInEx 发行层（把 Windows 包默认打成 <code>version.dll</code>、把开关默认打开）属于产品策略，不是这次短路的充要修复。按 BepInEx 的贡献约定，改默认行为应先开 issue，本文不把它当成补丁本体。</p>
 
-            <h3>2. 游戏目录配置（不改源码也能先试前两层）</h3>
-            <table>
-                <thead><tr><th>路径</th><th>内容</th></tr></thead>
-                <tbody>
-                    <tr>
-                        <td class="path"><code>LegendOfMortal/doorstop_config.ini</code></td>
-                        <td><code>enabled = true</code>，<code>ignore_disable_switch = true</code>，<code>target_assembly = BepInEx\core\BepInEx.Unity.Mono.Preloader.dll</code></td>
-                    </tr>
-                    <tr>
-                        <td class="path"><code>LegendOfMortal/version.dll</code></td>
-                        <td>Doorstop 代理。不要同时再放一份抢系统的 <code>winhttp.dll</code>。</td>
-                    </tr>
-                    <tr>
-                        <td class="path"><code>LegendOfMortal/version_alt.dll</code></td>
-                        <td>系统 <code>VERSION.dll</code> 的副本，给 <code>load_proxy</code> 转发真实导出。</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>3. BepInEx 仓库（发行向，不是这次断点）</h3>
-            <p>本地分支 <code>third_party/BepInEx</code> 的 <code>steam-nonadmin-load</code>：默认 ini 打开 ignore 开关、Windows 包改打 <code>version.dll</code>。按 BepInEx 的贡献规则，默认改所有游戏要先问，所以<strong>没有</strong>往 BepInEx 提 PR。</p>
-            <table>
-                <thead><tr><th>文件</th><th>改什么</th></tr></thead>
-                <tbody>
-                    <tr><td class="path"><code>Runtimes/Unity/Doorstop/doorstop_config_mono.ini</code></td><td>默认 <code>ignore_disable_switch = true</code></td></tr>
-                    <tr><td class="path"><code>build/Program.cs</code> · MakeDist Windows</td><td>Doorstop 复制为 <code>version.dll</code> 而不是 <code>winhttp.dll</code></td></tr>
-                </tbody>
-            </table>
-
-            <h2>怎么确认修好</h2>
+            <h2>6. 验证</h2>
             <ol>
-                <li>Steam <strong>普通点开始</strong>，不要管理员。</li>
-                <li>新的 <code>doorstop_*.log</code> 里应有 <code>Cleared inherited DOORSTOP_INITIALIZED</code> 和 <code>Opening assembly</code>，不能再停在 <code>Skipping!</code>。</li>
-                <li><code>BepInEx/LogOutput.log</code> 时间变成这次启动，出现 <code>BepInEx 6.0.0-be.785</code> 和 MortalModHost。</li>
-                <li>标题左下角「活侠MOD」，菜单是 <strong>F8</strong>。</li>
+                <li>从 Steam 以 Medium 完整性启动（不要 <code>RUNASADMIN</code>）。</li>
+                <li>verbose 日志应出现 <code>Cleared inherited DOORSTOP_INITIALIZED / DOORSTOP_DISABLE</code>，随后 <code>Opening assembly</code>，不能再停在 <code>Skipping!</code>。</li>
+                <li><code>BepInEx/LogOutput.log</code> 的修改时间对应当次启动，并含 Preloader / Chainloader 行。</li>
+                <li>回归：显式设置 <code>ignore_disable_switch = false</code> 且父进程带上 <code>DOORSTOP_INITIALIZED</code>，仍应跳过——确认没有把防重入整段拆掉。</li>
             </ol>
 
-            <h2>附件</h2>
+            <h2>附件与引用</h2>
             <ul class="attach-list">
                 <li>
                     <a href="../attachments/steam-doorstop-bepinex/doorstop-skip.log">
-                        <span>doorstop-skip.log · 跳过引导的关键日志</span>
+                        <span>doorstop-skip.log — verbose 下的短路现场</span>
                         <span>txt</span>
                     </a>
                 </li>
                 <li>
                     <a href="https://github.com/NeighTools/UnityDoorstop/pull/109">
-                        <span>上游 PR #109</span>
+                        <span>UnityDoorstop PR #109</span>
                         <span>GitHub</span>
                     </a>
                 </li>
                 <li>
                     <a href="https://github.com/NeighTools/UnityDoorstop/issues/73">
-                        <span>相关 issue #73 · 进程重启继承环境变量</span>
+                        <span>UnityDoorstop #73 — 自重启继承环境</span>
                         <span>GitHub</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/NeighTools/UnityDoorstop/blob/master/src/bootstrap.c">
+                        <span>src/bootstrap.c · mono_doorstop_bootstrap</span>
+                        <span>源码</span>
                     </a>
                 </li>
             </ul>
