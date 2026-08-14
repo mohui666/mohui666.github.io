@@ -1,0 +1,24 @@
+# 2026-08-14 16:27  Steam 普通启动 Mortal.exe
+# 文件：游戏目录 doorstop_11f12a9.log（verbose Doorstop）
+# 结论：钩子已装上，Mono 已进，引导被 DOORSTOP_INITIALIZED 跳过。
+
+Doorstop started!
+Executable path: C:\Program Files (x86)\Steam\steamapps\common\LegendOfMortal\Mortal.exe
+Doorstop library path: ...\LegendOfMortal\VERSION.dll
+Doorstop library name: VERSION
+CONFIG: General.enabled = true
+CONFIG: General.ignore_disable_switch = true
+CONFIG: General.target_assembly = BepInEx\core\BepInEx.Unity.Mono.Preloader.dll
+Config loaded
+Doorstop enabled!
+Installing IAT hooks
+Hooks installed, marking DOORSTOP_DISALBE = TRUE
+Got mono_jit_init_version at 097B0000
+Loaded all runtime functions
+Starting mono domain "Unity Root Domain"
+Runtime version: v4.0.30319
+Current root: ...\Mortal_Data\Managed
+Overriding mono DLL search path
+Adding root path: ...\BepInEx\core
+Mono search path: ...\BepInEx\core;...\Mortal_Data\Managed
+DOORSTOP_INITIALIZED is set! Skipping!

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/subpage.css" type="text/css">
+    <link rel="stylesheet" href="../css/blog.css" type="text/css">
+    <title>如何加一篇笔记 · mohui666</title>
+</head>
+<body>
+    <main class="subpage-shell">
+        <nav class="top-nav" aria-label="页面导航">
+            <a class="nav-pill" href="index.html">← 笔记列表</a>
+        </nav>
+        <article class="content-card post-body">
+            <p class="kicker">Howto</p>
+            <h1>加一篇<span>笔记</span></h1>
+            <ol>
+                <li>复制 <code>blog/posts/steam-doorstop-bepinex.html</code> 改标题和正文，文件名用英文短横线。</li>
+                <li>附件放到 <code>blog/attachments/&lt;同一 id&gt;/</code>。</li>
+                <li>在 <code>blog/posts.json</code> 的 <code>posts</code> 数组<strong>最前面</strong>加一条：</li>
+            </ol>
+            <pre><code>{
+  "id": "new-slug",
+  "title": "标题",
+  "date": "2026-08-15",
+  "tags": ["标签"],
+  "summary": "一两句现象和结论。",
+  "url": "posts/new-slug.html"
+}</code></pre>
+            <p>列表页按 <code>date</code> 倒序自动排。推到 <code>main</code> 后 GitHub Pages 会重新部署。</p>
+        </article>
+    </main>
+</body>
+</html>

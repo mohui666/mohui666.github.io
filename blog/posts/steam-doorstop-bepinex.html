@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Steam 普通启动活侠传时 BepInEx 不加载：Doorstop 被继承的 DOORSTOP_INITIALIZED 跳过。">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/subpage.css" type="text/css">
+    <link rel="stylesheet" href="../../css/blog.css" type="text/css">
+    <title>Steam 下 BepInEx 不提权就加载不了 · 笔记</title>
+</head>
+<body>
+    <main class="subpage-shell">
+        <nav class="top-nav" aria-label="页面导航">
+            <a class="nav-pill" href="../index.html">← 笔记列表</a>
+            <a class="nav-pill" href="../../index.html">主页</a>
+        </nav>
+        <article class="content-card post-body">
+            <p class="kicker">Doorstop · Steam · BepInEx</p>
+            <h1>不提权就不加载</h1>
+            <p class="blog-meta">
+                <time datetime="2026-08-14">2026-08-14</time>
+                <span>活侠传 / Legend of Mortal · Unity 2020.3 Mono x86</span>
+            </p>
+            <div class="tag-row">
+                <span class="tag">Doorstop</span>
+                <span class="tag">BepInEx</span>
+                <span class="tag">Steam</span>
+            </div>
+
+            <p>Steam 点「开始」进标题没有「活侠MOD」，F8 没菜单。同一套文件，勾了管理员兼容就能加载。看起来像权限，其实 Doorstop 在进 BepInEx 之前就被掐掉了。</p>
+
+            <h2>加载链</h2>
+            <p>BepInEx 自己不负责钻进 Unity。顺序是：</p>
+            <p><strong>Steam → Mortal.exe → Doorstop（游戏目录 <code>version.dll</code>）→ 钩 <code>GetProcAddress</code> → <code>mono_jit_init_version</code> → <code>Doorstop.Entrypoint.Start</code> → BepInEx → MortalModHost</strong></p>
+            <p>哪一截断了，日志表现不一样：没有新的 <code>doorstop_*.log</code> 是 DLL 没进进程；有 Doorstop 日志但没有新的 <code>BepInEx/LogOutput.log</code> 是引导被跳过。</p>
+
+            <h2>误判</h2>
+            <ul>
+                <li>把 BepInEx 升到 785 / 迁 LTS：#1340、#1331 只是写配置失败别 abort，托管代码还没被叫到。</li>
+                <li>只改 BepInEx 的 C# 并覆盖 <code>BepInEx.Unity.Mono.Preloader.dll</code>：<code>LogOutput.log</code> 时间戳不动。</li>
+                <li>只开 <code>ignore_disable_switch</code>：能躲过 <code>DOORSTOP_DISABLE</code>，躲不过后面的 <code>DOORSTOP_INITIALIZED</code>。</li>
+            </ul>
+
+            <h2>三层原因</h2>
+            <table>
+                <thead>
+                    <tr><th>层</th><th>现象</th><th>做法</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Steam 塞 <code>DOORSTOP_DISABLE</code></td>
+                        <td>Doorstop 进进程立刻自杀。管理员走 UAC，不继承这份环境。</td>
+                        <td><code>doorstop_config.ini</code> 里 <code>ignore_disable_switch = true</code>（官方注释本来就是给 Steam 破坏环境隔离用的）</td>
+                    </tr>
+                    <tr>
+                        <td>代理 DLL 叫 <code>winhttp.dll</code></td>
+                        <td>overlay / steamclient 先加载系统 winhttp，游戏目录那份插不进去。</td>
+                        <td>Doorstop 4.x 同时导出 VERSION + WinHttp，改名为 <code>version.dll</code>。<code>UnityPlayer</code> 静态导入 <code>VERSION.dll</code>。</td>
+                    </tr>
+                    <tr>
+                        <td>继承了 <code>DOORSTOP_INITIALIZED</code></td>
+                        <td>钩子装上、Mono 进了，日志写 <code>DOORSTOP_INITIALIZED is set! Skipping!</code></td>
+                        <td>开了 ignore 开关时清掉继承变量；本进程是否引导过用静态标志，不信环境变量。</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>真正钉死第三层的是 16:27 这份 verbose 日志（节选见附件）：</p>
+            <pre><code>CONFIG: General.ignore_disable_switch = true
+Got mono_jit_init_version at 097B0000
+Starting mono domain "Unity Root Domain"
+DOORSTOP_INITIALIZED is set! Skipping!</code></pre>
+            <p>同类问题上游已有 <a href="https://github.com/NeighTools/UnityDoorstop/issues/73">UnityDoorstop#73</a>（游戏自己重启也会继承这两个变量）。</p>
+
+            <h2>改了哪些代码</h2>
+            <h3>1. UnityDoorstop（真正修好的地方）</h3>
+            <p>上游 PR：<a href="https://github.com/NeighTools/UnityDoorstop/pull/109">NeighTools/UnityDoorstop#109</a></p>
+            <table>
+                <thead><tr><th>文件</th><th>改什么</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td class="path"><code>src/bootstrap.c</code> · <code>mono_doorstop_bootstrap</code></td>
+                        <td>若 <code>ignore_disabled_env</code> 为真，不因继承的 <code>DOORSTOP_INITIALIZED</code> 直接 return；本进程用静态 <code>doorstop_bootstrapped</code> 防重入。</td>
+                    </tr>
+                    <tr>
+                        <td class="path"><code>src/windows/entrypoint.c</code> · <code>DllEntry</code> 在 <code>load_config()</code> 之后</td>
+                        <td><code>SetEnvironmentVariableW(L"DOORSTOP_INITIALIZED", NULL)</code> 以及 <code>DOORSTOP_DISABLE</code>。</td>
+                    </tr>
+                    <tr>
+                        <td class="path"><code>src/nix/entrypoint.c</code> · <code>doorstop_ctor</code></td>
+                        <td>同样 <code>unsetenv</code>，Linux/mac Steam 同一类泄漏。</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>本地游戏用的是这份源码编出来的 x86 <code>doorstop.dll</code>，复制成游戏根目录 <code>version.dll</code>。本机副本在 <code>lom_modkit/third_party/UnityDoorstop/</code>。</p>
+
+            <h3>2. 游戏目录配置（不改源码也能先试前两层）</h3>
+            <table>
+                <thead><tr><th>路径</th><th>内容</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td class="path"><code>LegendOfMortal/doorstop_config.ini</code></td>
+                        <td><code>enabled = true</code>，<code>ignore_disable_switch = true</code>，<code>target_assembly = BepInEx\core\BepInEx.Unity.Mono.Preloader.dll</code></td>
+                    </tr>
+                    <tr>
+                        <td class="path"><code>LegendOfMortal/version.dll</code></td>
+                        <td>Doorstop 代理。不要同时再放一份抢系统的 <code>winhttp.dll</code>。</td>
+                    </tr>
+                    <tr>
+                        <td class="path"><code>LegendOfMortal/version_alt.dll</code></td>
+                        <td>系统 <code>VERSION.dll</code> 的副本，给 <code>load_proxy</code> 转发真实导出。</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>3. BepInEx 仓库（发行向，不是这次断点）</h3>
+            <p>本地分支 <code>third_party/BepInEx</code> 的 <code>steam-nonadmin-load</code>：默认 ini 打开 ignore 开关、Windows 包改打 <code>version.dll</code>。按 BepInEx 的贡献规则，默认改所有游戏要先问，所以<strong>没有</strong>往 BepInEx 提 PR。</p>
+            <table>
+                <thead><tr><th>文件</th><th>改什么</th></tr></thead>
+                <tbody>
+                    <tr><td class="path"><code>Runtimes/Unity/Doorstop/doorstop_config_mono.ini</code></td><td>默认 <code>ignore_disable_switch = true</code></td></tr>
+                    <tr><td class="path"><code>build/Program.cs</code> · MakeDist Windows</td><td>Doorstop 复制为 <code>version.dll</code> 而不是 <code>winhttp.dll</code></td></tr>
+                </tbody>
+            </table>
+
+            <h2>怎么确认修好</h2>
+            <ol>
+                <li>Steam <strong>普通点开始</strong>，不要管理员。</li>
+                <li>新的 <code>doorstop_*.log</code> 里应有 <code>Cleared inherited DOORSTOP_INITIALIZED</code> 和 <code>Opening assembly</code>，不能再停在 <code>Skipping!</code>。</li>
+                <li><code>BepInEx/LogOutput.log</code> 时间变成这次启动，出现 <code>BepInEx 6.0.0-be.785</code> 和 MortalModHost。</li>
+                <li>标题左下角「活侠MOD」，菜单是 <strong>F8</strong>。</li>
+            </ol>
+
+            <h2>附件</h2>
+            <ul class="attach-list">
+                <li>
+                    <a href="../attachments/steam-doorstop-bepinex/doorstop-skip.log">
+                        <span>doorstop-skip.log · 跳过引导的关键日志</span>
+                        <span>txt</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/NeighTools/UnityDoorstop/pull/109">
+                        <span>上游 PR #109</span>
+                        <span>GitHub</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/NeighTools/UnityDoorstop/issues/73">
+                        <span>相关 issue #73 · 进程重启继承环境变量</span>
+                        <span>GitHub</span>
+                    </a>
+                </li>
+            </ul>
+        </article>
+    </main>
+</body>
+</html>
