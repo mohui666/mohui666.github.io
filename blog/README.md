@@ -1,4 +1,4 @@
-# 笔记（GitHub Pages）
+# Blog（GitHub Pages）
 
 列表：https://mohui666.github.io/blog/
 
