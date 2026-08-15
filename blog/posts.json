@@ -1,13 +1,13 @@
 {
   "title": "Blog",
-  "description": "怎么断、改了哪、附件在哪。以后按同样格式往下加。",
+  "description": "排查笔记与开发日志：一篇一个坑，或一个周期的提交全记录。",
   "posts": [
     {
       "id": "lom-modkit-devlog-1",
       "title": "lom_modkit 开发日志（changelog）— 2026-08-12 → 08-15",
       "date": "2026-08-15",
       "tags": ["活侠传", "lom_modkit", "changelog", "开发日志"],
-      "summary": "第一个开发周期 36 次提交全记录：按日期倒序、feat/fix/docs 分组、每条链到 commit。里程碑 v0.6.0（08-14）。",
+      "summary": "第一个开发周期 37 次提交全记录：按日期倒序、feat/fix/docs 分组、每条链到 commit。里程碑 v0.6.0（08-14）与 v0.7.0（08-15）。",
       "url": "posts/lom-modkit-devlog-1.html"
     },
     {
