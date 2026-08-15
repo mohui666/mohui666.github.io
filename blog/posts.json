@@ -3,6 +3,14 @@
   "description": "怎么断、改了哪、附件在哪。以后按同样格式往下加。",
   "posts": [
     {
+      "id": "lom-modkit-devlog-1",
+      "title": "lom_modkit 开发日志 #1 — 四天，三十六次提交",
+      "date": "2026-08-15",
+      "tags": ["活侠传", "lom_modkit", "开发日志", "BepInEx", "PySide6"],
+      "summary": "从 38 节点编译器到 v0.6.0：六个黑屏根因怎么变成编译期硬规则，用户内容库（音频/语音/立绘）与四语言文档怎么落地。",
+      "url": "posts/lom-modkit-devlog-1.html"
+    },
+    {
       "id": "steam-doorstop-bepinex",
       "title": "Steam 环境下 Doorstop 引导被 DOORSTOP_INITIALIZED 短路",
       "date": "2026-08-14",
