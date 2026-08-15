@@ -4,10 +4,10 @@
   "posts": [
     {
       "id": "lom-modkit-devlog-1",
-      "title": "lom_modkit 开发日志 #1 — 四天，三十六次提交",
+      "title": "lom_modkit 开发日志（changelog）— 2026-08-12 → 08-15",
       "date": "2026-08-15",
-      "tags": ["活侠传", "lom_modkit", "开发日志", "BepInEx", "PySide6"],
-      "summary": "从 38 节点编译器到 v0.6.0：六个黑屏根因怎么变成编译期硬规则，用户内容库（音频/语音/立绘）与四语言文档怎么落地。",
+      "tags": ["活侠传", "lom_modkit", "changelog", "开发日志"],
+      "summary": "第一个开发周期 36 次提交全记录：按日期倒序、feat/fix/docs 分组、每条链到 commit。里程碑 v0.6.0（08-14）。",
       "url": "posts/lom-modkit-devlog-1.html"
     },
     {
