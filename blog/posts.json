@@ -3,6 +3,14 @@
   "description": "排查笔记与开发日志：一篇一个坑，或一个周期的提交全记录。",
   "posts": [
     {
+      "id": "lom-modkit-devlog-2",
+      "title": "lom_modkit 开发日志（changelog）#2 — 2026-08-15 晚 → 08-16",
+      "date": "2026-08-16",
+      "tags": ["活侠传", "lom_modkit", "changelog", "开发日志"],
+      "summary": "gameplay breadth sprint：74 次提交。战斗/商店/任务/活动/持久状态的玩法编排，F5 运行时调试器，离线内容包与 schema 版本化，溯源水印与 Mod 披露。",
+      "url": "posts/lom-modkit-devlog-2.html"
+    },
+    {
       "id": "lom-modkit-devlog-1",
       "title": "lom_modkit 开发日志（changelog）— 2026-08-12 → 08-15",
       "date": "2026-08-15",
