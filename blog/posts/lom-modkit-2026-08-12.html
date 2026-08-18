@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="lom_modkit 2026-08-12 更新日志：项目起点，38 节点编译器、图形编辑器、战役模式运行时与官方素材预览管线。">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/subpage.css" type="text/css">
+    <link rel="stylesheet" href="../../css/blog.css" type="text/css">
+    <title>lom_modkit 更新日志 — 2026-08-12</title>
+</head>
+<body>
+    <main class="subpage-shell">
+        <nav class="top-nav" aria-label="页面导航"><a class="nav-pill" href="../index.html">← Blog</a><a class="nav-pill" href="../../index.html">主页</a></nav>
+        <article class="content-card post-body">
+            <p class="kicker">活侠传 · lom_modkit · Changelog</p>
+            <h1>lom_modkit 更新日志 — 2026-08-12</h1>
+            <p class="blog-meta"><time datetime="2026-08-12">2026-08-12</time><span>项目起点 · v3 全机制基线</span></p>
+            <div class="tag-row"><span class="tag">活侠传</span><span class="tag">lom_modkit</span><span class="tag">changelog</span></div>
+            <p>这一天确定了 lom_modkit 的第一条完整技术路线：先基于游戏真实剧情脚本和运行时接口建立可验证的节点模型，再做编辑器和 MOD Host，而不是从一套脱离原作的自定义 DSL 开始。</p>
+            <h2>主要更新</h2>
+            <ul>
+                <li><a href="https://github.com/mohui666/lom_modkit/commit/044d8b0">044d8b0</a> 建立 v3 全机制基线：<strong>38 种剧情节点</strong>的编译器、中文图形编辑器、战役模式插件与预览素材管线。</li>
+                <li>节点能力来自对约 <strong>1814 个官方剧情脚本</strong>的实证分析，优先复用《活侠传》原有对白、场景、角色、音乐、特效和流程机制。</li>
+                <li>形成最初的“编辑 → 编译 → 游戏内运行”闭环，为之后的 F5 试玩、发布体检、用户内容库和玩法编排打基础。</li>
+            </ul>
+            <h2>当天结论</h2>
+            <p>项目从一开始就不是单纯的剧情文本编辑器，而是朝“可视化编排《活侠传》原生能力”的方向设计；后续功能扩展基本都建立在这套节点与运行时契约上。</p>
+            <ul class="attach-list"><li><a href="lom-modkit-2026-08-13.html"><span>下一篇：2026-08-13</span><span>Blog</span></a></li><li><a href="https://github.com/mohui666/lom_modkit"><span>mohui666/lom_modkit</span><span>GitHub</span></a></li></ul>
+        </article>
+    </main>
+</body>
+</html>

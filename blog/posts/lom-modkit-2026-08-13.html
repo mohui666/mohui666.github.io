@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="lom_modkit 2026-08-13 更新日志：F5 试玩、发布体检、流程图、story_api、多剧情工程、运行时节点扩展，以及集中修复黑屏和菜单崩溃。">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon"><link rel="stylesheet" href="../../css/subpage.css" type="text/css"><link rel="stylesheet" href="../../css/blog.css" type="text/css">
+    <title>lom_modkit 更新日志 — 2026-08-13</title>
+</head>
+<body><main class="subpage-shell"><nav class="top-nav" aria-label="页面导航"><a class="nav-pill" href="../index.html">← Blog</a><a class="nav-pill" href="../../index.html">主页</a></nav><article class="content-card post-body">
+<p class="kicker">活侠传 · lom_modkit · Changelog</p><h1>lom_modkit 更新日志 — 2026-08-13</h1><p class="blog-meta"><time datetime="2026-08-13">2026-08-13</time><span>编辑器工作流成型 · 黑屏/崩溃集中排雷</span></p><div class="tag-row"><span class="tag">活侠传</span><span class="tag">lom_modkit</span><span class="tag">editor</span><span class="tag">runtime</span></div>
+<p>这一天的重点是把“能编译”推进到“能持续制作和调试”：编辑器加入 F5 试玩、体检、安装管理、流程图和多剧情工程，同时对游戏内黑屏、菜单越界和素材预载问题做了一轮集中修复。</p>
+<h2>编辑器与制作工作流</h2><ul>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/bc840d2">bc840d2</a> F5 试玩预览、发布前体检、安装管理和剧情流程图落地；流程图加入多目标着色与重叠修复。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/525512f">525512f</a> 新增 <code>story_api</code>，给 AI / CLI 提供受控的剧情编辑接口。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/749d008">749d008</a> 多剧情脚本管理、撤销/重做和脏标记。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/828dbc4">828dbc4</a> 编辑器 UI 主题与 PyInstaller 双入口打包。</li>
+</ul>
+<h2>运行时能力扩展</h2><ul>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/d3e032b">d3e032b</a> MOD 战役可以从标题画面独立启动。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/dc3fd2e">dc3fd2e</a> 已读文本快进、自定义死亡文本、心情气泡控制。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/fa19490">fa19490</a> 官方死亡/结局画面注入 MOD 文本；扩展时间、好感与骰子相关条件。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/6d5ff63">6d5ff63</a> 循环特效成对停止、骰子区间文本、MOD 专属死亡/结局 id。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/c2ead16">c2ead16</a> 死亡信息两段式格式，并允许战役禁用原版剧情事件。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/0cb0623">0cb0623</a> 新增 dim / message / rotate / dayenv 节点，branch 扩展 stat / flag_value / condition 来源。</li>
+</ul>
+<h2>黑屏与崩溃排雷</h2><ul>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/44a86b3">44a86b3</a> 修复从剧情中途 F5 试玩时的黑屏，试玩包自动补齐舞台状态前导。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/86869a8">86869a8</a> 修复游戏内黑屏根因，并加固骰子文本与编译器防护。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/eb2c2bd">eb2c2bd</a> 修复 clue transition 配对和主场景黑幕开场残留。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/7201fe2">7201fe2</a> 修复背景缺少 LoadView 预载，以及骰子菜单选项不足导致的 NRE。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/7b0b61f">7b0b61f</a> 修复 Talk 菜单越界崩溃，并补表情差分加载。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/f29827d">f29827d</a> 文本防 wipe、气泡控制加固，并增加全功能展示剧本。</li>
+</ul>
+<h2>样例与开源准备</h2><ul><li><a href="https://github.com/mohui666/lom_modkit/commit/29cc0a7">29cc0a7</a> 新增《点心大盗疑案》战役样例、screenbot 与 probe 诊断工具。</li><li><a href="https://github.com/mohui666/lom_modkit/commit/5fe2b21">5fe2b21</a> MIT 许可证、README 使用/构建文档与解包目录环境变量化。</li></ul>
+<ul class="attach-list"><li><a href="lom-modkit-2026-08-12.html"><span>上一篇：2026-08-12</span><span>Blog</span></a></li><li><a href="lom-modkit-2026-08-14.html"><span>下一篇：2026-08-14</span><span>Blog</span></a></li></ul>
+</article></main></body></html>

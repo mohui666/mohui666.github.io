@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="lom_modkit 2026-08-17 更新日志：v1.0.1 实机稳定性修复，Combat 身份隔离，Battle roster、人数组成与血量配置，以及反编译接口优先文档。"><link rel="icon" href="../../images/cover.ico" type="image/x-icon"><link rel="stylesheet" href="../../css/subpage.css" type="text/css"><link rel="stylesheet" href="../../css/blog.css" type="text/css"><title>lom_modkit 更新日志 — 2026-08-17</title></head>
+<body><main class="subpage-shell"><nav class="top-nav" aria-label="页面导航"><a class="nav-pill" href="../index.html">← Blog</a><a class="nav-pill" href="../../index.html">主页</a></nav><article class="content-card post-body">
+<p class="kicker">活侠传 · lom_modkit · Changelog</p><h1>lom_modkit 更新日志 — 2026-08-17</h1><p class="blog-meta"><time datetime="2026-08-17">2026-08-17</time><span>Combat / Battle 实机稳定性与配置精度</span></p><div class="tag-row"><span class="tag">活侠传</span><span class="tag">lom_modkit</span><span class="tag">combat</span><span class="tag">battle</span></div>
+<p>1.0.1 发布后开始集中实机验证 Combat/Battle。重点不是继续加节点数量，而是解决“看起来能跑、但角色身份、背景、人数、血量或恢复状态不够可信”的问题。</p>
+<h2>主要修复</h2><ul>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/acea025">acea025</a> 稳定 v1.0.1 的 Gameplay 场景切换与运行流程。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/a9ce6dc">a9ce6dc</a> Combat 身份与官方 duel shell 解耦：运行时使用临时 carrier 承载自定义角色、背景、数值与官方 CombatSkill 天赋，避免继承错误的 <code>CL_*</code> 身份或背景。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/8315df0">8315df0</a> Battle 阵营支持自带 roster、人数、ReadyPanel 标题和克隆 NPC 血量；具名部队可以回退使用角色目录中的 Battle animator。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/8315df0">8315df0</a> Combat 立绘不足四帧时固定到官方 idle 槽；状态滑条按 CombatStat 的 100 上限处理。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/e080e3d">e080e3d</a> 更新 showcase3 的 Combat 样例，专门覆盖“无四帧立绘 + 100 数值上限”的实机情况。</li>
+</ul>
+<h2>开发约束文档</h2><ul><li><a href="https://github.com/mohui666/lom_modkit/commit/8315df0">8315df0</a> 文档收敛为作者、契约和维护者三类；AGENTS.md 明确要求涉及游戏功能时优先依据反编译 API 实证，同时禁止把完整游戏反编译源码提交到仓库。</li></ul>
+<ul class="attach-list"><li><a href="lom-modkit-2026-08-16.html"><span>上一篇：2026-08-16</span><span>Blog</span></a></li><li><a href="lom-modkit-2026-08-18.html"><span>下一篇：2026-08-18</span><span>Blog</span></a></li></ul>
+</article></main></body></html>

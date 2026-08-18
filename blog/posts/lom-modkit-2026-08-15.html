@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="lom_modkit 2026-08-15 更新日志：v0.7.0、自定义角色与图片内容、编辑器生产力、F5/F6 调试、schema/发布工程、溯源水印，以及战斗/商店/任务等玩法编排。"><link rel="icon" href="../../images/cover.ico" type="image/x-icon"><link rel="stylesheet" href="../../css/subpage.css" type="text/css"><link rel="stylesheet" href="../../css/blog.css" type="text/css"><title>lom_modkit 更新日志 — 2026-08-15</title></head>
+<body><main class="subpage-shell"><nav class="top-nav" aria-label="页面导航"><a class="nav-pill" href="../index.html">← Blog</a><a class="nav-pill" href="../../index.html">主页</a></nav><article class="content-card post-body">
+<p class="kicker">活侠传 · lom_modkit · Changelog</p><h1>lom_modkit 更新日志 — 2026-08-15</h1><p class="blog-meta"><time datetime="2026-08-15">2026-08-15</time><span>v0.7.0 · 内容系统、调试器与 gameplay breadth sprint</span></p><div class="tag-row"><span class="tag">活侠传</span><span class="tag">lom_modkit</span><span class="tag">v0.7.0</span><span class="tag">gameplay</span></div>
+<p>这是功能密度最高的一天之一：白天完成自定义角色和内容系统，随后连续补齐编辑器生产力、运行时调试、打包/兼容性/水印基础设施，并开始把工具从“剧情演出”扩展到战斗、任务、商店和持久状态等玩法编排。</p>
+<h2>v0.7.0 与自定义内容</h2><ul>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/dca85c0">dca85c0</a> 发布 <strong>v0.7.0</strong>：自定义角色立绘、对白称号、介绍卡、50–130% 体型滑条、原图朝向、语音归属、离场清台与按类型自动编号。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/4ebccf2">4ebccf2</a> Custom Character v1：导入 PNG 即可作为可登场角色。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/2375a68">2375a68</a> 补齐自定义角色舞台动作。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/5a8ddd7">5a8ddd7</a>、<a href="https://github.com/mohui666/lom_modkit/commit/91665b6">91665b6</a>、<a href="https://github.com/mohui666/lom_modkit/commit/77c1b83">77c1b83</a>、<a href="https://github.com/mohui666/lom_modkit/commit/37e02c1">37e02c1</a> 依次加入通用用户图片、自定义背景、全屏 CG、overlay / cut-in。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/42866c9">42866c9</a> 统一内容浏览器升级。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/56e8609">56e8609</a> 编辑器支持简中/繁中/日语/韩语，步骤可重命名和拖动排序。</li>
+</ul>
+<h2>编辑器生产力</h2><ul>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/d10287c">d10287c</a> 项目级剧情搜索；<a href="https://github.com/mohui666/lom_modkit/commit/2d88750">2d88750</a> 项目级引用检查器。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/bde1966">bde1966</a> 安全批量编辑；<a href="https://github.com/mohui666/lom_modkit/commit/1a321b4">1a321b4</a> 可复用节点模板；<a href="https://github.com/mohui666/lom_modkit/commit/73915f7">73915f7</a> 剧情分组；<a href="https://github.com/mohui666/lom_modkit/commit/1d2d022">1d2d022</a> 跨剧情安全转移。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/ace7147">ace7147</a> 变量/flag 管理器；<a href="https://github.com/mohui666/lom_modkit/commit/a18d325">a18d325</a> 条件检查器；<a href="https://github.com/mohui666/lom_modkit/commit/d9c4db2">d9c4db2</a> 路径模拟器；<a href="https://github.com/mohui666/lom_modkit/commit/54dfd30">54dfd30</a> 离线剧情测试。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/dcc9cfb">dcc9cfb</a> 剧情本地化管线；<a href="https://github.com/mohui666/lom_modkit/commit/6f09ec6">6f09ec6</a> 翻译覆盖率仪表盘。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/f53f436">f53f436</a>、<a href="https://github.com/mohui666/lom_modkit/commit/43d0b24">43d0b24</a> 异常退出恢复自动存档；<a href="https://github.com/mohui666/lom_modkit/commit/fc17d23">fc17d23</a> 项目统计；<a href="https://github.com/mohui666/lom_modkit/commit/20d5b9f">20d5b9f</a> 语音覆盖率报告。</li>
+</ul>
+<h2>F5 / F6 调试与诊断</h2><ul>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/10ca54c">10ca54c</a> 有界运行时 trace；<a href="https://github.com/mohui666/lom_modkit/commit/894e64b">894e64b</a> F5 Runtime Debugger；<a href="https://github.com/mohui666/lom_modkit/commit/5d296a1">5d296a1</a> 节点边界暂停/单步；<a href="https://github.com/mohui666/lom_modkit/commit/0efe558">0efe558</a> F5 热重载生命周期。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/0e3aebf">0e3aebf</a> 扩展 F6 静态分析；<a href="https://github.com/mohui666/lom_modkit/commit/f72256c">f72256c</a> 结构化 Runtime Error；<a href="https://github.com/mohui666/lom_modkit/commit/607cdfb">607cdfb</a> 隐私安全诊断包。</li>
+</ul>
+<h2>包格式、发布与兼容性</h2><ul>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/7c4c3dc">7c4c3dc</a> schema 版本；<a href="https://github.com/mohui666/lom_modkit/commit/4cd61b9">4cd61b9</a> 可恢复迁移；<a href="https://github.com/mohui666/lom_modkit/commit/9502efc">9502efc</a> 兼容性元数据；<a href="https://github.com/mohui666/lom_modkit/commit/f233d75">f233d75</a> 确定性打包。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/be692f9">be692f9</a> 只读包检查器；<a href="https://github.com/mohui666/lom_modkit/commit/58e3805">58e3805</a> 离线内容包；<a href="https://github.com/mohui666/lom_modkit/commit/aeae308">aeae308</a> 内容包依赖。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/c19b712">c19b712</a> 严格发布前体检；<a href="https://github.com/mohui666/lom_modkit/commit/61de7fc">61de7fc</a> 离线 Release Builder；<a href="https://github.com/mohui666/lom_modkit/commit/940e8ee">940e8ee</a> Installation Doctor；<a href="https://github.com/mohui666/lom_modkit/commit/e0eaae4">e0eaae4</a> Runtime Rollback。</li>
+</ul>
+<h2>溯源与非官方披露</h2><ul><li><a href="https://github.com/mohui666/lom_modkit/commit/f84c4e7">f84c4e7</a> 定义溯源水印协议；<a href="https://github.com/mohui666/lom_modkit/commit/6dbd630">6dbd630</a> 演出时嵌入水印；<a href="https://github.com/mohui666/lom_modkit/commit/2aafbbb">2aafbbb</a> 截图检测；<a href="https://github.com/mohui666/lom_modkit/commit/2a65f1e">2a65f1e</a> 多帧视频检测。</li><li><a href="https://github.com/mohui666/lom_modkit/commit/2933d38">2933d38</a> / <a href="https://github.com/mohui666/lom_modkit/commit/c758260">c758260</a> 强制非官方 MOD 披露。</li></ul>
+<h2>Gameplay breadth sprint 启动</h2><ul>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/6291084">6291084</a> 先验证 Gameplay 集成 API，再开始高层节点。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/d12c2f9">d12c2f9</a>、<a href="https://github.com/mohui666/lom_modkit/commit/9b21d87">9b21d87</a> 原版战斗编排与验证层；<a href="https://github.com/mohui666/lom_modkit/commit/2b8db98">2b8db98</a> 战斗预设；<a href="https://github.com/mohui666/lom_modkit/commit/f79926e">f79926e</a> 按真实战斗结果分支；<a href="https://github.com/mohui666/lom_modkit/commit/890ca13">890ca13</a> 战斗布置/奖励复合节点。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/502a36d">502a36d</a> 自定义商店；<a href="https://github.com/mohui666/lom_modkit/commit/4b3ddf2">4b3ddf2</a> Gameplay checks；<a href="https://github.com/mohui666/lom_modkit/commit/8d424ec">8d424ec</a> 类型化战役事件触发器。</li>
+<li><a href="https://github.com/mohui666/lom_modkit/commit/97d1a2b">97d1a2b</a> 活动与隔离 MOD 任务；<a href="https://github.com/mohui666/lom_modkit/commit/6c562e3">6c562e3</a> 槽位绑定持久 MOD 状态；<a href="https://github.com/mohui666/lom_modkit/commit/c788a99">c788a99</a> 原版 UI 结算画面。</li>
+</ul>
+<ul class="attach-list"><li><a href="lom-modkit-2026-08-14.html"><span>上一篇：2026-08-14</span><span>Blog</span></a></li><li><a href="lom-modkit-2026-08-16.html"><span>下一篇：2026-08-16</span><span>Blog</span></a></li><li><a href="https://github.com/mohui666/lom_modkit/releases/tag/v0.7.0"><span>v0.7.0 Release</span><span>GitHub</span></a></li></ul>
+</article></main></body></html>
