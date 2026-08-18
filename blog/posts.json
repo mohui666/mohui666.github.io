@@ -3,6 +3,14 @@
   "description": "排查笔记、开发日志与踩坑实录：一篇一个坑，lom_modkit 更新日志按自然日单独记录。",
   "posts": [
     {
+      "id": "lom-modkit-since-v0.7",
+      "title": "lom_modkit 从 v0.7.0 到 v1.1.0：到底更新了什么？",
+      "date": "2026-08-18",
+      "tags": ["活侠传", "lom_modkit", "v0.7.0", "v1.1.0", "总结"],
+      "summary": "不按 commit 流水账，按实际代码能力总结 0.7 以来的演进：43→62 种节点、Gameplay/Combat、独立战役存档、静态分析、调试测试、内容系统与发布工具链。",
+      "url": "posts/lom-modkit-since-v0.7.html"
+    },
+    {
       "id": "koozhan-429-codex-warning",
       "title": "Koozhan 中转站避雷：连续 429 把 Codex 干碎了",
       "date": "2026-08-18",
