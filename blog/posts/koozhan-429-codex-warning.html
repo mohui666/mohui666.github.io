@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Koozhan 中转站实测避雷：同一轮 Codex Agent 工作流中短时间连续三次 429 Too Many Requests，三个不同 request id，全部 exceeded retry limit。">
+    <meta name="description" content="Koozhan 中转站实测避雷：同一轮 Codex Agent 工作流中短时间连续三次 429 Too Many Requests，三个不同 request id，全部 exceeded retry limit；后续想退出时，我这边剩余余额也无法退款。">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
     <link rel="stylesheet" href="../../css/subpage.css" type="text/css">
     <link rel="stylesheet" href="../../css/blog.css" type="text/css">
@@ -95,6 +95,16 @@ exceeded retry limit</code></pre>
             <p>但这根本不是付费用户应该操心的问题。</p>
             <blockquote><strong>你是中转商，你收的就是这个钱。用户最后只看一件事：请求到底能不能稳定跑完。</strong></blockquote>
 
+            <h2>更恶心的是：我这边余额还退不了</h2>
+            <p>连续 429 把 Agent 工作流狠狠干断以后，我想着既然这服务我已经不敢继续拿来跑长任务，那剩下的钱退掉算了。</p>
+            <p><strong>结果我这边实际遇到的情况是：剩余余额无法退款。</strong></p>
+            <p>这一下就真的把我恶心到了。</p>
+            <p>服务稳定性已经差到让我不想继续用，长任务连续 <code>429 → retry → exceeded retry limit</code>；用户想退出，钱又拿不回来。</p>
+            <blockquote><strong>能充值，不能退款；能收钱，服务炸了以后余额还得继续烂在里面。</strong></blockquote>
+            <p>我不知道它内部对退款到底怎么规定，也不替它编理由。我只写我自己的实际结果：<strong>我想退，我这边退不了。</strong></p>
+            <p>你要是真对自己的服务有信心，用户觉得不好用要走，把没消费掉的余额退掉不就完事了？现在是 429 把人赶走，余额又把人拴住。</p>
+            <p><strong>线路我不敢用了，钱我还拿不回来。就这体验，我说一句黑心商家一点不过分。</strong></p>
+
             <h2>我的结论</h2>
             <p>如果只是短聊天、临时问几个问题，也许你自己试试就完事。</p>
             <p>但如果你的用途是：</p>
@@ -107,12 +117,12 @@ exceeded retry limit</code></pre>
                 <li>需要连续跑很久的任务；</li>
             </ul>
             <p>我的建议就是：<strong>先小额测试，别看便宜就往里面狠狠干一大笔余额。</strong></p>
-            <p>省几毛 Token 钱，最后花十几分钟甚至更久收拾一次 Agent 中断现场，这钱到底省哪了？</p>
+            <p>尤其是现在我自己还碰到了余额无法退款。别最后省几毛 Token 钱，既要花十几分钟甚至更久收拾 Agent 中断现场，剩余的钱还退不回来。</p>
             <p><strong>我个人实测后的评价：Koozhan 这次的表现就是黑心中转，体验司马。</strong></p>
-            <p>连续 429、三个 request id、全部 retry limit，这些都是实际发生的。不是张嘴瞎编。</p>
+            <p>连续 429、三个 request id、全部 retry limit，以及我这边后续无法退款，都是我这次实际使用中遇到的情况。</p>
 
             <hr>
-            <p><small>说明：本文中的“黑心商家”“体验司马”等属于作者基于本次服务体验的主观评价，并非对商家存在诈骗、违法或其他特定违法事实的认定。429 的具体内部来源仅凭客户端错误无法确定。</small></p>
+            <p><small>说明：本文中的“黑心商家”“体验司马”等属于作者基于本次服务体验的主观评价，并非对商家存在诈骗、违法或其他特定违法事实的认定。429 的具体内部来源仅凭客户端错误无法确定；“无法退款”描述的是作者本次实际退款结果，不代表对该平台所有用户、所有支付方式或所有时期退款政策的概括。</small></p>
         </article>
     </main>
 </body>
