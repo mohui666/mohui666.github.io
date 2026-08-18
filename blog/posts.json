@@ -6,8 +6,8 @@
       "id": "koozhan-429-codex-warning",
       "title": "Koozhan 中转站避雷：连续 429 把 Codex 干碎了",
       "date": "2026-08-18",
-      "tags": ["Koozhan", "中转站", "Codex", "429", "避雷"],
-      "summary": "同一轮 Codex Agent 工作流短时间连续三次 429，三个不同 request id，全部 exceeded retry limit。基于这次实际付费体验：长 Agent 任务慎用。",
+      "tags": ["Koozhan", "中转站", "Codex", "429", "退款", "避雷"],
+      "summary": "同一轮 Codex Agent 工作流短时间连续三次 429，三个不同 request id，全部 exceeded retry limit；后续我这边剩余余额也无法退款。",
       "url": "posts/koozhan-429-codex-warning.html"
     },
     {
