@@ -1,7 +1,15 @@
 {
   "title": "Blog",
-  "description": "排查笔记与开发日志：一篇一个坑，lom_modkit 更新日志按自然日单独记录。",
+  "description": "排查笔记、开发日志与踩坑实录：一篇一个坑，lom_modkit 更新日志按自然日单独记录。",
   "posts": [
+    {
+      "id": "koozhan-429-codex-warning",
+      "title": "Koozhan 中转站避雷：连续 429 把 Codex 干碎了",
+      "date": "2026-08-18",
+      "tags": ["Koozhan", "中转站", "Codex", "429", "避雷"],
+      "summary": "同一轮 Codex Agent 工作流短时间连续三次 429，三个不同 request id，全部 exceeded retry limit。基于这次实际付费体验：长 Agent 任务慎用。",
+      "url": "posts/koozhan-429-codex-warning.html"
+    },
     {
       "id": "lom-modkit-2026-08-18",
       "title": "lom_modkit 更新日志 — 2026-08-18",

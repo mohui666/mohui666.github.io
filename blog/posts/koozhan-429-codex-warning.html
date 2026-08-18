@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Koozhan 中转站实测避雷：同一轮 Codex Agent 工作流中短时间连续三次 429 Too Many Requests，三个不同 request id，全部 exceeded retry limit。">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/subpage.css" type="text/css">
+    <link rel="stylesheet" href="../../css/blog.css" type="text/css">
+    <title>Koozhan 中转站避雷：连续 429 把 Codex 干碎了</title>
+</head>
+<body>
+    <main class="subpage-shell">
+        <nav class="top-nav" aria-label="页面导航">
+            <a class="nav-pill" href="../index.html">← Blog</a>
+            <a class="nav-pill" href="../../index.html">主页</a>
+        </nav>
+
+        <article class="content-card post-body">
+            <p class="kicker">中转站 · Codex · 429 · 避雷</p>
+            <h1>Koozhan 中转站避雷：连续 429 把 Codex 干碎了</h1>
+            <p class="blog-meta">
+                <time datetime="2026-08-18">2026-08-18</time>
+                <span>个人实测 · 长 Agent 工作流</span>
+            </p>
+            <div class="tag-row">
+                <span class="tag">Koozhan</span>
+                <span class="tag">中转站</span>
+                <span class="tag">Codex</span>
+                <span class="tag">429</span>
+                <span class="tag">避雷</span>
+            </div>
+
+            <p>最近拿 <a href="https://koozhan.com" target="_blank" rel="noopener noreferrer">Koozhan</a> 跑 Codex，给我的体验只能说：<strong>真他妈离谱。</strong></p>
+            <p>这不是偶尔弹一次 429，也不是我开几十个并发把接口狠狠干爆了。就是一个正常的 Coding Agent 工作流：改代码、提交、push、检查 GitHub Actions、准备重建 Release。</p>
+            <p>然后同一轮任务里，短时间连续给我来了至少三次：</p>
+
+            <pre><code>exceeded retry limit, last status: 429 Too Many Requests</code></pre>
+
+            <p>三个不同的 request id：</p>
+            <pre><code>e6e954dc-7d25-4bb0-8769-6f8a55436ca5
+63d05a44-ae3a-4b56-8fc4-0fc73c4072af
+411099fa-e8b6-4f3f-94be-ede902d80842</code></pre>
+
+            <h2>这不是“一次偶发 429”</h2>
+            <p>第一次报错时，Codex 正准备提交；恢复之后 commit 建好了。接着准备 push，又来一次 429。好不容易 push 到 <code>origin/master</code>，准备继续检查 Actions、标签和本地产物，第三次 429 又把执行链干断。</p>
+            <p>整个流程差不多就是：</p>
+            <pre><code>Codex：我先提交代码。
+中转：429。
+
+Codex：提交好了，我 push。
+中转：429。
+
+Codex：push 好了，我继续检查 Actions / Release。
+中转：又他妈 429。
+
+客户端：exceeded retry limit</code></pre>
+
+            <p>看到这里我就一个问题：</p>
+            <blockquote><strong>你这中转到底中转了个鸡巴？</strong></blockquote>
+
+            <h2>我为什么直接说它是“黑心商家”</h2>
+            <p><strong>这是我基于这次实际付费体验给出的主观评价：黑心商家。</strong></p>
+            <p>我掏钱用中转，不就是图一个省心吗？上游账号、渠道容量、RPM、TPM、线路切换、调度这些东西，本来就是中转服务应该替用户处理的。</p>
+            <p>结果钱照样花，真正跑任务的时候用户看到的是：</p>
+            <pre><code>429
+retry
+429
+retry
+exceeded retry limit</code></pre>
+            <p>然后烂摊子还是用户自己收拾。</p>
+            <p>我还得重新确认：</p>
+            <ul>
+                <li>commit 到底有没有成功；</li>
+                <li>push 到底有没有完成；</li>
+                <li>GitHub Actions 有没有触发；</li>
+                <li>标签有没有推上去；</li>
+                <li>Release 做到哪一步了；</li>
+                <li>Agent 上一轮执行状态还能不能接着用。</li>
+            </ul>
+            <p><strong>我花钱是来跑 Coding Agent 的，不是来玩《429 状态恢复模拟器》的。</strong></p>
+
+            <h2>对 Agent 用户尤其恶心</h2>
+            <p>普通聊天偶尔 429 一下，你重新生成一次，损失可能没那么大。</p>
+            <p>但 Agent 不一样。它可能已经读了几十个文件、改了代码、跑了测试、积累了一大坨上下文，甚至已经执行了一部分具有外部状态的操作。</p>
+            <p>这时候中间突然一句：</p>
+            <pre><code>exceeded retry limit</code></pre>
+            <p>不是简单的“再问一遍”就完事了。你得先检查半天当前状态，避免重复提交、重复发 Release、漏跑 CI，或者把已经成功的步骤当成失败重新执行。</p>
+            <p>所以对长 Agent 工作流来说，稳定性不是“体验加分项”，而是最基础的服务指标。</p>
+
+            <h2>“API 偶尔 429 很正常”也别拿来洗</h2>
+            <p>API 偶发限流当然正常，我也不是第一次用 API。</p>
+            <p>但我这里是：<strong>同一个任务、短时间内、连续三个不同 request id、每次都已经自动重试到彻底失败。</strong></p>
+            <p>至于后台到底是上游账号爆了、渠道容量不足、RPM/TPM 不够、调度没切过去，还是别的原因，我不知道，也不会编一个内部原因替它定罪。</p>
+            <p>但这根本不是付费用户应该操心的问题。</p>
+            <blockquote><strong>你是中转商，你收的就是这个钱。用户最后只看一件事：请求到底能不能稳定跑完。</strong></blockquote>
+
+            <h2>我的结论</h2>
+            <p>如果只是短聊天、临时问几个问题，也许你自己试试就完事。</p>
+            <p>但如果你的用途是：</p>
+            <ul>
+                <li>Codex / Coding Agent；</li>
+                <li>长上下文编程；</li>
+                <li>多轮工具调用；</li>
+                <li>自动化工作流；</li>
+                <li>CI / Release 操作；</li>
+                <li>需要连续跑很久的任务；</li>
+            </ul>
+            <p>我的建议就是：<strong>先小额测试，别看便宜就往里面狠狠干一大笔余额。</strong></p>
+            <p>省几毛 Token 钱，最后花十几分钟甚至更久收拾一次 Agent 中断现场，这钱到底省哪了？</p>
+            <p><strong>我个人实测后的评价：Koozhan 这次的表现就是黑心中转，体验司马。</strong></p>
+            <p>连续 429、三个 request id、全部 retry limit，这些都是实际发生的。不是张嘴瞎编。</p>
+
+            <hr>
+            <p><small>说明：本文中的“黑心商家”“体验司马”等属于作者基于本次服务体验的主观评价，并非对商家存在诈骗、违法或其他特定违法事实的认定。429 的具体内部来源仅凭客户端错误无法确定。</small></p>
+        </article>
+    </main>
+</body>
+</html>
