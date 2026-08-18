@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="总结 lom_modkit 从 v0.7.0 到 v1.1.0 的实际代码演进：62 种节点、Gameplay/Combat、MOD 独立存档、编辑器工程化工具、用户图片、本地化、调试测试、确定性打包与来源标识。">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/subpage.css" type="text/css">
+    <link rel="stylesheet" href="../../css/blog.css" type="text/css">
+    <title>lom_modkit 从 v0.7.0 到 v1.1.0：到底更新了什么？</title>
+</head>
+<body>
+<main class="subpage-shell">
+    <nav class="top-nav" aria-label="页面导航">
+        <a class="nav-pill" href="../index.html">← Blog</a>
+        <a class="nav-pill" href="../../index.html">主页</a>
+    </nav>
+    <article class="content-card post-body">
+        <p class="kicker">活侠传 · lom_modkit · 总结</p>
+        <h1>lom_modkit 从 v0.7.0 到 v1.1.0：到底更新了什么？</h1>
+        <p class="blog-meta"><time datetime="2026-08-18">2026-08-18</time><span>从剧情编辑器继续往完整 Mod 创作工具链扩张</span></p>
+        <div class="tag-row">
+            <span class="tag">活侠传</span>
+            <span class="tag">lom_modkit</span>
+            <span class="tag">v0.7.0 → v1.1.0</span>
+            <span class="tag">总结</span>
+        </div>
+
+        <p>这篇不按 commit 流水账，也不重复每天的更新日志，而是直接看从 <strong>v0.7.0 到现在</strong>，lom_modkit 在代码和实际能力上到底发生了什么变化。</p>
+        <p>v0.7.0 时，项目已经能完成可视化剧情制作、自定义角色与语音、F5 试玩和 F6 检查，基本闭环已经存在。但之后的更新重点明显变了：不再只是“多加几个剧情节点”，而是在补一套真正能支撑大型 Mod 的编辑、调试、测试、运行、存档和发布体系。</p>
+
+        <h2>节点从 43 种扩展到 62 种</h2>
+        <p>v0.7.0 的节点模型一共有 43 种，主要集中在对白、人物演出、场景、数值和流程控制。现在代码中的节点类型已经扩展到 <strong>62 种</strong>，而且新增的不只是演出节点，而是一整组 Gameplay 能力。</p>
+        <ul>
+            <li><strong>自定义画面：</strong>背景、全屏 CG、Overlay / 插图。</li>
+            <li><strong>战斗：</strong>Combat、Battle、Battle Result。</li>
+            <li><strong>玩法结果：</strong>Reward、自定义结算、Custom Shop。</li>
+            <li><strong>条件检定：</strong>属性、好感、物品、天赋、Flag 检定。</li>
+            <li><strong>玩法状态：</strong>Activity、MOD Quest、Quest Check、Persistent Variable / Check。</li>
+        </ul>
+        <p>这意味着 lom_modkit 已经不再只是“让角色说话、切背景、做分支”的 Story Editor。现在剧情可以真正进入战斗、读取战斗结果、发奖励、开商店、维护任务和长期状态，再继续走后面的剧情。</p>
+
+        <h2>Combat / Battle 真正接入原版系统</h2>
+        <p>战斗是 0.7 之后变化最大的一块。这里没有自己造一套 Battle Engine，而是持续根据《活侠传》原版接口和反编译结果，把确认可用的能力封装进 Runtime 和节点系统。</p>
+        <p>Combat 现在可以配置对手的生命、气力、六维、技能、天赋、行动概率和背景，也可以对赵活本场战斗的基础属性与天赋做临时覆盖。Battle 则支持人数、具名角色、阵营构成、双方生命和标题等配置。</p>
+        <p>更关键的是，战斗结束后不再只是“跳回剧情”。Runtime 会记录真正的 Combat / Battle 胜负，剧情可以通过 Battle Result 继续分支：</p>
+        <p><strong>剧情 → 战斗 → 读取真实结果 → 奖励 / 惩罚 → 下一条剧情路线。</strong></p>
+
+        <h2>1.0 之后，战斗 Runtime 又做了一轮重构</h2>
+        <p>第一次把战斗接口接进来之后，实机很快暴露出很多只有真正进游戏才会出现的问题：自动读档后回合异常、生命重复叠加、玩家临时属性污染存档、背景恢复错误、Battle roster 不稳定等。</p>
+        <p>所以 v1.0 之后又新增了一批专门的 Combat Runtime 模块，包括玩家属性 Session、生命策略、角色绑定、背景策略、Sprite 布局、状态记录和 Gameplay Checkpoint。</p>
+        <p>现在赵活的本场属性覆盖不再是直接把最终值写死，而是作为战斗期间的临时状态维护；保存时还会暂时解除这层覆盖，保存完成后再恢复，避免把“本场战斗临时数值”写进正常存档逻辑。</p>
+
+        <h2>MOD 战役存档从“隔离槽”变成完整体系</h2>
+        <p>v0.7.0 已经有 MOD 战役和存档隔离的方向，但现在这一块已经扩展成完整的 Runtime 子系统。</p>
+        <p>每个 Campaign 都拥有自己的手动存档命名空间，并且 Story、Free、Battle 三种自动存档都会被 Runtime 拦截后重定向到当前 MOD 自己的槽位。</p>
+        <p>另外还专门处理了原版 Universe 的“最近存档”指针：处于 MOD 存档时，不允许 MOD 槽把原版继续游戏的位置覆盖掉。必要时宁可拒绝一次保存，也优先保护玩家的原版存档状态。</p>
+        <p>v1.1.0 又把这套流程进一步收口到原版风格的手动栏位界面，支持空栏开始新战役、已有栏覆盖和读取。Combat / Battle 的读档还会绑定当前 MOD、完整包指纹、剧情节点和 Gameplay checkpoint，避免跨包恢复到错误状态。</p>
+
+        <h2>加入真正的持久变量与 MOD 任务</h2>
+        <p>以前的 Mod Flag / Mod Variable 更接近一次剧情会话里的临时状态。现在新增了 Persistent Variable，可以把 Int32 数据和当前 MOD、Campaign、存档槽绑定后写入独立 sidecar。</p>
+        <p>它不修改《活侠传》自己的 GameSave schema，但已经可以支撑周目计数、长期路线状态、隐藏条件、自定义成长数值等跨剧情、跨重启数据。</p>
+        <p>同时新增的 MOD Quest 也和原版 Mission 分开维护，避免为了做一个自定义支线任务去污染官方任务状态。</p>
+
+        <h2>用户内容从“音频 + 角色”扩展到完整画面资源</h2>
+        <p>v0.7.0 已经支持自定义音乐、音效、环境音、逐句语音和角色立绘。之后用户内容系统继续扩展，加入了自定义背景、CG 和 Overlay。</p>
+        <p>剧情仍然只保存稳定的 <code>user:</code> 引用，导出时 Compiler 扫描整个项目，只把实际引用到的资源放进最终 <code>.lommod</code>。作者本地内容库里没有使用的素材不会被一起打包，玩家也不依赖作者机器上的绝对路径。</p>
+        <p>这一层后来又继续补了 Content Registry、Content Pack、包依赖和更严格的资源引用验证，用户资源开始从“能加载”走向正式的内容系统。</p>
+
+        <h2>编辑器开始补大型项目需要的 IDE 功能</h2>
+        <p>剧情只有几十个节点时，左侧列表基本够用；项目一旦上百、上千节点，问题就会变成“这个变量在哪用过”“这段剧情能不能复制”“这条路到底能不能走到结局”。0.7 之后新增的大量功能，本质上都是在解决这种工程问题。</p>
+        <ul>
+            <li><strong>全局搜索：</strong>跨 Story 搜索节点、台词、人物、语音、图片、变量、Flag、Goto 和用户内容引用。</li>
+            <li><strong>引用查询：</strong>直接查看角色、内容、变量、Flag、章节或节点到底被谁引用。</li>
+            <li><strong>批量编辑：</strong>只暴露多个节点之间真正兼容的公共字段，整次修改可撤销。</li>
+            <li><strong>节点模板：</strong>保存单节点或连续片段，插入时自动生成新 ID 并重映射内部跳转。</li>
+            <li><strong>跨章节复制：</strong>复制连续剧情片段时处理 ID 冲突和范围内引用，并列出无法安全猜测的外部依赖。</li>
+            <li><strong>Section / Group：</strong>给大型剧情增加纯编辑器层的树形组织，不改变节点顺序和最终 Lua 语义。</li>
+        </ul>
+
+        <h2>变量、条件和剧情路径开始做静态分析</h2>
+        <p>Variable / Flag Manager 会统计读写次数、首次写入和引用位置。对 MOD Flag 还能基于真实 CFG 做保守数据流分析，找出可能“先读后写”的路径。</p>
+        <p>Condition Inspector 会把 Branch 展开成可读条件，展示每个 Case、目标和 fallback。能证明的条件就给出结果，依赖原版 Runtime 状态、Raw Lua 或未知数据的情况则明确保持“未知”，不会为了给出结论而乱猜。</p>
+        <p>Story Path Simulator 又把这一层扩展到了整个项目：不可达节点、断裂目标、无出口循环、可证明死分支、缺少最终结局、错误的跨章节跳转和 Campaign Trigger 都可以在不启动游戏的情况下提前发现。</p>
+
+        <h2>甚至加入了离线 Story Test Runner</h2>
+        <p>现在可以用 JSON 声明初始变量 / Flag、玩家在 Choice 节点做什么选择，以及最终应该到达哪些节点、得到什么变量值，然后直接在编辑器里跑测试。</p>
+        <p>它只执行能够确定模拟的 Story 语义。Combat、Battle、Dice、Raw Lua 或其他必须依赖 Runtime 的节点会明确返回 Unsupported，而不是伪造一个 PASS。</p>
+        <p>对于分支很多的剧情，这可以少掉大量“开游戏 → 读档 → 点半天 → 验证一个分支”的重复劳动。</p>
+
+        <h2>F5 / F6 从试玩按钮变成调试与体检系统</h2>
+        <p>F5 原本主要负责从指定节点进游戏试玩，后面又加入了 Runtime Trace、Debugger、节点边界暂停、单步和热重载生命周期管理。</p>
+        <p>F6 的检查范围也持续扩张：除了编译错误，现在还会看 CFG、无出口 SCC、不可达节点、跨章节引用、用户内容、图片和语音、Metadata、Flag 数据流以及发布前风险。</p>
+        <p>自动修复仍然只处理不会改变剧情含义的机械问题。无法确定作者意图的内容不会擅自修改。</p>
+
+        <h2>恢复、统计、模板、语音覆盖率等工程功能补齐</h2>
+        <p>编辑器增加了 Recovery Store / Controller 和统一的 History Controller，复杂批量操作、复制、模板等功能逐步接入 Undo / Redo。</p>
+        <p>同时还加入了项目模板、项目统计、语音覆盖率、翻译覆盖率等工具。它们不是某个新的“游戏功能”，但对真正制作一个长期项目比再多几个按钮更重要。</p>
+
+        <h2>剧情内容本身也支持多语言了</h2>
+        <p>以前的多语言主要是编辑器 UI 和文档。现在 Story Localization 已经进入 Compiler / Editor，可以在同一套剧情结构上维护简中、繁中、日语和韩语译文，并提供默认语言和缺失文本回退。</p>
+        <p>因此一个多语言 Mod 不再需要复制四份 Story 再分别维护。</p>
+
+        <h2>.lommod 从“一个 Zip”变成正式包格式</h2>
+        <p>Compiler 现在有独立的确定性打包器：包内路径会规范化，检查重复和大小写冲突，固定条目顺序与时间戳，并使用稳定 JSON 输出。</p>
+        <p>同时会为整个包的逻辑内容计算稳定 SHA-256。这个指纹后来又被存档绑定、来源显示和运行时身份判断使用。</p>
+        <p>包验证也明显加强，包括非法路径、异常归档条目、重复文件、Schema Version、Migration 和 Story Lua Integrity。<code>.lommod</code> 已经开始按一个需要长期兼容的文件格式维护，而不是单纯“把目录压缩一下”。</p>
+
+        <h2>发布流程开始独立出来</h2>
+        <p>现在编辑剧情和发布 Mod 已经是两个明确阶段。</p>
+        <ul>
+            <li>Release Preflight</li>
+            <li>Release Builder</li>
+            <li>Package Inspector</li>
+            <li>Installation Doctor</li>
+            <li>Runtime Rollback</li>
+            <li>Test Matrix</li>
+            <li>隐私边界明确的诊断包</li>
+        </ul>
+        <p>诊断包尤其做了固定白名单和路径脱敏，不会因为用户点了“导出诊断”就把剧情正文、用户素材、存档甚至整份游戏目录打进去。</p>
+
+        <h2>增加 MOD 来源披露与截图 / 视频来源水印</h2>
+        <p>Runtime 现在会在 MOD 剧情期间维护明确的“玩家制作 MOD / 非官方内容”来源信息，并绑定作品信息和包指纹。</p>
+        <p>之后又增加了 Host 自己维护的画面来源水印，以及 Compiler 侧的 Screenshot Detector、Video Detector、Watermark Codec 和 Protocol。</p>
+        <p>这套系统的定位一直很明确：它是来源辅助标记，不是 DRM，也不是数字签名，不能证明法律意义上的作者身份。</p>
+
+        <h2>测试体系也跟着整个项目一起膨胀</h2>
+        <p>随着功能增加，现在已经有针对 Combat、Battle、Gameplay、Campaign、Save Isolation、Migration、Localization、Package Validation、Watermark、Story Graph、Path Simulator、Story Test Runner、Global Search、Content Pack、Recovery、Release Builder、Variable Manager、Voice Coverage 等模块的自动测试和 Runtime 回归测试。</p>
+        <p>很多 Hook 游戏本体的行为仍然必须靠实机验收，但可以脱离游戏验证的部分，正在尽量从“我觉得应该没问题”变成可以重复执行的自动检查。</p>
+
+        <h2>从 0.7 到现在，真正变化的不是功能数量</h2>
+        <p>如果只看 UI，最明显的当然是节点更多了、菜单更多了。</p>
+        <p>但从代码结构来看，变化更像是：</p>
+        <p><strong>v0.7.0：可视化剧情编辑器 + Compiler + Runtime。</strong></p>
+        <p><strong>现在：Story / Gameplay 编辑器 + 内容系统 + 静态分析 + 调试测试 + 战役与存档 Runtime + 发布工具链。</strong></p>
+        <p>所以我现在更愿意把 lom_modkit 看成一套正在成形的《活侠传》Mod SDK / 创作工具，而不只是“一个不用写 Lua 的剧情编辑器”。</p>
+        <p>接下来真正值得继续做的，也不是无限往节点列表里塞功能，而是继续研究游戏原生 UI、生命周期和 Gameplay API，把现在还能明显看出“外部工具感”的地方逐步收进《活侠传》自己的体验里。</p>
+
+        <ul class="attach-list">
+            <li><a href="lom-modkit-2026-08-18.html"><span>2026-08-18 日更日志</span><span>Blog</span></a></li>
+            <li><a href="https://github.com/mohui666/lom_modkit"><span>lom_modkit 源码</span><span>GitHub</span></a></li>
+            <li><a href="https://github.com/mohui666/lom_modkit/releases"><span>版本发布记录</span><span>GitHub</span></a></li>
+        </ul>
+    </article>
+</main>
+</body>
+</html>
