@@ -6,9 +6,10 @@
     <meta name="description" content="Magnetic Docking 磁性停靠：多个停靠点按距离产生不同磁力，释放后锁入当前最强的磁场。">
     <meta name="theme-color" content="#160f1c">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../drag-physics.css?v=20260831">
-    <script src="../drag-physics.js?v=20260831" defer></script>
+    <link rel="stylesheet" href="../drag-physics.css?v=20260831-ui">
+    <script src="../drag-physics.js?v=20260831-ui" defer></script>
     <title>Magnetic Docking · Motion Field 39</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="magnetic-docking">
     <a class="skip-link" href="#experiment">跳到磁性停靠实验</a>
@@ -32,6 +33,7 @@
         </section>
 
         <section class="physics-stage magnetic-stage" data-physics-stage aria-label="具有五个磁性停靠点的拖拽区域">
+            <p class="mobile-touch-hint">拖动圆体靠近停靠点</p>
             <p class="stage-label top">5 DOCKS / DISTANCE FORCE</p>
             <p class="stage-label side">RELEASE TO LOCK</p>
             <button class="dock" data-dock="A" type="button" style="left:18%;top:20%" aria-label="锁入停靠点 A"><b>A</b></button>
@@ -46,7 +48,7 @@
     </main>
 
     <button class="physics-reset" data-reset type="button">↺ RESET</button>
-    <a class="physics-next" href="../rope-constraint/"><small>NEXT 40</small><span>Rope Constraint</span><b aria-hidden="true">↗</b></a>
+    <a class="physics-next" href="../rope-constraint/" aria-label="前往下一个实验：Rope Constraint Drag"><small>NEXT · 40 / 44</small><span>Rope Constraint</span><b aria-hidden="true">↗</b></a>
     <noscript><p class="no-script">启用 JavaScript 后即可感受磁性停靠。</p></noscript>
 </body>
 </html>

@@ -6,20 +6,21 @@
     <meta name="description" content="Infinite Pannable Canvas 无限平移画布：拖动或滚轮探索一张没有边界的视觉索引。">
     <meta name="theme-color" content="#080b10">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../space-lab.css?v=20260831">
-    <script src="../space-lab.js?v=20260831" defer></script>
+    <link rel="stylesheet" href="../space-lab.css?v=20260831-ui">
+    <script src="../space-lab.js?v=20260831-ui" defer></script>
     <title>Infinite Pannable Canvas · Motion Field 19</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="infinite-canvas">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
         <p><i></i> Infinite Pannable Canvas</p>
-        <b aria-label="第十九个实验，共四十四个">19 / 44</b>
+        <b aria-label="第 19 个实验，共 44 个">19 / 44</b>
     </header>
 
     <main class="infinite-lab" id="experiment">
-        <div class="infinite-viewport" data-infinite-viewport tabindex="0" aria-label="可拖动的无限画布，也可以使用方向键或滚轮移动">
+        <div class="infinite-viewport" data-infinite-viewport tabindex="0" role="group" aria-label="可拖动的无限画布，也可以使用方向键或滚轮移动">
             <div class="infinite-plane" data-infinite-plane aria-hidden="true">
                 <figure class="canvas-tile tile-photo tile-wide"><img src="../assets/bg8-720.webp" alt="" draggable="false"><figcaption>01 / ECHO FIELD</figcaption></figure>
                 <figure class="canvas-tile tile-word"><strong>NO<br>EDGE</strong><span>∞</span></figure>
@@ -44,7 +45,7 @@
             <p>按住拖动、滑动触摸屏或滚动鼠标。图块会跨过边界重新出现，让有限内容变成一张连续地图。</p>
         </section>
         <p class="gesture-chip"><span aria-hidden="true">↔</span><b data-infinite-status>DRAG / WHEEL / ARROW KEYS</b></p>
-        <a class="lab-next" href="../inertial-drag/"><small>NEXT 20</small><span>Inertial Drag</span> ↗</a>
+        <a class="lab-next" href="../inertial-drag/" aria-label="前往下一个实验：Inertial Drag"><small>NEXT · 20 / 44</small><span>Inertial Drag</span><b aria-hidden="true">↗</b></a>
     </main>
     <noscript><p class="no-script">启用 JavaScript 后即可拖动画布。</p></noscript>
 </body>

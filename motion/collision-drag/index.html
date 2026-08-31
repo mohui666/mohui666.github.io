@@ -6,16 +6,17 @@
     <meta name="description" content="Collision Drag 碰撞拖拽：拖动并投掷多个圆体，观察边界与圆体之间的弹性碰撞。">
     <meta name="theme-color" content="#f0eddf">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../constraint-physics.css?v=20260831">
-    <script src="../constraint-physics.js?v=20260831" defer></script>
+    <link rel="stylesheet" href="../constraint-physics.css?v=20260831-ui">
+    <script src="../constraint-physics.js?v=20260831-ui" defer></script>
     <title>Collision Drag · Motion Field 41</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="collision-drag">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="field-nav">
         <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
         <p><i aria-hidden="true"></i> Collision Drag</p>
-        <b aria-label="第四十一个实验，共四十四个">41 / 44</b>
+        <b aria-label="第 41 个实验，共 44 个">41 / 44</b>
     </header>
 
     <main class="physics-lab collision-lab" id="experiment">
@@ -35,12 +36,12 @@
         </section>
 
         <section class="physics-stage collision-stage" aria-label="多圆体弹性碰撞实验场">
-            <canvas class="physics-canvas" data-collision-canvas tabindex="0" role="application" aria-describedby="collision-instructions">你的浏览器需要支持 Canvas。</canvas>
+            <canvas class="physics-canvas" data-collision-canvas tabindex="0" role="group" aria-label="多圆体碰撞拖拽交互画布" aria-describedby="collision-instructions">你的浏览器需要支持 Canvas。</canvas>
             <p class="stage-tag">BOUNCE 0.82 · BODY 06</p>
             <p class="stage-status" data-status aria-live="polite">READY / THROW A BODY</p>
         </section>
 
-        <a class="field-next" href="../orbital-drag/"><small>NEXT 42</small><span>Orbital Drag</span> ↗</a>
+        <a class="field-next" href="../orbital-drag/" aria-label="前往下一个实验：Orbital Constraint Drag"><small>NEXT · 42 / 44</small><span>Orbital Drag</span><b aria-hidden="true">↗</b></a>
     </main>
     <noscript><p class="no-script">启用 JavaScript 后即可拖动、投掷并碰撞圆体。</p></noscript>
 </body>

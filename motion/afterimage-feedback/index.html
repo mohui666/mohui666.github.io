@@ -1,13 +1,14 @@
 <!doctype html>
 <html lang="zh-CN"><head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="description" content="Afterimage Feedback：画面回灌自身，留下逐渐衰减的指针残像。"><meta name="theme-color" content="#05070d">
-    <link rel="icon" href="../../images/cover.ico" type="image/x-icon"><link rel="stylesheet" href="../gpu-lab.css?v=20260831"><script src="../gpu-lab.js?v=20260831" defer></script><title>Afterimage Feedback · Motion Field</title>
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon"><link rel="stylesheet" href="../gpu-lab.css?v=20260831-ui"><script src="../gpu-lab.js?v=20260831-ui" defer></script><title>Afterimage Feedback · Motion Field 32</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head><body data-effect="afterimage-feedback">
-    <a class="skip-link" href="#experiment">跳到实验</a><header class="lab-nav"><a class="back-link" href="../"><span>←</span><span>Motion Field</span></a><p class="nav-label"><i></i> Afterimage Feedback</p><p class="nav-counter" aria-label="第 32 个实验，共 44 个">32 / 44</p></header>
+    <a class="skip-link" href="#experiment">跳到实验</a><header class="lab-nav"><a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a><p class="nav-label"><i></i> Afterimage Feedback</p><p class="nav-counter" aria-label="第 32 个实验，共 44 个">32 / 44</p></header>
     <main id="experiment" class="lab-stage" data-stage><canvas id="lab-canvas" aria-label="动态残像反馈画布"></canvas><div class="lab-grid"></div><div class="lab-vignette"></div><div class="lab-noise"></div>
         <section class="hero-copy" aria-labelledby="page-title"><p class="eyebrow"><span>32</span> Temporal feedback study</p><h1 id="page-title">AFTER<br><em>IMAGE</em></h1><p class="intro">上一帧被轻微缩放、旋转、降透明后写回下一帧。移动指针点亮新的能量源，时间便堆成一串会呼吸的残影。</p></section>
-        <aside class="lab-note"><p>FRAME FEEDBACK</p><strong>Fₜ = input + 0.965 · T(Fₜ₋₁)</strong><span>持续拖动绘制光路，点击清空可以重新开始一段时间。</span></aside>
-        <section class="interaction-dock"><div class="live-state"><i></i><p><span data-state>FEEDBACK OPEN</span><small data-prompt>拖动写入新的残像</small></p></div><button class="lab-button" type="button" data-action="clear">清空时间</button></section>
-        <p class="fallback" data-fallback hidden></p><a class="next-link" href="../volumetric-god-rays/"><span><small>NEXT / 33</small>Volumetric God Rays</span><i>→</i></a>
+        <aside class="lab-note"><p>FRAME FEEDBACK</p><strong>Fₜ = input + 0.963 · T(Fₜ₋₁)</strong><span>移动鼠标写入残像；触屏请按住拖动。点击清空可以重新开始一段时间。</span></aside>
+        <section class="interaction-dock"><div class="live-state"><i></i><p><span data-state>FEEDBACK OPEN</span><small data-prompt>移动鼠标写入残像；触屏请按住拖动</small></p></div><button class="lab-button" type="button" data-action="clear">清空时间</button></section>
+        <p class="fallback" data-fallback hidden></p><a class="next-link" href="../volumetric-god-rays/" aria-label="前往下一个实验：Volumetric God Rays"><span><small>NEXT · 33 / 44</small>Volumetric God Rays</span><i aria-hidden="true">→</i></a>
     </main><noscript><p class="no-script">启用 JavaScript 后即可绘制残像。</p></noscript>
 </body></html>

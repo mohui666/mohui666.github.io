@@ -6,16 +6,17 @@
     <meta name="description" content="Layered Zoom Scroll 分层推镜滚动：滚动穿过四层嵌套画框，形成连续镜头推进。">
     <meta name="theme-color" content="#e96342">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../space-lab.css?v=20260831">
-    <script src="../space-lab.js?v=20260831" defer></script>
+    <link rel="stylesheet" href="../space-lab.css?v=20260831-ui">
+    <script src="../space-lab.js?v=20260831-ui" defer></script>
     <title>Layered Zoom Scroll · Motion Field 24</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="layered-zoom-scroll">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
         <p><i></i> Layered Zoom Scroll</p>
-        <b aria-label="第二十四个实验，共四十四个">24 / 44</b>
+        <b aria-label="第 24 个实验，共 44 个">24 / 44</b>
     </header>
 
     <main class="zoom-lab" id="experiment" data-zoom-lab>
@@ -39,6 +40,7 @@
             <section class="zoom-copy">
                 <p class="lab-kicker">EXPERIMENT 24 · NESTED SCALE</p>
                 <h1>ENTER<br><em>THE FRAME</em></h1>
+                <p class="zoom-description">滚动把四个嵌套画框连续放大，每一层接管视口后再进入下一层。</p>
             </section>
             <div class="zoom-hud" aria-hidden="true"><b data-zoom-percent>000%</b><span data-zoom-label>SURFACE</span><i data-zoom-meter></i></div>
             <p class="scroll-cue">SCROLL TO PUSH IN <span aria-hidden="true">↓</span></p>
@@ -46,7 +48,7 @@
     </main>
     <footer class="zoom-footer">
         <p>FOUR FRAMES / ONE CAMERA</p>
-        <a href="../scroll-3d-stack/"><small>NEXT 25</small><span>Scroll 3D Stack</span> ↗</a>
+        <a href="../scroll-3d-stack/" aria-label="前往下一个实验：On-Scroll 3D Stack Motion" class="motion-next"><small>NEXT · 25 / 44</small><span>Scroll 3D Stack</span><b aria-hidden="true">↗</b></a>
     </footer>
     <noscript><p class="no-script">启用 JavaScript 后即可滚动穿过嵌套画框。</p></noscript>
 </body>

@@ -87,6 +87,7 @@ button {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 18px 70px rgba(0, 0, 0, 0.28);
     backdrop-filter: blur(18px) saturate(1.3);
     -webkit-backdrop-filter: blur(18px) saturate(1.3);
+    transform: translateX(-50%);
 }
 
 .back-link {
@@ -149,7 +150,7 @@ button {
     min-height: 620px;
     overflow: hidden;
     isolation: isolate;
-    touch-action: none;
+    touch-action: pinch-zoom;
     background:
         radial-gradient(circle at 76% 36%, rgba(82, 58, 168, 0.15), transparent 30%),
         radial-gradient(circle at 28% 78%, rgba(35, 130, 151, 0.1), transparent 28%),

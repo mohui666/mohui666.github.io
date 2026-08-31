@@ -6,9 +6,10 @@
     <meta name="description" content="Spring Drag 二阶弹簧拖拽：调节刚度与阻尼，观察目标点和物体之间的跟随、超调与收敛。">
     <meta name="theme-color" content="#160c2c">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../drag-physics.css?v=20260831">
-    <script src="../drag-physics.js?v=20260831" defer></script>
+    <link rel="stylesheet" href="../drag-physics.css?v=20260831-ui">
+    <script src="../drag-physics.js?v=20260831-ui" defer></script>
     <title>Spring Drag · Motion Field 35</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="spring-drag">
     <a class="skip-link" href="#experiment">跳到弹簧实验</a>
@@ -29,25 +30,26 @@
                 <div><dt>EXTENSION</dt><dd data-readout="distance">0 px</dd></div>
                 <div><dt>SPEED</dt><dd data-readout="speed">0 px/s</dd></div>
             </dl>
-            <div class="physics-controls" aria-label="弹簧参数">
+            <div class="physics-controls" role="group" aria-label="弹簧参数">
                 <label class="physics-control"><span>STIFFNESS</span><input data-stiffness type="range" min="50" max="300" step="5" value="170"><output data-stiffness-value>170</output></label>
                 <label class="physics-control"><span>DAMPING</span><input data-damping type="range" min="5" max="32" step="1" value="18"><output data-damping-value>18</output></label>
             </div>
         </section>
 
         <section class="physics-stage spring-stage" data-physics-stage aria-label="弹簧拖拽区域">
+            <p class="mobile-touch-hint">按住并拖动</p>
             <p class="stage-label top">TARGET / BODY / FORCE</p>
             <p class="stage-label side">SECOND-ORDER RESPONSE</p>
             <span class="spring-target" data-spring-target aria-hidden="true"></span>
             <span class="spring-tether" data-spring-tether aria-hidden="true"></span>
-            <button class="physics-object spring-puck" data-physics-object type="button" aria-describedby="spring-description">
+            <div class="physics-object spring-puck" data-physics-object tabindex="0" role="group" aria-label="弹簧拖拽物体" aria-describedby="spring-description">
                 <b>DRAG</b><small>SPRING / 35</small>
-            </button>
+            </div>
         </section>
     </main>
 
     <button class="physics-reset" data-reset type="button">↺ RESET</button>
-    <a class="physics-next" href="../elastic-bounds/"><small>NEXT 36</small><span>Elastic Bounds</span><b aria-hidden="true">↗</b></a>
+    <a class="physics-next" href="../elastic-bounds/" aria-label="前往下一个实验：Elastic Bounds"><small>NEXT · 36 / 44</small><span>Elastic Bounds</span><b aria-hidden="true">↗</b></a>
     <noscript><p class="no-script">启用 JavaScript 后即可体验弹簧跟随。</p></noscript>
 </body>
 </html>

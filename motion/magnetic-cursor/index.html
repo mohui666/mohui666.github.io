@@ -6,16 +6,17 @@
     <meta name="description" content="Magnetic Cursor 磁吸光标：让界面元素响应指针距离并产生具有重量感的吸附。">
     <meta name="theme-color" content="#080913">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../light-lab.css">
-    <script src="../light-lab.js" defer></script>
+    <link rel="stylesheet" href="../light-lab.css?v=20260831-ui">
+    <script src="../light-lab.js?v=20260831-ui" defer></script>
     <title>Magnetic Cursor · Motion Field 07</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="magnetic">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
         <p class="lab-title"><i aria-hidden="true"></i> Magnetic Cursor</p>
-        <p class="lab-count" aria-label="第七个实验，共四十四个">07 / 44</p>
+        <p class="lab-count" aria-label="第 7 个实验，共 44 个">07 / 44</p>
     </header>
 
     <main class="lab-stage magnetic-field" id="experiment">
@@ -24,7 +25,7 @@
             <h1 id="page-title">MAGNETIC<br><em>CURSOR</em></h1>
             <p class="description">按钮不再被动等待点击：指针进入力场后，它们会按距离被吸引。靠近、绕行，再点击一个磁极释放脉冲。</p>
         </section>
-        <div class="magnetic-cluster" aria-label="磁吸按钮实验">
+        <div class="magnetic-cluster" role="group" aria-label="磁吸按钮实验">
             <button class="magnet" type="button" data-magnet><span>GRAVITY</span></button>
             <button class="magnet" type="button" data-magnet><span>ORBIT</span></button>
             <button class="magnet" type="button" data-magnet><span>PULSE</span></button>
@@ -37,7 +38,7 @@
     <footer class="lab-footer">
         <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>MOVE TO ATTRACT</span></p>
         <p class="method">DISTANCE → FORCE → OFFSET</p>
-        <a class="next-link" href="../fullscreen-crosshair/"><span><small>NEXT 08</small>Crosshair</span><b aria-hidden="true">↗</b></a>
+        <a class="next-link" href="../fullscreen-crosshair/" aria-label="前往下一个实验：Fullscreen Crosshair Cursor"><span><small>NEXT · 08 / 44</small>Crosshair</span><b aria-hidden="true">↗</b></a>
     </footer>
     <noscript><p class="no-script">启用 JavaScript 后，按钮会响应指针距离。</p></noscript>
 </body>

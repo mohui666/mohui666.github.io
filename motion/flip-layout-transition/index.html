@@ -7,16 +7,17 @@
     <meta name="theme-color" content="#080d18">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
     <link rel="preload" href="../assets/bg8-720.webp" as="image" type="image/webp">
-    <link rel="stylesheet" href="../light-lab.css">
-    <script src="../light-lab.js" defer></script>
+    <link rel="stylesheet" href="../light-lab.css?v=20260831-ui">
+    <script src="../light-lab.js?v=20260831-ui" defer></script>
     <title>FLIP Layout Transition · Motion Field 17</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="flip">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
         <p class="lab-title"><i aria-hidden="true"></i> FLIP Layout Transition</p>
-        <p class="lab-count" aria-label="第十七个实验，共四十四个">17 / 44</p>
+        <p class="lab-count" aria-label="第 17 个实验，共 44 个">17 / 44</p>
     </header>
 
     <main class="lab-stage flip-stage" id="experiment">
@@ -26,7 +27,7 @@
             <p class="description">先记录每张卡片旧位置，再改变真实布局，最后用反向变换消除跳跃。切换网格与列表、随机排序，或点击卡片放大。</p>
         </section>
         <div class="flip-workspace">
-            <div class="flip-tools" aria-label="布局控制">
+            <div class="flip-tools" role="group" aria-label="布局控制">
                 <button class="mode-button" type="button" data-flip-layout="grid" aria-pressed="true">GRID</button>
                 <button class="mode-button" type="button" data-flip-layout="list" aria-pressed="false">LIST</button>
                 <button class="control-pill" type="button" data-flip-shuffle>SHUFFLE</button>
@@ -45,7 +46,7 @@
     <footer class="lab-footer">
         <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>SELECT A LAYOUT</span></p>
         <p class="method">FIRST → LAST → INVERT → PLAY</p>
-        <a class="next-link" href="../shared-element-transition/"><span><small>NEXT 18</small>Shared Element</span><b aria-hidden="true">↗</b></a>
+        <a class="next-link" href="../shared-element-transition/" aria-label="前往下一个实验：Shared Element Transition"><span><small>NEXT · 18 / 44</small>Shared Element</span><b aria-hidden="true">↗</b></a>
     </footer>
     <noscript><p class="no-script">启用 JavaScript 后，布局重排会通过 FLIP 保持连续运动。</p></noscript>
 </body>

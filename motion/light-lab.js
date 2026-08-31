@@ -8,7 +8,7 @@
     const liveState = document.querySelector("[data-live-state]");
 
     const setLiveState = (text) => {
-        if (liveState) liveState.textContent = text;
+        if (liveState && liveState.textContent !== text) liveState.textContent = text;
     };
 
     const magnetic = () => {
@@ -286,7 +286,6 @@
             playing = false;
             cancelAnimationFrame(frame);
             playButton.textContent = "PLAY";
-            playButton.setAttribute("aria-pressed", "false");
         };
 
         const tick = (now) => {
@@ -308,7 +307,6 @@
             playing = true;
             started = 0;
             playButton.textContent = "PAUSE";
-            playButton.setAttribute("aria-pressed", "true");
             frame = requestAnimationFrame(tick);
         };
 
@@ -385,7 +383,6 @@
             map.style.setProperty("--duration", `${duration}s`);
             map.classList.toggle("is-paused", paused);
             toggle.textContent = paused ? "PLAY" : "PAUSE";
-            toggle.setAttribute("aria-pressed", String(paused));
             setLiveState(paused ? "ROUTE PAUSED" : `VELOCITY ${slider.value} / 10`);
         };
 
@@ -522,7 +519,12 @@
         const detailTitle = dialog.querySelector("[data-detail-title]");
         const detailIndex = dialog.querySelector("[data-detail-index]");
         const closeButton = dialog.querySelector("[data-dialog-close]");
+        const background = [document.querySelector(".lab-nav"), stage, document.querySelector(".lab-footer")].filter(Boolean);
         let activeCard = null;
+
+        const setBackgroundInert = (value) => {
+            background.forEach((element) => { element.inert = value; });
+        };
 
         const animateClone = (from, to, source, done) => {
             if (reducedMotion) {
@@ -551,13 +553,14 @@
             detailImage.alt = sourceImage.alt;
             detailTitle.textContent = card.dataset.title;
             detailIndex.textContent = card.dataset.index;
+            setBackgroundInert(true);
             dialog.hidden = false;
             detailImage.style.opacity = "0";
+            closeButton.focus();
             const from = sourceImage.getBoundingClientRect();
             const to = detailImage.getBoundingClientRect();
             animateClone(from, to, sourceImage.src, () => {
                 detailImage.style.opacity = "1";
-                closeButton.focus();
             });
             setLiveState("SHARED ELEMENT EXPANDED");
         };
@@ -570,6 +573,7 @@
             detailImage.style.opacity = "0";
             animateClone(from, to, detailImage.src, () => {
                 dialog.hidden = true;
+                setBackgroundInert(false);
                 activeCard.focus();
                 activeCard = null;
             });
@@ -580,6 +584,12 @@
         closeButton.addEventListener("click", close);
         dialog.addEventListener("pointerdown", (event) => {
             if (event.target === dialog) close();
+        });
+        dialog.addEventListener("keydown", (event) => {
+            if (event.key === "Tab") {
+                event.preventDefault();
+                closeButton.focus();
+            }
         });
         document.addEventListener("keydown", (event) => {
             if (event.key === "Escape" && !dialog.hidden) close();

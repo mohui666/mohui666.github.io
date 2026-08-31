@@ -804,7 +804,7 @@ a {
     }
 
     .stage {
-        min-height: 460px;
+        min-height: 0;
     }
 
     .chapter-meta {

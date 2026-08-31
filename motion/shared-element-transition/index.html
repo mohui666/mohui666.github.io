@@ -7,16 +7,17 @@
     <meta name="theme-color" content="#0b0a11">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
     <link rel="preload" href="../assets/bg11-720.webp" as="image" type="image/webp">
-    <link rel="stylesheet" href="../light-lab.css">
-    <script src="../light-lab.js" defer></script>
+    <link rel="stylesheet" href="../light-lab.css?v=20260831-ui">
+    <script src="../light-lab.js?v=20260831-ui" defer></script>
     <title>Shared Element Transition · Motion Field 18</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="shared">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
         <p class="lab-title"><i aria-hidden="true"></i> Shared Element Transition</p>
-        <p class="lab-count" aria-label="第十八个实验，共四十四个">18 / 44</p>
+        <p class="lab-count" aria-label="第 18 个实验，共 44 个">18 / 44</p>
     </header>
 
     <main class="lab-stage shared-stage" id="experiment">
@@ -25,11 +26,11 @@
             <h1 id="page-title">SHARED<br><em>ELEMENT</em></h1>
             <p class="description">缩略图不是消失后换成另一张图，而是保持视觉身份，跨越两个布局连续飞入详情。点击任意画面，Esc 返回。</p>
         </section>
-        <div class="shared-gallery" aria-label="选择一张图片进入详情">
-            <button class="shared-card" type="button" data-shared-card data-title="Echo Chamber" data-index="01 / ECHO"><img src="../assets/bg8-720.webp" alt="Echo Chamber 蓝紫色抽象空间"><span><b>01</b><b>ECHO CHAMBER ↗</b></span></button>
-            <button class="shared-card" type="button" data-shared-card data-title="Solar Flare" data-index="02 / FLARE"><img src="../assets/bg9-720.webp" alt="Solar Flare 暖色抽象空间"><span><b>02</b><b>SOLAR FLARE ↗</b></span></button>
-            <button class="shared-card" type="button" data-shared-card data-title="Tidal Memory" data-index="03 / TIDE"><img src="../assets/bg0-720.webp" alt="Tidal Memory 绿色抽象空间"><span><b>03</b><b>TIDAL MEMORY ↗</b></span></button>
-            <button class="shared-card" type="button" data-shared-card data-title="Dark Signal" data-index="04 / VOID"><img src="../assets/bg11-720.webp" alt="Dark Signal 深色流体纹理"><span><b>04</b><b>DARK SIGNAL ↗</b></span></button>
+        <div class="shared-gallery" role="group" aria-label="选择一张图片进入详情">
+            <button class="shared-card" type="button" data-shared-card data-title="Echo Chamber" data-index="01 / ECHO" aria-label="打开 Echo Chamber 详情"><img src="../assets/bg8-720.webp" alt="Echo Chamber 蓝紫色抽象空间"><span><b>01</b><b>ECHO CHAMBER ↗</b></span></button>
+            <button class="shared-card" type="button" data-shared-card data-title="Solar Flare" data-index="02 / FLARE" aria-label="打开 Solar Flare 详情"><img src="../assets/bg9-720.webp" alt="Solar Flare 暖色抽象空间"><span><b>02</b><b>SOLAR FLARE ↗</b></span></button>
+            <button class="shared-card" type="button" data-shared-card data-title="Tidal Memory" data-index="03 / TIDE" aria-label="打开 Tidal Memory 详情"><img src="../assets/bg0-720.webp" alt="Tidal Memory 绿色抽象空间"><span><b>03</b><b>TIDAL MEMORY ↗</b></span></button>
+            <button class="shared-card" type="button" data-shared-card data-title="Dark Signal" data-index="04 / VOID" aria-label="打开 Dark Signal 详情"><img src="../assets/bg11-720.webp" alt="Dark Signal 深色流体纹理"><span><b>04</b><b>DARK SIGNAL ↗</b></span></button>
         </div>
     </main>
 
@@ -44,7 +45,7 @@
     <footer class="lab-footer">
         <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>SELECT AN IMAGE</span></p>
         <p class="method">SOURCE → CLONE → TARGET</p>
-        <a class="next-link" href="../infinite-canvas/"><span><small>NEXT 19</small>Infinite Canvas</span><b aria-hidden="true">↗</b></a>
+        <a class="next-link" href="../infinite-canvas/" aria-label="前往下一个实验：Infinite Pannable Canvas"><span><small>NEXT · 19 / 44</small>Infinite Canvas</span><b aria-hidden="true">↗</b></a>
     </footer>
     <noscript><p class="no-script">启用 JavaScript 后，缩略图会连续转场到详情视图。</p></noscript>
 </body>

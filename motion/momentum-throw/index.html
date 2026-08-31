@@ -6,9 +6,10 @@
     <meta name="description" content="Momentum Throw 动量投掷：连续采样拖拽速度，释放后按动量滑行，并绘制速度向量与运动轨迹。">
     <meta name="theme-color" content="#090a0e">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../drag-physics.css?v=20260831">
-    <script src="../drag-physics.js?v=20260831" defer></script>
+    <link rel="stylesheet" href="../drag-physics.css?v=20260831-ui">
+    <script src="../drag-physics.js?v=20260831-ui" defer></script>
     <title>Momentum Throw · Motion Field 37</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="momentum-throw">
     <a class="skip-link" href="#experiment">跳到动量投掷实验</a>
@@ -32,17 +33,18 @@
         </section>
 
         <section class="physics-stage momentum-stage" data-physics-stage aria-label="动量投掷与轨迹区域">
+            <p class="mobile-touch-hint">按住、拖动并甩出</p>
             <canvas class="trail-canvas" data-trail-canvas aria-hidden="true"></canvas>
             <p class="stage-label top">SAMPLE WINDOW 150MS / VECTOR</p>
             <p class="stage-label side">MOMENTUM DECAY</p>
-            <button class="physics-object momentum-puck" data-physics-object type="button" aria-describedby="momentum-description">
+            <div class="physics-object momentum-puck" data-physics-object tabindex="0" role="group" aria-label="动量投掷物体" aria-describedby="momentum-description">
                 <b>THROW</b><small>VECTOR / 37</small>
-            </button>
+            </div>
         </section>
     </main>
 
     <button class="physics-reset" data-reset type="button">↺ RESET</button>
-    <a class="physics-next" href="../inertial-snap-grid/"><small>NEXT 38</small><span>Inertial Snap Grid</span><b aria-hidden="true">↗</b></a>
+    <a class="physics-next" href="../inertial-snap-grid/" aria-label="前往下一个实验：Inertial Snap Grid"><small>NEXT · 38 / 44</small><span>Inertial Snap Grid</span><b aria-hidden="true">↗</b></a>
     <noscript><p class="no-script">启用 JavaScript 后即可采样并投掷。</p></noscript>
 </body>
 </html>

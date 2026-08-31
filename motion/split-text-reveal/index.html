@@ -6,16 +6,17 @@
     <meta name="description" content="Split-Text Mask Reveal 分割文字蒙版揭示：字符、单词或行按节奏从裁切窗口进入。">
     <meta name="theme-color" content="#120d08">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../light-lab.css">
-    <script src="../light-lab.js" defer></script>
+    <link rel="stylesheet" href="../light-lab.css?v=20260831-ui">
+    <script src="../light-lab.js?v=20260831-ui" defer></script>
     <title>Split-Text Reveal · Motion Field 16</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="split">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
         <p class="lab-title"><i aria-hidden="true"></i> Split-Text Mask Reveal</p>
-        <p class="lab-count" aria-label="第十六个实验，共四十四个">16 / 44</p>
+        <p class="lab-count" aria-label="第 16 个实验，共 44 个">16 / 44</p>
     </header>
 
     <main class="lab-stage split-stage" id="experiment" tabindex="0" aria-label="选择字符、单词或分行模式播放文字揭示；数字键一到三切换，空格重播">
@@ -28,7 +29,7 @@
             <p class="split-kicker">MOTION FIELD / TYPOGRAPHIC SEQUENCE</p>
             <p class="split-text" data-split-text aria-live="polite">BREAK THE SILENCE</p>
         </div>
-        <div class="control-dock split-controls" aria-label="文字拆分方式">
+        <div class="control-dock split-controls" role="group" aria-label="文字拆分方式">
             <button class="mode-button" type="button" data-split-mode="char" aria-pressed="false">CHAR</button>
             <button class="mode-button" type="button" data-split-mode="word" aria-pressed="true">WORD</button>
             <button class="mode-button" type="button" data-split-mode="line" aria-pressed="false">LINE</button>
@@ -40,7 +41,7 @@
     <footer class="lab-footer">
         <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>WORD REVEAL PLAYING</span></p>
         <p class="method">TOKENIZE → CLIP → STAGGER</p>
-        <a class="next-link" href="../flip-layout-transition/"><span><small>NEXT 17</small>FLIP Layout</span><b aria-hidden="true">↗</b></a>
+        <a class="next-link" href="../flip-layout-transition/" aria-label="前往下一个实验：FLIP Layout Transition"><span><small>NEXT · 17 / 44</small>FLIP Layout</span><b aria-hidden="true">↗</b></a>
     </footer>
     <noscript><p class="no-script">启用 JavaScript 后，可切换拆分层级并重播文字揭示。</p></noscript>
 </body>

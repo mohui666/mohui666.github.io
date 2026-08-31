@@ -17,8 +17,9 @@
         if (node) node.textContent = value;
     };
     const setState = (value) => {
-        readout("state", value);
-        object.dataset.state = value;
+        const node = document.querySelector('[data-readout="state"]');
+        if (node && node.textContent !== value) node.textContent = value;
+        if (object.dataset.state !== value) object.dataset.state = value;
     };
     const setDragging = (value) => document.body.classList.toggle("is-dragging", value);
     const stagePoint = (event) => {

@@ -6,9 +6,10 @@
     <meta name="description" content="Elastic Bounds 弹性边界：拖拽物按释放速度撞击边缘，发生反弹、压缩并受边缘阻力减速。">
     <meta name="theme-color" content="#ff7045">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../drag-physics.css?v=20260831">
-    <script src="../drag-physics.js?v=20260831" defer></script>
+    <link rel="stylesheet" href="../drag-physics.css?v=20260831-ui">
+    <script src="../drag-physics.js?v=20260831-ui" defer></script>
     <title>Elastic Bounds · Motion Field 36</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="elastic-bounds">
     <a class="skip-link" href="#experiment">跳到弹性边界实验</a>
@@ -32,17 +33,18 @@
         </section>
 
         <section class="physics-stage elastic-stage" data-physics-stage aria-label="带弹性碰撞的拖拽区域">
+            <p class="mobile-touch-hint">按住并拖动</p>
             <div class="edge-meter" data-edge-meter aria-hidden="true"></div>
             <p class="stage-label top">RESTITUTION 0.74 / EDGE DRAG</p>
             <p class="stage-label side">COLLISION NORMAL</p>
-            <button class="physics-object elastic-puck" data-physics-object type="button" aria-describedby="elastic-description">
+            <div class="physics-object elastic-puck" data-physics-object tabindex="0" role="group" aria-label="弹性边界拖拽物体" aria-describedby="elastic-description">
                 <b>BOUNCE</b><small>BODY / 36</small>
-            </button>
+            </div>
         </section>
     </main>
 
     <button class="physics-reset" data-reset type="button">↺ RESET</button>
-    <a class="physics-next" href="../momentum-throw/"><small>NEXT 37</small><span>Momentum Throw</span><b aria-hidden="true">↗</b></a>
+    <a class="physics-next" href="../momentum-throw/" aria-label="前往下一个实验：Momentum Throw"><small>NEXT · 37 / 44</small><span>Momentum Throw</span><b aria-hidden="true">↗</b></a>
     <noscript><p class="no-script">启用 JavaScript 后即可体验弹性边界。</p></noscript>
 </body>
 </html>

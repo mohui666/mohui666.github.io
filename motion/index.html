@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="mohui666 的 Motion Field：44 个独立网页动效实验，涵盖指针、滚动、物理拖拽、SVG、Canvas 与 WebGL。">
     <meta name="theme-color" content="#070a14">
     <meta property="og:title" content="Motion Field · mohui666">
@@ -15,7 +15,7 @@
     <meta name="twitter:description" content="44 个独立网页，44 种可以亲手操控的动效。">
     <meta name="twitter:image" content="https://mohui666.github.io/motion/og.png">
     <link rel="icon" href="../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="catalog.css?v=20260831" type="text/css">
+    <link rel="stylesheet" href="catalog.css?v=20260831-ui" type="text/css">
     <script src="catalog.js?v=20260831" defer></script>
     <title>Motion Field · 动效实验目录</title>
 </head>
@@ -127,18 +127,18 @@
                     <span>07—18</span>
                 </div>
                 <div class="term-grid">
-                    <a class="term-card" href="magnetic-cursor/" data-card style="--term-accent:#7dd3fc"><span>07</span><h3>Magnetic Cursor</h3><p>磁吸光标</p><small>POINTER</small><b>↗</b></a>
-                    <a class="term-card" href="fullscreen-crosshair/" data-card style="--term-accent:#f0abfc"><span>08</span><h3>Fullscreen Crosshair Cursor</h3><p>全屏十字准星</p><small>POINTER</small><b>↗</b></a>
-                    <a class="term-card" href="direction-aware-reveal/" data-card style="--term-accent:#fb7185"><span>09</span><h3>Direction-Aware Hover Reveal</h3><p>方向感知悬停揭示</p><small>HOVER</small><b>↗</b></a>
-                    <a class="term-card" href="direction-aware-marquee/" data-card style="--term-accent:#facc15"><span>10</span><h3>Direction-Aware Marquee</h3><p>方向感知跑马灯</p><small>HOVER</small><b>↗</b></a>
-                    <a class="term-card" href="tilt-hover/" data-card style="--term-accent:#a5b4fc"><span>11</span><h3>Tilt Hover / Pointer Parallax</h3><p>倾斜悬停与指针视差</p><small>POINTER</small><b>↗</b></a>
-                    <a class="term-card" href="svg-path-morphing/" data-card style="--term-accent:#34d399"><span>12</span><h3>SVG Path Morphing</h3><p>SVG 路径形变</p><small>DRAG</small><b>↗</b></a>
-                    <a class="term-card" href="svg-stroke-drawing/" data-card style="--term-accent:#60a5fa"><span>13</span><h3>SVG Stroke Drawing</h3><p>SVG 路径描边</p><small>POINTER</small><b>↗</b></a>
-                    <a class="term-card" href="svg-mask-reveal/" data-card style="--term-accent:#f97316"><span>14</span><h3>SVG Mask Reveal</h3><p>SVG 蒙版揭示</p><small>POINTER</small><b>↗</b></a>
-                    <a class="term-card" href="css-motion-path/" data-card style="--term-accent:#22d3ee"><span>15</span><h3>CSS Motion Path</h3><p>CSS 运动路径</p><small>CONTROL</small><b>↗</b></a>
-                    <a class="term-card" href="split-text-reveal/" data-card style="--term-accent:#c084fc"><span>16</span><h3>Split-Text Mask Reveal</h3><p>分割文字蒙版揭示</p><small>CLICK</small><b>↗</b></a>
-                    <a class="term-card" href="flip-layout-transition/" data-card style="--term-accent:#4ade80"><span>17</span><h3>FLIP Layout Transition</h3><p>FLIP 布局转场</p><small>CLICK</small><b>↗</b></a>
-                    <a class="term-card" href="shared-element-transition/" data-card style="--term-accent:#f472b6"><span>18</span><h3>Shared Element Transition</h3><p>共享元素视图转场</p><small>CLICK</small><b>↗</b></a>
+                    <a class="term-card" href="magnetic-cursor/" data-card style="--term-accent:#7dd3fc"><span>07</span><h3>Magnetic Cursor</h3><p>磁吸光标</p><small>POINTER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="fullscreen-crosshair/" data-card style="--term-accent:#f0abfc"><span>08</span><h3>Fullscreen Crosshair Cursor</h3><p>全屏十字准星</p><small>POINTER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="direction-aware-reveal/" data-card style="--term-accent:#fb7185"><span>09</span><h3>Direction-Aware Hover Reveal</h3><p>方向感知悬停揭示</p><small>HOVER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="direction-aware-marquee/" data-card style="--term-accent:#facc15"><span>10</span><h3>Direction-Aware Marquee</h3><p>方向感知跑马灯</p><small>HOVER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="tilt-hover/" data-card style="--term-accent:#a5b4fc"><span>11</span><h3>Tilt Hover / Pointer Parallax</h3><p>倾斜悬停与指针视差</p><small>POINTER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="svg-path-morphing/" data-card style="--term-accent:#34d399"><span>12</span><h3>SVG Path Morphing</h3><p>SVG 路径形变</p><small>CONTROL</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="svg-stroke-drawing/" data-card style="--term-accent:#60a5fa"><span>13</span><h3>SVG Stroke Drawing</h3><p>SVG 路径描边</p><small>POINTER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="svg-mask-reveal/" data-card style="--term-accent:#f97316"><span>14</span><h3>SVG Mask Reveal</h3><p>SVG 蒙版揭示</p><small>POINTER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="css-motion-path/" data-card style="--term-accent:#22d3ee"><span>15</span><h3>CSS Motion Path</h3><p>CSS 运动路径</p><small>CONTROL</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="split-text-reveal/" data-card style="--term-accent:#c084fc"><span>16</span><h3>Split-Text Mask Reveal</h3><p>分割文字蒙版揭示</p><small>CLICK</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="flip-layout-transition/" data-card style="--term-accent:#4ade80"><span>17</span><h3>FLIP Layout Transition</h3><p>FLIP 布局转场</p><small>CLICK</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="shared-element-transition/" data-card style="--term-accent:#f472b6"><span>18</span><h3>Shared Element Transition</h3><p>共享元素视图转场</p><small>CLICK</small><b aria-hidden="true">↗</b></a>
                 </div>
             </section>
 
@@ -151,14 +151,14 @@
                     <span>19—26</span>
                 </div>
                 <div class="term-grid">
-                    <a class="term-card" href="infinite-canvas/" data-card style="--term-accent:#38bdf8"><span>19</span><h3>Infinite Pannable Canvas</h3><p>无限可平移画布</p><small>DRAG</small><b>↗</b></a>
-                    <a class="term-card" href="inertial-drag/" data-card style="--term-accent:#fbbf24"><span>20</span><h3>Inertial Drag</h3><p>惯性拖拽</p><small>DRAG</small><b>↗</b></a>
-                    <a class="term-card" href="drag-parallax-carousel/" data-card style="--term-accent:#fb7185"><span>21</span><h3>Drag-Driven Parallax Carousel</h3><p>拖拽驱动视差轮播</p><small>DRAG</small><b>↗</b></a>
-                    <a class="term-card" href="horizontal-scroll/" data-card style="--term-accent:#a78bfa"><span>22</span><h3>Vertical-to-Horizontal Scroll</h3><p>纵向滚动驱动横向轨道</p><small>SCROLL</small><b>↗</b></a>
-                    <a class="term-card" href="parallax-depth-scroll/" data-card style="--term-accent:#2dd4bf"><span>23</span><h3>Parallax Depth Scroll</h3><p>视差深度滚动</p><small>SCROLL</small><b>↗</b></a>
-                    <a class="term-card" href="layered-zoom-scroll/" data-card style="--term-accent:#f97316"><span>24</span><h3>Layered Zoom Scroll</h3><p>分层推镜滚动</p><small>SCROLL</small><b>↗</b></a>
-                    <a class="term-card" href="scroll-3d-stack/" data-card style="--term-accent:#818cf8"><span>25</span><h3>On-Scroll 3D Stack Motion</h3><p>滚动驱动三维卡片堆栈</p><small>SCROLL</small><b>↗</b></a>
-                    <a class="term-card" href="scroll-svg-morph/" data-card style="--term-accent:#e879f9"><span>26</span><h3>SVG Path Morphing on Scroll</h3><p>滚动驱动 SVG 路径形变</p><small>SCROLL</small><b>↗</b></a>
+                    <a class="term-card" href="infinite-canvas/" data-card style="--term-accent:#38bdf8"><span>19</span><h3>Infinite Pannable Canvas</h3><p>无限可平移画布</p><small>DRAG</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="inertial-drag/" data-card style="--term-accent:#fbbf24"><span>20</span><h3>Inertial Drag</h3><p>惯性拖拽</p><small>DRAG</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="drag-parallax-carousel/" data-card style="--term-accent:#fb7185"><span>21</span><h3>Drag-Driven Parallax Carousel</h3><p>拖拽驱动视差轮播</p><small>DRAG</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="horizontal-scroll/" data-card style="--term-accent:#a78bfa"><span>22</span><h3>Vertical-to-Horizontal Scroll</h3><p>纵向滚动驱动横向轨道</p><small>SCROLL</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="parallax-depth-scroll/" data-card style="--term-accent:#2dd4bf"><span>23</span><h3>Parallax Depth Scroll</h3><p>视差深度滚动</p><small>SCROLL</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="layered-zoom-scroll/" data-card style="--term-accent:#f97316"><span>24</span><h3>Layered Zoom Scroll</h3><p>分层推镜滚动</p><small>SCROLL</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="scroll-3d-stack/" data-card style="--term-accent:#818cf8"><span>25</span><h3>On-Scroll 3D Stack Motion</h3><p>滚动驱动三维卡片堆栈</p><small>SCROLL</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="scroll-svg-morph/" data-card style="--term-accent:#e879f9"><span>26</span><h3>SVG Path Morphing on Scroll</h3><p>滚动驱动 SVG 路径形变</p><small>SCROLL</small><b aria-hidden="true">↗</b></a>
                 </div>
             </section>
 
@@ -171,14 +171,14 @@
                     <span>27—34</span>
                 </div>
                 <div class="term-grid">
-                    <a class="term-card" href="reaction-diffusion/" data-card style="--term-accent:#b9ff7d"><span>27</span><h3>Reaction–Diffusion</h3><p>反应–扩散模拟</p><small>POINTER</small><b>↗</b></a>
-                    <a class="term-card" href="sdf-ray-marching/" data-card style="--term-accent:#60a5fa"><span>28</span><h3>SDF Ray Marching</h3><p>距离场光线步进</p><small>WEBGL</small><b>↗</b></a>
-                    <a class="term-card" href="gpgpu-particles/" data-card style="--term-accent:#c084fc"><span>29</span><h3>GPGPU Particle Simulation</h3><p>GPU 粒子模拟</p><small>POINTER</small><b>↗</b></a>
-                    <a class="term-card" href="lens-refraction/" data-card style="--term-accent:#67e8f9"><span>30</span><h3>WebGL Lens Refraction</h3><p>WebGL 透镜折射</p><small>POINTER</small><b>↗</b></a>
-                    <a class="term-card" href="rgb-shift/" data-card style="--term-accent:#fb7185"><span>31</span><h3>RGB Shift / Chromatic Aberration</h3><p>RGB 通道偏移与色差</p><small>POINTER</small><b>↗</b></a>
-                    <a class="term-card" href="afterimage-feedback/" data-card style="--term-accent:#a5b4fc"><span>32</span><h3>Afterimage Feedback</h3><p>残像反馈</p><small>POINTER</small><b>↗</b></a>
-                    <a class="term-card" href="volumetric-god-rays/" data-card style="--term-accent:#fde68a"><span>33</span><h3>Volumetric God Rays</h3><p>体积光束</p><small>POINTER</small><b>↗</b></a>
-                    <a class="term-card" href="morph-targets/" data-card style="--term-accent:#34d399"><span>34</span><h3>3D Morph Targets</h3><p>三维形态目标动画</p><small>CLICK</small><b>↗</b></a>
+                    <a class="term-card" href="reaction-diffusion/" data-card style="--term-accent:#b9ff7d"><span>27</span><h3>Reaction–Diffusion</h3><p>反应–扩散模拟</p><small>POINTER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="sdf-ray-marching/" data-card style="--term-accent:#60a5fa"><span>28</span><h3>SDF Ray Marching</h3><p>距离场光线步进</p><small>WEBGL</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="gpgpu-particles/" data-card style="--term-accent:#c084fc"><span>29</span><h3>GPU Procedural Particle Field</h3><p>GPU 程序化粒子流场</p><small>POINTER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="lens-refraction/" data-card style="--term-accent:#67e8f9"><span>30</span><h3>WebGL Lens Refraction</h3><p>WebGL 透镜折射</p><small>POINTER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="rgb-shift/" data-card style="--term-accent:#fb7185"><span>31</span><h3>RGB Shift / Chromatic Aberration</h3><p>RGB 通道偏移与色差</p><small>POINTER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="afterimage-feedback/" data-card style="--term-accent:#a5b4fc"><span>32</span><h3>Afterimage Feedback</h3><p>残像反馈</p><small>POINTER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="volumetric-god-rays/" data-card style="--term-accent:#fde68a"><span>33</span><h3>Volumetric God Rays</h3><p>体积光束</p><small>POINTER</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="morph-targets/" data-card style="--term-accent:#34d399"><span>34</span><h3>3D Morph Targets</h3><p>三维形态目标动画</p><small>CLICK</small><b aria-hidden="true">↗</b></a>
                 </div>
             </section>
 
@@ -191,16 +191,16 @@
                     <span>35—44</span>
                 </div>
                 <div class="term-grid">
-                    <a class="term-card" href="spring-drag/" data-card style="--term-accent:#5eead4"><span>35</span><h3>Spring Drag</h3><p>二阶弹簧跟随拖拽</p><small>SPRING</small><b>↗</b></a>
-                    <a class="term-card" href="elastic-bounds/" data-card style="--term-accent:#fb7185"><span>36</span><h3>Elastic Bounds</h3><p>弹性边界与撞墙回弹</p><small>BOUNCE</small><b>↗</b></a>
-                    <a class="term-card" href="momentum-throw/" data-card style="--term-accent:#fbbf24"><span>37</span><h3>Momentum Throw</h3><p>速度采样与动量投掷</p><small>THROW</small><b>↗</b></a>
-                    <a class="term-card" href="inertial-snap-grid/" data-card style="--term-accent:#60a5fa"><span>38</span><h3>Inertial Snap Grid</h3><p>惯性预测与网格吸附</p><small>SNAP</small><b>↗</b></a>
-                    <a class="term-card" href="magnetic-docking/" data-card style="--term-accent:#c084fc"><span>39</span><h3>Magnetic Docking</h3><p>距离磁力与停靠锁定</p><small>MAGNET</small><b>↗</b></a>
-                    <a class="term-card" href="rope-constraint/" data-card style="--term-accent:#f97316"><span>40</span><h3>Rope Constraint Drag</h3><p>绳段长度约束拖拽</p><small>VERLET</small><b>↗</b></a>
-                    <a class="term-card" href="collision-drag/" data-card style="--term-accent:#34d399"><span>41</span><h3>Multi-body Collision Drag</h3><p>多物体碰撞与投掷</p><small>COLLIDE</small><b>↗</b></a>
-                    <a class="term-card" href="orbital-drag/" data-card style="--term-accent:#818cf8"><span>42</span><h3>Orbital Constraint Drag</h3><p>轨道约束与角动量</p><small>ORBIT</small><b>↗</b></a>
-                    <a class="term-card" href="rubber-band-drag/" data-card style="--term-accent:#e879f9"><span>43</span><h3>Rubber-band Drag</h3><p>渐进阻力与橡皮筋回弹</p><small>RESIST</small><b>↗</b></a>
-                    <a class="term-card" href="physics-reorder/" data-card style="--term-accent:#a3e635"><span>44</span><h3>Physics Reorder</h3><p>弹簧让位式拖拽重排</p><small>REORDER</small><b>↗</b></a>
+                    <a class="term-card" href="spring-drag/" data-card style="--term-accent:#5eead4"><span>35</span><h3>Spring Drag</h3><p>二阶弹簧跟随拖拽</p><small>SPRING</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="elastic-bounds/" data-card style="--term-accent:#fb7185"><span>36</span><h3>Elastic Bounds</h3><p>弹性边界与撞墙回弹</p><small>BOUNCE</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="momentum-throw/" data-card style="--term-accent:#fbbf24"><span>37</span><h3>Momentum Throw</h3><p>速度采样与动量投掷</p><small>THROW</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="inertial-snap-grid/" data-card style="--term-accent:#60a5fa"><span>38</span><h3>Inertial Snap Grid</h3><p>惯性预测与网格吸附</p><small>SNAP</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="magnetic-docking/" data-card style="--term-accent:#c084fc"><span>39</span><h3>Magnetic Docking</h3><p>距离磁力与停靠锁定</p><small>MAGNET</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="rope-constraint/" data-card style="--term-accent:#f97316"><span>40</span><h3>Rope Constraint Drag</h3><p>绳段长度约束拖拽</p><small>VERLET</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="collision-drag/" data-card style="--term-accent:#34d399"><span>41</span><h3>Multi-body Collision Drag</h3><p>多物体碰撞与投掷</p><small>COLLIDE</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="orbital-drag/" data-card style="--term-accent:#818cf8"><span>42</span><h3>Orbital Constraint Drag</h3><p>轨道约束与角动量</p><small>ORBIT</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="rubber-band-drag/" data-card style="--term-accent:#e879f9"><span>43</span><h3>Rubber-band Drag</h3><p>渐进阻力与橡皮筋回弹</p><small>RESIST</small><b aria-hidden="true">↗</b></a>
+                    <a class="term-card" href="physics-reorder/" data-card style="--term-accent:#a3e635"><span>44</span><h3>Physics Reorder</h3><p>弹簧让位式拖拽重排</p><small>REORDER</small><b aria-hidden="true">↗</b></a>
                 </div>
             </section>
         </section>

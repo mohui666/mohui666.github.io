@@ -6,34 +6,35 @@
     <meta name="description" content="Fullscreen Crosshair Cursor 全屏十字准星：指针坐标扩展为贯穿视口的定位系统。">
     <meta name="theme-color" content="#06100f">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../light-lab.css">
-    <script src="../light-lab.js" defer></script>
+    <link rel="stylesheet" href="../light-lab.css?v=20260831-ui">
+    <script src="../light-lab.js?v=20260831-ui" defer></script>
     <title>Fullscreen Crosshair · Motion Field 08</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="crosshair">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
         <p class="lab-title"><i aria-hidden="true"></i> Fullscreen Crosshair</p>
-        <p class="lab-count" aria-label="第八个实验，共四十四个">08 / 44</p>
+        <p class="lab-count" aria-label="第 8 个实验，共 44 个">08 / 44</p>
     </header>
 
-    <main class="lab-stage crosshair-stage" id="experiment" tabindex="0" aria-label="移动指针控制全屏准星，点击锁定；方向键可微调，空格切换锁定">
+    <main class="lab-stage crosshair-stage" id="experiment" tabindex="0" aria-label="鼠标点击锁定；触摸点按定位；方向键微调，空格切换锁定">
         <section class="lab-copy" aria-labelledby="page-title">
             <p class="eyebrow"><span>08</span> X / Y / LOCK</p>
             <h1 id="page-title">FULLSCREEN<br><em>CROSSHAIR</em></h1>
-            <p class="description">横纵坐标线追随指针贯穿整个视口。点击锁定目标；键盘方向键微调坐标，空格切换锁定状态。</p>
+            <p class="description">横纵坐标线追随指针贯穿整个视口。鼠标点击锁定；触摸点按定位；方向键微调，空格切换锁定。</p>
         </section>
         <i class="cross-line cross-line-x" aria-hidden="true"></i>
         <i class="cross-line cross-line-y" aria-hidden="true"></i>
         <div class="cross-target" aria-hidden="true"></div>
-        <p class="cross-readout" aria-live="polite">X <span data-cross-x>720</span><br>Y <span data-cross-y>480</span></p>
+        <p class="cross-readout">X <span data-cross-x>720</span><br>Y <span data-cross-y>480</span></p>
     </main>
 
     <footer class="lab-footer">
         <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>TRACKING COORDINATES</span></p>
         <p class="method">MOVE → ALIGN → LOCK</p>
-        <a class="next-link" href="../direction-aware-reveal/"><span><small>NEXT 09</small>Hover Reveal</span><b aria-hidden="true">↗</b></a>
+        <a class="next-link" href="../direction-aware-reveal/" aria-label="前往下一个实验：Direction-Aware Hover Reveal"><span><small>NEXT · 09 / 44</small>Hover Reveal</span><b aria-hidden="true">↗</b></a>
     </footer>
     <noscript><p class="no-script">启用 JavaScript 后，准星会追随指针并显示坐标。</p></noscript>
 </body>

@@ -6,30 +6,31 @@
     <meta name="description" content="CSS Motion Path 运动路径：元素沿贝塞尔闭合轨道移动并自动对齐方向。">
     <meta name="theme-color" content="#07110c">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../light-lab.css">
-    <script src="../light-lab.js" defer></script>
+    <link rel="stylesheet" href="../light-lab.css?v=20260831-ui">
+    <script src="../light-lab.js?v=20260831-ui" defer></script>
     <title>CSS Motion Path · Motion Field 15</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="motion-path">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
         <p class="lab-title"><i aria-hidden="true"></i> CSS Motion Path</p>
-        <p class="lab-count" aria-label="第十五个实验，共四十四个">15 / 44</p>
+        <p class="lab-count" aria-label="第 15 个实验，共 44 个">15 / 44</p>
     </header>
 
-    <main class="lab-stage path-stage" id="experiment" tabindex="0" aria-label="调节速度控制轨道节点，空格播放或暂停">
+    <main class="lab-stage path-stage" id="experiment" tabindex="0" aria-label="调节三个轨道节点的运行速度，空格播放或暂停">
         <section class="lab-copy" aria-labelledby="page-title">
             <p class="eyebrow"><span>15</span> CURVE / OFFSET / ORIENT</p>
             <h1 id="page-title">CSS<br><em>MOTION PATH</em></h1>
-            <p class="description">三个节点沿同一条 CSS offset-path 运行，速度与相位各不相同，朝向由曲线切线自动决定。拖动速度或按空格暂停。</p>
+            <p class="description">三个节点沿同一条 CSS offset-path 运行，以相同速度前进、相位彼此错开，朝向由曲线切线自动决定。拖动速度或按空格暂停。</p>
         </section>
         <div class="orbit-map" data-orbit-map aria-hidden="true">
             <svg viewBox="0 0 900 600"><path class="route-path-wide" d="M105 340 C135 115 350 72 474 190 S706 460 820 245 C890 112 742 62 626 124 S330 500 105 340 Z"/><path class="route-path" d="M105 340 C135 115 350 72 474 190 S706 460 820 245 C890 112 742 62 626 124 S330 500 105 340 Z"/></svg>
             <i class="path-runner"></i><i class="path-runner"></i><i class="path-runner"></i>
         </div>
         <div class="control-dock path-controls">
-            <button class="control-pill" type="button" data-path-toggle aria-pressed="false">PAUSE</button>
+            <button class="control-pill" type="button" data-path-toggle>PAUSE</button>
             <label>SPEED <input type="range" min="1" max="10" value="6" data-speed-slider aria-label="运动路径速度"></label>
         </div>
     </main>
@@ -37,7 +38,7 @@
     <footer class="lab-footer">
         <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>VELOCITY 6 / 10</span></p>
         <p class="method">PATH → DISTANCE → ROTATE</p>
-        <a class="next-link" href="../split-text-reveal/"><span><small>NEXT 16</small>Split Text</span><b aria-hidden="true">↗</b></a>
+        <a class="next-link" href="../split-text-reveal/" aria-label="前往下一个实验：Split-Text Mask Reveal"><span><small>NEXT · 16 / 44</small>Split Text</span><b aria-hidden="true">↗</b></a>
     </footer>
     <noscript><p class="no-script">启用 JavaScript 后，可调节轨道速度并暂停动画。</p></noscript>
 </body>

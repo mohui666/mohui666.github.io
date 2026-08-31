@@ -8,7 +8,7 @@
     const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
     const setGrabState = (active) => document.body.classList.toggle("is-grabbing", active);
     const setText = (element, value) => {
-        if (element) element.textContent = value;
+        if (element && element.textContent !== value) element.textContent = value;
     };
     const localPoint = (element, event) => {
         const rect = element.getBoundingClientRect();

@@ -6,16 +6,17 @@
     <meta name="description" content="Inertial Drag 惯性拖拽：释放卡片后，速度、摩擦和边界碰撞继续塑造运动。">
     <meta name="theme-color" content="#e7ff57">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../space-lab.css?v=20260831">
-    <script src="../space-lab.js?v=20260831" defer></script>
+    <link rel="stylesheet" href="../space-lab.css?v=20260831-ui">
+    <script src="../space-lab.js?v=20260831-ui" defer></script>
     <title>Inertial Drag · Motion Field 20</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="inertial-drag">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav nav-dark">
         <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
         <p><i></i> Inertial Drag</p>
-        <b aria-label="第二十个实验，共四十四个">20 / 44</b>
+        <b aria-label="第 20 个实验，共 44 个">20 / 44</b>
     </header>
 
     <main class="inertia-lab" id="experiment">
@@ -32,7 +33,7 @@
 
         <div class="inertia-arena" data-inertia-arena>
             <div class="arena-grid" aria-hidden="true"></div>
-            <article class="drag-puck" data-drag-puck tabindex="0" aria-label="可拖拽并带惯性的画框，按方向键也可推动">
+            <article class="drag-puck" data-drag-puck tabindex="0" role="group" aria-label="可拖拽并带惯性的画框，按方向键也可推动">
                 <img src="../assets/bg11-720.webp" alt="抽象蓝紫色动态画面" draggable="false">
                 <span>GRAB</span>
                 <footer><b>INERTIA / 20</b><i data-puck-state>RESTING</i></footer>
@@ -42,7 +43,7 @@
         </div>
 
         <p class="gesture-chip dark-chip"><span aria-hidden="true">✦</span><b>DRAG FAST · RELEASE · WATCH</b></p>
-        <a class="lab-next dark-next" href="../drag-parallax-carousel/"><small>NEXT 21</small><span>Drag Parallax Carousel</span> ↗</a>
+        <a class="lab-next dark-next" href="../drag-parallax-carousel/" aria-label="前往下一个实验：Drag-Driven Parallax Carousel"><small>NEXT · 21 / 44</small><span>Drag Parallax Carousel</span><b aria-hidden="true">↗</b></a>
     </main>
     <noscript><p class="no-script">启用 JavaScript 后即可拖拽并抛出画框。</p></noscript>
 </body>

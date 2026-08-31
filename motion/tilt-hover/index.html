@@ -7,16 +7,17 @@
     <meta name="theme-color" content="#07101b">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
     <link rel="preload" href="../assets/bg0-720.webp" as="image" type="image/webp">
-    <link rel="stylesheet" href="../light-lab.css">
-    <script src="../light-lab.js" defer></script>
+    <link rel="stylesheet" href="../light-lab.css?v=20260831-ui">
+    <script src="../light-lab.js?v=20260831-ui" defer></script>
     <title>Tilt Hover · Motion Field 11</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="tilt">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
         <p class="lab-title"><i aria-hidden="true"></i> Tilt Hover / Pointer Parallax</p>
-        <p class="lab-count" aria-label="第十一个实验，共四十四个">11 / 44</p>
+        <p class="lab-count" aria-label="第 11 个实验，共 44 个">11 / 44</p>
     </header>
 
     <main class="lab-stage tilt-stage" id="experiment">
@@ -25,17 +26,17 @@
             <h1 id="page-title">POINTER<br><em>PARALLAX</em></h1>
             <p class="description">指针在卡片表面的位置被映射为 X/Y 轴旋转，同时推动高光移动。键盘聚焦后可用方向键倾斜，Esc 归零。</p>
         </section>
-        <div class="tilt-deck" aria-label="三张可倾斜卡片">
-            <button class="tilt-card" type="button" data-tilt-card><img src="../assets/bg8-720.webp" alt="蓝紫色抽象空间" draggable="false"><span><b>01 / ECHO</b><b>±10°</b></span></button>
-            <button class="tilt-card" type="button" data-tilt-card><img src="../assets/bg0-720.webp" alt="绿色抽象空间" draggable="false"><span><b>02 / TIDE</b><b>±10°</b></span></button>
-            <button class="tilt-card" type="button" data-tilt-card><img src="../assets/bg9-720.webp" alt="暖色抽象空间" draggable="false"><span><b>03 / FLARE</b><b>±10°</b></span></button>
+        <div class="tilt-deck" role="group" aria-label="三张可倾斜卡片">
+            <article class="tilt-card" data-tilt-card tabindex="0" role="group" aria-label="Echo 倾斜视差卡片"><img src="../assets/bg8-720.webp" alt="蓝紫色抽象空间" draggable="false"><span><b>01 / ECHO</b><b>±10°</b></span></article>
+            <article class="tilt-card" data-tilt-card tabindex="0" role="group" aria-label="Tide 倾斜视差卡片"><img src="../assets/bg0-720.webp" alt="绿色抽象空间" draggable="false"><span><b>02 / TIDE</b><b>±10°</b></span></article>
+            <article class="tilt-card" data-tilt-card tabindex="0" role="group" aria-label="Flare 倾斜视差卡片"><img src="../assets/bg9-720.webp" alt="暖色抽象空间" draggable="false"><span><b>03 / FLARE</b><b>±10°</b></span></article>
         </div>
     </main>
 
     <footer class="lab-footer">
         <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>HOVER A SURFACE</span></p>
         <p class="method">POINTER → ROTATE → LIGHT</p>
-        <a class="next-link" href="../svg-path-morphing/"><span><small>NEXT 12</small>Path Morphing</span><b aria-hidden="true">↗</b></a>
+        <a class="next-link" href="../svg-path-morphing/" aria-label="前往下一个实验：SVG Path Morphing"><span><small>NEXT · 12 / 44</small>Path Morphing</span><b aria-hidden="true">↗</b></a>
     </footer>
     <noscript><p class="no-script">启用 JavaScript 后，卡片会根据指针位置产生透视倾斜。</p></noscript>
 </body>

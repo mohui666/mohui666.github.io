@@ -6,16 +6,17 @@
     <meta name="description" content="Rope Constraint 绳索约束：用轻量 Verlet 约束链拖动末端，每一段始终保持固定长度。">
     <meta name="theme-color" content="#070914">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../constraint-physics.css?v=20260831">
-    <script src="../constraint-physics.js?v=20260831" defer></script>
+    <link rel="stylesheet" href="../constraint-physics.css?v=20260831-ui">
+    <script src="../constraint-physics.js?v=20260831-ui" defer></script>
     <title>Rope Constraint · Motion Field 40</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="rope-constraint">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="field-nav">
         <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
         <p><i aria-hidden="true"></i> Rope Constraint</p>
-        <b aria-label="第四十个实验，共四十四个">40 / 44</b>
+        <b aria-label="第 40 个实验，共 44 个">40 / 44</b>
     </header>
 
     <main class="physics-lab rope-lab" id="experiment">
@@ -35,12 +36,12 @@
         </section>
 
         <section class="physics-stage rope-stage" aria-label="绳索约束实验场">
-            <canvas class="physics-canvas" data-rope-canvas tabindex="0" role="application" aria-describedby="rope-instructions">你的浏览器需要支持 Canvas。</canvas>
+            <canvas class="physics-canvas" data-rope-canvas tabindex="0" role="group" aria-label="绳索长度约束交互画布" aria-describedby="rope-instructions">你的浏览器需要支持 Canvas。</canvas>
             <p class="stage-tag">ANCHOR 01 · LENGTH LOCK</p>
             <p class="stage-status" data-status aria-live="polite">READY / ENDPOINT FREE</p>
         </section>
 
-        <a class="field-next" href="../collision-drag/"><small>NEXT 41</small><span>Collision Drag</span> ↗</a>
+        <a class="field-next" href="../collision-drag/" aria-label="前往下一个实验：Multi-body Collision Drag"><small>NEXT · 41 / 44</small><span>Collision Drag</span><b aria-hidden="true">↗</b></a>
     </main>
     <noscript><p class="no-script">启用 JavaScript 后即可拖动受长度约束的绳索。</p></noscript>
 </body>

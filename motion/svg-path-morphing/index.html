@@ -6,16 +6,17 @@
     <meta name="description" content="SVG Path Morphing 路径形变：在具有相同拓扑的矢量轮廓之间连续插值。">
     <meta name="theme-color" content="#10091c">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../light-lab.css">
-    <script src="../light-lab.js" defer></script>
+    <link rel="stylesheet" href="../light-lab.css?v=20260831-ui">
+    <script src="../light-lab.js?v=20260831-ui" defer></script>
     <title>SVG Path Morphing · Motion Field 12</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="morph">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
         <p class="lab-title"><i aria-hidden="true"></i> SVG Path Morphing</p>
-        <p class="lab-count" aria-label="第十二个实验，共四十四个">12 / 44</p>
+        <p class="lab-count" aria-label="第 12 个实验，共 44 个">12 / 44</p>
     </header>
 
     <main class="lab-stage morph-stage" id="experiment" tabindex="0" aria-label="选择按钮切换 SVG 形态，左右方向键循环">
@@ -32,7 +33,7 @@
             </svg>
             <p class="morph-label" data-morph-label>ORBIT</p>
         </div>
-        <div class="control-dock morph-controls" aria-label="形态选择">
+        <div class="control-dock morph-controls" role="group" aria-label="形态选择">
             <button class="mode-button" type="button" data-morph-mode="orbit" aria-pressed="true">ORBIT</button>
             <button class="mode-button" type="button" data-morph-mode="tide" aria-pressed="false">TIDE</button>
             <button class="mode-button" type="button" data-morph-mode="pulse" aria-pressed="false">PULSE</button>
@@ -43,7 +44,7 @@
     <footer class="lab-footer">
         <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>ORBIT GEOMETRY</span></p>
         <p class="method">COORDINATES → INTERPOLATE → SHAPE</p>
-        <a class="next-link" href="../svg-stroke-drawing/"><span><small>NEXT 13</small>Stroke Drawing</span><b aria-hidden="true">↗</b></a>
+        <a class="next-link" href="../svg-stroke-drawing/" aria-label="前往下一个实验：SVG Stroke Drawing"><span><small>NEXT · 13 / 44</small>Stroke Drawing</span><b aria-hidden="true">↗</b></a>
     </footer>
     <noscript><p class="no-script">启用 JavaScript 后，可在四种 SVG 轮廓间连续形变。</p></noscript>
 </body>

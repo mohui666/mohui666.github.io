@@ -3,17 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Metaballs / Gooey Effect 互动实验：拖动指针，让彩色融球聚合、拉伸与分离。">
+    <meta name="description" content="Metaballs / Gooey Effect 互动实验：移动鼠标（触屏拖动），让彩色融球聚合、拉伸与分离。">
     <meta name="theme-color" content="#05070d">
     <meta property="og:title" content="Metaballs · Motion Field">
-    <meta property="og:description" content="拖动指针，把一组彩色距离场聚合成流动的连续表面。">
+    <meta property="og:description" content="移动鼠标（触屏拖动），让一组彩色圆经模糊与对比度处理聚合成流动的黏性轮廓。">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mohui666.github.io/motion/metaballs/">
     <meta property="og:image" content="https://mohui666.github.io/motion/og.png">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="style.css?v=20260831">
-    <script src="app.js?v=20260831" defer></script>
-    <title>Metaballs · Motion Field</title>
+    <link rel="stylesheet" href="style.css?v=20260831-ui">
+    <script src="app.js?v=20260831-ui" defer></script>
+    <title>Metaballs · Motion Field 05</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body>
     <a class="skip-link" href="#experiment">跳到实验</a>
@@ -38,15 +39,15 @@
         <div class="pointer-orbit" data-pointer-orbit aria-hidden="true"><i></i></div>
 
         <section class="hero-copy" aria-labelledby="page-title">
-            <p class="eyebrow"><span>05</span> Implicit surface study</p>
+            <p class="eyebrow"><span>05</span> Canvas gooey study</p>
             <h1 id="page-title">META<br><em>BALLS</em></h1>
-            <p class="intro">一个球没有边界问题。多个球靠近时，距离场会把它们焊成同一块表面——像油滴、细胞，也像正在思考的液态光。</p>
+            <p class="intro">多个彩色圆先画进同一张 Canvas，再经模糊与高对比度处理焊成连续轮廓——像油滴、细胞，也像正在思考的液态光。</p>
         </section>
 
         <aside class="field-note" aria-label="Metaballs 原理">
-            <p>FIELD EQUATION</p>
-            <strong>Σ r² / d² ≥ τ</strong>
-            <span>当相邻场值越过阈值，轮廓便自然相连。</span>
+            <p>GOOEY PIPELINE</p>
+            <strong>contrast(blur(Σ circles))</strong>
+            <span>圆形图层靠近后，模糊色块经对比度压缩形成黏连轮廓。</span>
         </aside>
 
         <section class="interaction-dock" aria-label="交互说明">
@@ -62,14 +63,14 @@
 
         <p class="edge-label" aria-hidden="true">ATTRACT · MERGE · RELEASE · SEPARATE</p>
 
-        <a class="next-link" href="../image-motion-trail/">
-            <span><small>NEXT / 06</small>Image Motion Trail</span>
+        <a class="next-link" href="../image-motion-trail/" aria-label="前往下一个实验：Image Motion Trail">
+            <span><small>NEXT · 06 / 44</small>Image Motion Trail</span>
             <i aria-hidden="true">→</i>
         </a>
     </main>
 
     <noscript>
-        <p class="no-script">启用 JavaScript 后即可拖动并聚合融球。</p>
+        <p class="no-script">启用 JavaScript 后，移动鼠标或在触屏上拖动即可聚合融球。</p>
     </noscript>
 </body>
 </html>

@@ -7,16 +7,17 @@
     <meta name="theme-color" content="#120b0b">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
     <link rel="preload" href="../assets/bg9-720.webp" as="image" type="image/webp">
-    <link rel="stylesheet" href="../light-lab.css">
-    <script src="../light-lab.js" defer></script>
+    <link rel="stylesheet" href="../light-lab.css?v=20260831-ui">
+    <script src="../light-lab.js?v=20260831-ui" defer></script>
     <title>SVG Mask Reveal · Motion Field 14</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="mask">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
         <p class="lab-title"><i aria-hidden="true"></i> SVG Mask Reveal</p>
-        <p class="lab-count" aria-label="第十四个实验，共四十四个">14 / 44</p>
+        <p class="lab-count" aria-label="第 14 个实验，共 44 个">14 / 44</p>
     </header>
 
     <main class="lab-stage mask-stage" id="experiment" tabindex="0" aria-label="在图片上移动指针控制 SVG 蒙版，点击改变光圈大小；方向键移动，加减键缩放">
@@ -32,14 +33,14 @@
                 <image href="../assets/bg9-720.webp" width="1000" height="700" preserveAspectRatio="xMidYMid slice" mask="url(#spotlight-mask)"/>
             </svg>
             <i class="mask-ring" data-mask-ring aria-hidden="true"></i>
-            <p class="mask-readout" data-mask-readout aria-live="polite">X 620 · Y 336 · R 150</p>
+            <p class="mask-readout" data-mask-readout>X 620 · Y 336 · R 150</p>
         </div>
     </main>
 
     <footer class="lab-footer">
         <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>MOVE THE APERTURE</span></p>
         <p class="method">MASK → POSITION → REVEAL</p>
-        <a class="next-link" href="../css-motion-path/"><span><small>NEXT 15</small>Motion Path</span><b aria-hidden="true">↗</b></a>
+        <a class="next-link" href="../css-motion-path/" aria-label="前往下一个实验：CSS Motion Path"><span><small>NEXT · 15 / 44</small>Motion Path</span><b aria-hidden="true">↗</b></a>
     </footer>
     <noscript><p class="no-script">启用 JavaScript 后，蒙版光圈会追随指针。</p></noscript>
 </body>

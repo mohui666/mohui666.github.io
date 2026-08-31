@@ -6,9 +6,10 @@
     <meta name="description" content="Inertial Snap Grid 惯性网格吸附：根据释放速度预测落点，再以弹簧把物体吸附到最近网格交点。">
     <meta name="theme-color" content="#06272d">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../drag-physics.css?v=20260831">
-    <script src="../drag-physics.js?v=20260831" defer></script>
+    <link rel="stylesheet" href="../drag-physics.css?v=20260831-ui">
+    <script src="../drag-physics.js?v=20260831-ui" defer></script>
     <title>Inertial Snap Grid · Motion Field 38</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="inertial-snap-grid">
     <a class="skip-link" href="#experiment">跳到惯性网格实验</a>
@@ -32,18 +33,19 @@
         </section>
 
         <section class="physics-stage snap-stage" data-physics-stage aria-label="带落点预测的网格拖拽区域">
+            <p class="mobile-touch-hint">拖动并松手吸附</p>
             <p class="stage-label top">GRID 72PX / LANDING PREDICTION</p>
             <p class="stage-label side">SPRING SNAP</p>
             <span class="snap-target" data-snap-target aria-hidden="true"></span>
             <span class="snap-vector" data-snap-vector aria-hidden="true"></span>
-            <button class="physics-object snap-puck" data-physics-object type="button" aria-describedby="snap-description">
+            <div class="physics-object snap-puck" data-physics-object tabindex="0" role="group" aria-label="惯性网格吸附物体" aria-describedby="snap-description">
                 <b>SNAP</b><small>GRID / 38</small>
-            </button>
+            </div>
         </section>
     </main>
 
     <button class="physics-reset" data-reset type="button">↺ RESET</button>
-    <a class="physics-next" href="../magnetic-docking/"><small>NEXT 39</small><span>Magnetic Docking</span><b aria-hidden="true">↗</b></a>
+    <a class="physics-next" href="../magnetic-docking/" aria-label="前往下一个实验：Magnetic Docking"><small>NEXT · 39 / 44</small><span>Magnetic Docking</span><b aria-hidden="true">↗</b></a>
     <noscript><p class="no-script">启用 JavaScript 后即可预测并吸附落点。</p></noscript>
 </body>
 </html>

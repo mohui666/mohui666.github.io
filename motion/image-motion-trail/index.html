@@ -7,9 +7,10 @@
     <meta name="theme-color" content="#e8e2d7">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
     <link rel="preload" href="../assets/bg8-720.webp" as="image" type="image/webp">
-    <link rel="stylesheet" href="style.css?v=20260831">
-    <script src="app.js?v=20260831" defer></script>
+    <link rel="stylesheet" href="style.css?v=20260831-ui">
+    <script src="app.js?v=20260831-ui" defer></script>
     <title>Image Motion Trail · Motion Field 06</title>
+    <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body>
     <a class="skip-link" href="#experiment">跳到实验区</a>
@@ -64,7 +65,7 @@
         <section class="hero-copy" aria-labelledby="page-title">
             <p class="eyebrow"><span>EXPERIMENT 06</span> PATH / MEMORY / IMAGE</p>
             <h1 id="page-title">IMAGE<br><em>MOTION</em><br>TRAIL</h1>
-            <p class="description">图像运动拖尾把移动距离变成离散画面。每越过一个阈值，就从路径中释放一帧；速度决定间距，方向决定姿态。</p>
+            <p class="description">图像运动拖尾把移动距离变成离散画面。每越过一个固定距离阈值，就沿路径释放一帧；移动方向决定姿态，单次位移幅度影响散开量。</p>
         </section>
 
         <aside class="interaction-panel" aria-label="互动说明">
@@ -85,8 +86,8 @@
         <footer class="bottom-bar">
             <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>WAITING FOR INPUT</span></p>
             <p class="sequence">MOVE → SAMPLE → LAYER → FADE</p>
-            <a class="next-link" href="../magnetic-cursor/">
-                <span><small>NEXT / 07</small>Magnetic Cursor</span>
+            <a class="next-link" href="../magnetic-cursor/" aria-label="前往下一个实验：Magnetic Cursor">
+                <span><small>NEXT · 07 / 44</small>Magnetic Cursor</span>
                 <i aria-hidden="true">↗</i>
             </a>
         </footer>
