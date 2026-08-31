@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Full-screen Expansion：由滚动距离逐帧控制的全屏扩展转场。">
+    <meta name="theme-color" content="#05070d">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="preload" href="../../images/BackGround/bg0.png" as="image" fetchpriority="high">
+    <link rel="stylesheet" href="../motion.css?v=20260831" type="text/css">
+    <script src="../motion.js?v=20260831" defer></script>
+    <title>Full-screen Expansion · Motion Field</title>
+</head>
+<body>
+    <a class="skip-link" href="#experiment">跳到全屏扩展实验</a>
+
+    <header class="motion-nav">
+        <a class="home-link" href="../" aria-label="返回 Motion Field 目录">
+            <span aria-hidden="true">←</span>
+            <span>Motion Field</span>
+        </a>
+        <p class="nav-title"><span aria-hidden="true"></span> Full-screen Expansion</p>
+        <p class="nav-counter" aria-hidden="true">02 / 06</p>
+    </header>
+
+    <main id="experiment">
+        <section class="expansion-track" data-expand-track aria-labelledby="expand-title">
+            <div class="expansion-sticky">
+                <div class="expansion-plane" data-expand-plane>
+                    <p class="expansion-chapter"><span>02</span> Full-screen expansion</p>
+                    <div class="expansion-copy" data-expand-copy>
+                        <p class="eyebrow"><span>02</span> Scroll-driven transition</p>
+                        <h2 id="expand-title">从一扇窗口<br><span>坠入整片黄昏</span></h2>
+                        <p>继续滚动，卡片边界会逐寸退场。你的滚动距离就是转场时间轴，每一个中间状态都由当前位置决定。</p>
+                    </div>
+                    <div class="expansion-readout" aria-hidden="true">
+                        <span data-expand-percent>000%</span>
+                        <i></i>
+                        <small>VIEWPORT OCCUPANCY</small>
+                    </div>
+                    <p class="edge-label" aria-hidden="true">KEEP SCROLLING · LET THE FRAME DISAPPEAR</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="experiment-end" aria-labelledby="next-title">
+            <p class="eyebrow"><span>02</span> Frame dissolved</p>
+            <h2 id="next-title">下一种运动，<br>让场景接管滚动。</h2>
+            <p>三个全屏舞台将连续交接，滚动位置同时控制画面透明度、尺度和文字位移。</p>
+            <div class="experiment-end-actions">
+                <a href="../scroll-scenes/">下一个实验 <span aria-hidden="true">→</span></a>
+                <a href="../">查看全部 <span aria-hidden="true">↗</span></a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

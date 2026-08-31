@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Image Motion Trail 图像运动拖尾：用鼠标或手指把图像帧留在移动路径上。">
+    <meta name="theme-color" content="#e8e2d7">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="preload" href="../../images/BackGround/bg8.png" as="image">
+    <link rel="stylesheet" href="style.css?v=20260831">
+    <script src="app.js?v=20260831" defer></script>
+    <title>Image Motion Trail · Motion Field 06</title>
+</head>
+<body>
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+
+    <header class="topbar">
+        <a class="back-link" href="../" aria-label="返回 Motion Field 总览">
+            <span aria-hidden="true">←</span>
+            <span>Motion Field</span>
+        </a>
+        <p class="topbar-title"><i aria-hidden="true"></i> Image Motion Trail</p>
+        <p class="counter" aria-label="第六个实验，共六个">06 / 06</p>
+    </header>
+
+    <main class="trail-stage" id="experiment" data-trail-stage>
+        <div class="trail-field" data-trail-field aria-hidden="true">
+            <figure class="trail-card trail-card-a" data-trail-card>
+                <img src="../../images/BackGround/bg8.png" alt="" draggable="false">
+                <figcaption><span>01</span> ECHO</figcaption>
+            </figure>
+            <figure class="trail-card trail-card-b" data-trail-card>
+                <img src="../../images/BackGround/bg9.png" alt="" draggable="false">
+                <figcaption><span>02</span> ORBIT</figcaption>
+            </figure>
+            <figure class="trail-card trail-card-c" data-trail-card>
+                <img src="../../images/BackGround/bg0.png" alt="" draggable="false">
+                <figcaption><span>03</span> AFTERGLOW</figcaption>
+            </figure>
+            <figure class="trail-card trail-card-d" data-trail-card>
+                <img src="../../images/BackGround/bg11.png" alt="" draggable="false">
+                <figcaption><span>04</span> TIDE</figcaption>
+            </figure>
+            <figure class="trail-card trail-card-a" data-trail-card>
+                <img src="../../images/BackGround/bg8.png" alt="" draggable="false">
+                <figcaption><span>05</span> ECHO</figcaption>
+            </figure>
+            <figure class="trail-card trail-card-b" data-trail-card>
+                <img src="../../images/BackGround/bg9.png" alt="" draggable="false">
+                <figcaption><span>06</span> ORBIT</figcaption>
+            </figure>
+            <figure class="trail-card trail-card-c" data-trail-card>
+                <img src="../../images/BackGround/bg0.png" alt="" draggable="false">
+                <figcaption><span>07</span> AFTERGLOW</figcaption>
+            </figure>
+            <figure class="trail-card trail-card-d" data-trail-card>
+                <img src="../../images/BackGround/bg11.png" alt="" draggable="false">
+                <figcaption><span>08</span> TIDE</figcaption>
+            </figure>
+        </div>
+
+        <div class="pointer-orbit" data-pointer-orbit aria-hidden="true"><i></i><span></span></div>
+
+        <section class="hero-copy" aria-labelledby="page-title">
+            <p class="eyebrow"><span>EXPERIMENT 06</span> PATH / MEMORY / IMAGE</p>
+            <h1 id="page-title">IMAGE<br><em>MOTION</em><br>TRAIL</h1>
+            <p class="description">图像运动拖尾把移动距离变成离散画面。每越过一个阈值，就从路径中释放一帧；速度决定间距，方向决定姿态。</p>
+        </section>
+
+        <aside class="interaction-panel" aria-label="互动说明">
+            <p class="panel-label">HOW TO PLAY</p>
+            <div class="gesture-icon" aria-hidden="true"><i></i><span></span><span></span><span></span></div>
+            <p class="prompt" data-trail-prompt>移动鼠标，或按住屏幕拖动</p>
+            <dl>
+                <div><dt>TRIGGER</dt><dd>DISTANCE</dd></div>
+                <div><dt>FRAMES</dt><dd>08 / LOOP</dd></div>
+            </dl>
+        </aside>
+
+        <div class="coordinate-readout" aria-hidden="true">
+            <span>X <b data-coordinate-x>000</b></span>
+            <span>Y <b data-coordinate-y>000</b></span>
+        </div>
+
+        <footer class="bottom-bar">
+            <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>WAITING FOR INPUT</span></p>
+            <p class="sequence">MOVE → SAMPLE → LAYER → FADE</p>
+            <a class="next-link" href="../fluid-distortion/">
+                <span><small>NEXT LOOP</small>Fluid Distortion</span>
+                <i aria-hidden="true">↗</i>
+            </a>
+        </footer>
+    </main>
+
+    <noscript><p class="no-script">启用 JavaScript 后，移动指针即可生成图像拖尾。</p></noscript>
+</body>
+</html>

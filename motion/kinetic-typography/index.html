@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kinetic Typography 动态排版实验：滚动控制文字的速度、张力与重排。">
+    <meta name="theme-color" content="#070a14">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css?v=20260831">
+    <script src="app.js?v=20260831" defer></script>
+    <title>Kinetic Typography · Motion Field</title>
+</head>
+<body>
+    <a class="skip-link" href="#experiment">跳到动态排版实验</a>
+
+    <header class="experiment-nav">
+        <a class="back-link" href="../" aria-label="返回 Motion Field">
+            <span aria-hidden="true">←</span>
+            <span>Motion Field</span>
+        </a>
+        <p class="nav-title"><i aria-hidden="true"></i>Kinetic Typography</p>
+        <p class="nav-index" aria-label="第 4 个实验，共 6 个">04 / 06</p>
+    </header>
+
+    <aside class="progress-rail" aria-hidden="true">
+        <span>000</span>
+        <i><b data-progress-fill></b></i>
+        <span>100</span>
+    </aside>
+    <output class="progress-readout" aria-hidden="true"><span data-progress-number>000</span>%</output>
+
+    <main id="experiment">
+        <section class="chapter chapter-velocity" data-chapter data-variant="velocity" aria-labelledby="velocity-title">
+            <div class="stage">
+                <div class="stage-grid" aria-hidden="true"></div>
+                <div class="chapter-meta">
+                    <p><span>ACT 01</span> Horizontal velocity</p>
+                    <p>滚动让三条基线相向穿行</p>
+                </div>
+                <h1 class="sr-only" id="velocity-title">Velocity is the message</h1>
+                <div class="type-stack velocity-stack" aria-hidden="true">
+                    <span data-motion-line>VELOCITY</span>
+                    <span data-motion-line>IS THE</span>
+                    <span data-motion-line>MESSAGE</span>
+                </div>
+                <p class="chapter-note">字不只承载句子，移动方式本身也在说话。</p>
+                <p class="scroll-hint" aria-hidden="true"><i></i>SCROLL TO SCRUB</p>
+            </div>
+        </section>
+
+        <section class="chapter chapter-tension" data-chapter data-variant="tension" aria-labelledby="tension-title">
+            <div class="stage">
+                <div class="stage-grid" aria-hidden="true"></div>
+                <div class="chapter-meta">
+                    <p><span>ACT 02</span> Typographic tension</p>
+                    <p>压缩、拉伸，再释放</p>
+                </div>
+                <h2 class="sr-only" id="tension-title">Tension stretches language</h2>
+                <div class="type-stack tension-stack" aria-hidden="true">
+                    <span data-motion-line>TENSION</span>
+                    <span data-motion-line>STRETCHES</span>
+                    <span data-motion-line>LANGUAGE</span>
+                </div>
+                <div class="axis-readout" aria-hidden="true">
+                    <span>WDTH</span><i><b data-axis-meter></b></i><span data-axis-value>100</span>
+                </div>
+                <p class="chapter-note">同一组字形，在宽度变化里产生呼吸和压力。</p>
+            </div>
+        </section>
+
+        <section class="chapter chapter-grid" data-chapter data-variant="scatter" aria-labelledby="grid-title">
+            <div class="stage">
+                <div class="stage-grid" aria-hidden="true"></div>
+                <div class="chapter-meta">
+                    <p><span>ACT 03</span> Rotational reflow</p>
+                    <p>打破网格，然后重新成句</p>
+                </div>
+                <h2 class="sr-only" id="grid-title">Break the grid</h2>
+                <div class="scatter-field" data-scatter-field aria-hidden="true">
+                    <span data-scatter-word data-x="-25" data-y="-23" data-r="-15">BREAK</span>
+                    <span data-scatter-word data-x="26" data-y="-10" data-r="10">THE</span>
+                    <span data-scatter-word data-x="-3" data-y="25" data-r="-7">GRID</span>
+                </div>
+                <div class="orbit-mark" aria-hidden="true"><i></i><b></b></div>
+                <p class="chapter-note">旋转不是装饰，它会改变阅读路径和先后顺序。</p>
+            </div>
+        </section>
+
+        <section class="chapter chapter-rhythm" data-chapter data-variant="rhythm" aria-labelledby="rhythm-title">
+            <div class="stage">
+                <div class="stage-grid" aria-hidden="true"></div>
+                <div class="chapter-meta">
+                    <p><span>ACT 04</span> Rhythmic assembly</p>
+                    <p>散开的词，回到同一个节拍</p>
+                </div>
+                <h2 class="sr-only" id="rhythm-title">Read the rhythm again</h2>
+                <div class="rhythm-field" data-rhythm-field aria-hidden="true">
+                    <span data-rhythm-word>READ</span>
+                    <span data-rhythm-word>THE</span>
+                    <span data-rhythm-word>RHYTHM</span>
+                    <span data-rhythm-word>AGAIN</span>
+                </div>
+                <p class="rhythm-beat" aria-hidden="true">01 · 02 · 03 · 04</p>
+                <p class="chapter-note">滚动停在哪里，版面就停在哪一拍。</p>
+            </div>
+        </section>
+
+        <footer class="next-experiment" aria-labelledby="next-title">
+            <div>
+                <p class="eyebrow">END OF EXPERIMENT 04</p>
+                <h2 id="next-title">文字归位。<br><span>轮廓开始融化。</span></h2>
+            </div>
+            <a class="next-link" href="../metaballs/">
+                <span>NEXT EXPERIMENT · 05 / 06</span>
+                <strong>METABALLS</strong>
+                <em>进入融球实验 <i aria-hidden="true">→</i></em>
+            </a>
+            <a class="all-link" href="../">返回全部动效</a>
+        </footer>
+    </main>
+
+    <noscript><p class="noscript">启用 JavaScript 后，滚动位置才会驱动动态排版。</p></noscript>
+</body>
+</html>

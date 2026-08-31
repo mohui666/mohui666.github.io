@@ -167,6 +167,8 @@
     var imageHeight = 1;
     var hasPointerPosition = false;
     var lastPointerTime = 0;
+    var stageVisible = true;
+    var animationFrame = 0;
 
     function resize() {
         var dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 760 ? 1.25 : 1.5);
@@ -251,9 +253,12 @@
         textureReady = true;
         stage.classList.add("fluid-ready");
     });
-    image.src = "../images/BackGround/bg11.png";
+    image.src = stage.getAttribute("data-fluid-image") || "../images/BackGround/bg11.png";
 
     function render(time) {
+        animationFrame = 0;
+        if (!stageVisible || document.hidden) return;
+
         resize();
         pointer.x += (pointer.targetX - pointer.x) * 0.11;
         pointer.y += (pointer.targetY - pointer.y) * 0.11;
@@ -274,11 +279,23 @@
             gl.drawArrays(gl.TRIANGLES, 0, 6);
         }
 
-        window.requestAnimationFrame(render);
+        startRender();
     }
 
+    function startRender() {
+        if (animationFrame || !stageVisible || document.hidden) return;
+        animationFrame = window.requestAnimationFrame(render);
+    }
+
+    var stageObserver = new IntersectionObserver(function (entries) {
+        stageVisible = entries[0].isIntersecting;
+        startRender();
+    }, { threshold: 0.01 });
+
+    stageObserver.observe(stage);
     window.addEventListener("resize", resize, { passive: true });
-    window.requestAnimationFrame(render);
+    document.addEventListener("visibilitychange", startRender);
+    startRender();
 }());
 
 (function () {
@@ -295,11 +312,10 @@
     var sceneDots = Array.prototype.slice.call(document.querySelectorAll("[data-scene-dot]"));
     var sceneNumber = document.querySelector("[data-scene-number]");
     var nav = document.querySelector(".motion-nav");
-    var navCounter = document.querySelector(".nav-counter");
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var ticking = false;
 
-    if (!expandTrack || !expandPlane || !sceneTrack || !scenes.length || reduceMotion) return;
+    if ((!expandTrack && !sceneTrack) || reduceMotion) return;
 
     function clamp(value, min, max) {
         return Math.min(max, Math.max(min, value));
@@ -318,6 +334,7 @@
     }
 
     function updateExpansion() {
+        if (!expandTrack || !expandPlane) return;
         var progress = trackProgress(expandTrack, expandSticky);
         var eased = smoothstep(0, 1, progress);
         var maxClipX = Math.min(170, Math.max(24, window.innerWidth * 0.11));
@@ -342,6 +359,7 @@
     }
 
     function updateScenes() {
+        if (!sceneTrack || !scenes.length) return;
         var progress = trackProgress(sceneTrack, sceneSticky);
         var position = progress * (scenes.length - 1);
         var activeIndex = Math.round(position);
@@ -366,11 +384,6 @@
     }
 
     function updateNavigation() {
-        var section = 1;
-        if (expandTrack.getBoundingClientRect().top <= window.innerHeight * 0.45) section = 2;
-        if (sceneTrack.getBoundingClientRect().top <= window.innerHeight * 0.45) section = 3;
-
-        if (navCounter) navCounter.textContent = "0" + section + " / 03";
         if (nav) {
             var scrollRange = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
             nav.style.setProperty("--page-progress", clamp(window.scrollY / scrollRange, 0, 1).toFixed(4));

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Metaballs / Gooey Effect 互动实验：拖动指针，让彩色融球聚合、拉伸与分离。">
+    <meta name="theme-color" content="#05070d">
+    <meta property="og:title" content="Metaballs · Motion Field">
+    <meta property="og:description" content="拖动指针，把一组彩色距离场聚合成流动的连续表面。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mohui666.github.io/motion/metaballs/">
+    <meta property="og:image" content="https://mohui666.github.io/motion/og.png">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css?v=20260831">
+    <script src="app.js?v=20260831" defer></script>
+    <title>Metaballs · Motion Field</title>
+</head>
+<body>
+    <a class="skip-link" href="#experiment">跳到实验</a>
+
+    <header class="experiment-nav">
+        <a class="back-link" href="../" aria-label="返回 Motion Field 实验目录">
+            <span aria-hidden="true">←</span>
+            <span>Motion Field</span>
+        </a>
+        <p class="nav-label"><i aria-hidden="true"></i> Metaballs</p>
+        <p class="nav-counter" aria-label="第 5 个实验，共 6 个">05 / 06</p>
+    </header>
+
+    <main id="experiment" class="metaball-stage" data-stage>
+        <div class="ambient-field" aria-hidden="true"></div>
+        <div class="static-field" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <canvas id="gooey-canvas" aria-hidden="true"></canvas>
+        <div class="field-grid" aria-hidden="true"></div>
+        <div class="noise" aria-hidden="true"></div>
+        <div class="pointer-orbit" data-pointer-orbit aria-hidden="true"><i></i></div>
+
+        <section class="hero-copy" aria-labelledby="page-title">
+            <p class="eyebrow"><span>05</span> Implicit surface study</p>
+            <h1 id="page-title">META<br><em>BALLS</em></h1>
+            <p class="intro">一个球没有边界问题。多个球靠近时，距离场会把它们焊成同一块表面——像油滴、细胞，也像正在思考的液态光。</p>
+        </section>
+
+        <aside class="field-note" aria-label="Metaballs 原理">
+            <p>FIELD EQUATION</p>
+            <strong>Σ r² / d² ≥ τ</strong>
+            <span>当相邻场值越过阈值，轮廓便自然相连。</span>
+        </aside>
+
+        <section class="interaction-dock" aria-label="交互说明">
+            <div class="live-state">
+                <i aria-hidden="true"></i>
+                <p><span data-state>FIELD DRIFTING</span><small data-prompt>移动鼠标；触屏请按住拖动</small></p>
+            </div>
+            <button type="button" class="scatter-button" data-scatter>
+                <span>打散场域</span>
+                <i aria-hidden="true">↗</i>
+            </button>
+        </section>
+
+        <p class="edge-label" aria-hidden="true">ATTRACT · MERGE · RELEASE · SEPARATE</p>
+
+        <a class="next-link" href="../image-motion-trail/">
+            <span><small>NEXT / 06</small>Image Motion Trail</span>
+            <i aria-hidden="true">→</i>
+        </a>
+    </main>
+
+    <noscript>
+        <p class="no-script">启用 JavaScript 后即可拖动并聚合融球。</p>
+    </noscript>
+</body>
+</html>
