@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Spring Creature State Machine：原创弹簧角色状态机，包含二阶弹簧、轮廓形变、视线跟随、眨眼、挤压拉伸与情绪切换。">
+    <meta name="theme-color" content="#050817">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../extended-lab.css?v=20260901-spring">
+    <script src="../extended-lab.js?v=20260901-spring" defer></script>
+    <script src="../spring-character.js?v=20260901-spring" defer></script>
+    <title>Spring Creature State Machine · Motion Field 45</title>
+</head>
+<body data-effect="spring-creature" data-mode="pointer" style="--accent:#7dd3fc;--accent-2:#f0abfc;--accent-rgb:125,211,252">
+    <a class="skip-link" href="#experiment">跳到角色状态机实验</a>
+    <header class="extended-nav">
+        <a href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
+        <p><i aria-hidden="true"></i> Spring Creature</p>
+        <b aria-label="第 45 个实验，共 545 个">045 / 545</b>
+    </header>
+
+    <main class="extended-stage" id="experiment" data-stage>
+        <div class="extended-sticky" data-surface>
+            <section class="extended-copy" aria-labelledby="page-title">
+                <p class="extended-eyebrow"><span>045</span> CHARACTER · SPRING · MORPH</p>
+                <h1 id="page-title">SPRING<br><em>CREATURE.</em></h1>
+                <p class="extended-description">一只完全原创的程序化小生物。二阶弹簧同时驱动位置、轮廓、挤压拉伸、表情和视线；状态机会在好奇、专注、喜悦、困倦与警觉之间连续过渡。</p>
+            </section>
+
+            <section class="effect-zone" data-zone tabindex="0" aria-label="交互式弹簧角色。移动指针控制视线，按住拖动，点击按钮切换情绪。">
+                <canvas data-canvas aria-hidden="true"></canvas>
+                <div class="dom-layer" data-dom hidden></div>
+            </section>
+
+            <div class="extended-controls">
+                <p class="extended-state"><i aria-hidden="true"></i><span data-state>IDLE / BREATHING<small data-prompt>移动视线 · 按住牵引 · 点击切换状态</small></span></p>
+                <button class="extended-action" data-action type="button">NEXT MOOD</button>
+            </div>
+
+            <a class="extended-next" href="../oscillatory-fields-fd-string-direct-manipulation/" aria-label="前往下一个实验：Finite-Difference String — Direct Manipulation">
+                <span><small>NEXT · 046 / 545</small>Finite-Difference String</span><b aria-hidden="true">↗</b>
+            </a>
+        </div>
+    </main>
+    <noscript><p class="no-script">启用 JavaScript 后即可体验弹簧角色状态机。</p></noscript>
+</body>
+</html>
