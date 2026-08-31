@@ -41,7 +41,9 @@
         var size = { width: 1, height: 1, dpr: 1 };
         var frameId = 0;
         var lastTime = 0;
+        var lastPreviewFrame = 0;
         var visible = true;
+        var hostActive = !isPreview;
         var reducedMotion = motionQuery.matches;
         var scrollPosition = window.scrollY;
         var scrollVelocity = 0;
@@ -123,9 +125,13 @@
 
         function resize() {
             var bounds = zone.getBoundingClientRect();
+            var mobile = window.matchMedia("(max-width: 760px)").matches;
+            var dprCap = isPreview ? (mobile ? 0.6 : 0.65) : (mobile ? 1.25 : 2);
+            var pixelWidthCap = isPreview ? 1280 : 1920;
+            var pixelHeightCap = isPreview ? 720 : 1080;
             size.width = Math.max(1, bounds.width);
             size.height = Math.max(1, bounds.height);
-            size.dpr = Math.min(window.devicePixelRatio || 1, isPreview ? 0.75 : 2, 1920 / size.width, 1080 / size.height);
+            size.dpr = Math.min(window.devicePixelRatio || 1, dprCap, pixelWidthCap / size.width, pixelHeightCap / size.height);
             var pixelWidth = Math.max(1, Math.round(size.width * size.dpr));
             var pixelHeight = Math.max(1, Math.round(size.height * size.dpr));
             if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
@@ -161,9 +167,14 @@
 
         function frame(now) {
             frameId = 0;
-            if (reducedMotion || document.hidden || !visible) return;
+            if (reducedMotion || document.hidden || !visible || (isPreview && !hostActive)) return;
+            if (isPreview && now - lastPreviewFrame < 41.667) {
+                frameId = requestAnimationFrame(frame);
+                return;
+            }
             var delta = lastTime ? Math.min(50, now - lastTime) : 16.667;
             lastTime = now;
+            lastPreviewFrame = now;
             draw(now, delta, false);
             frameId = requestAnimationFrame(frame);
         }
@@ -172,9 +183,10 @@
             if (frameId) cancelAnimationFrame(frameId);
             frameId = 0;
             lastTime = 0;
+            lastPreviewFrame = 0;
             if (reducedMotion) {
                 renderStatic();
-            } else if (!document.hidden && visible) {
+            } else if (!document.hidden && visible && (!isPreview || hostActive)) {
                 frameId = requestAnimationFrame(frame);
             }
         }
@@ -218,6 +230,11 @@
         }
 
         window.addEventListener("resize", resize);
+        window.addEventListener("message", function (event) {
+            if (!isPreview || event.source !== window.parent || !event.data || event.data.type !== "motion-preview-active") return;
+            hostActive = Boolean(event.data.active);
+            start();
+        });
         window.addEventListener("scroll", function () { if (reducedMotion) renderStatic(); }, { passive: true });
         document.addEventListener("visibilitychange", start);
         motionQuery.addEventListener("change", function () {
@@ -235,5 +252,6 @@
         renderer = factories[effect](api) || {};
         resize();
         start();
+        if (isPreview && window.parent !== window) window.parent.postMessage({ type: "motion-preview-ready" }, "*");
     });
 }());

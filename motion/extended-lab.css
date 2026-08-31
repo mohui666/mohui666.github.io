@@ -389,7 +389,14 @@ body[data-effect="generated-effect"] .extended-copy h1 {
 }
 
 @media (max-width: 600px) {
-    .extended-nav { width: calc(100% - 20px); right: 10px; left: 10px; }
+    .extended-nav {
+        width: calc(100% - 20px);
+        right: 10px;
+        left: 10px;
+        background: rgba(7, 10, 20, .96);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
     .extended-nav a span:last-child,
     .extended-nav p { display: none; }
     .extended-copy { top: 82px; }

@@ -11,6 +11,7 @@
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var mounted = new Map();
     var visibleCards = new Set();
+    var activeCards = new Set();
     var cards = [];
     var reconcileFrame = 0;
 
@@ -95,6 +96,7 @@
         var pointerInside = false;
         var enteredTarget = null;
         var downTarget = null;
+        var lastFrame = 0;
 
         function dispatchPointer(childWindow, target, type, x, y, buttons) {
             var EventType = childWindow.PointerEvent || childWindow.MouseEvent;
@@ -113,6 +115,15 @@
         function tick(now) {
             var entry = mounted.get(card);
             if (!entry || entry.frame !== frame || card.hidden) return;
+            if (!entry.active) {
+                entry.driver = 0;
+                return;
+            }
+            if (now - lastFrame < 41.667) {
+                entry.driver = requestAnimationFrame(tick);
+                return;
+            }
+            lastFrame = now;
             try {
                 var childWindow = frame.contentWindow;
                 var childDocument = frame.contentDocument;
@@ -178,15 +189,19 @@
         frame.title = "实验 " + pad(card._effect.id) + " 的实时页面预览";
         frame.tabIndex = -1;
         frame.setAttribute("aria-hidden", "true");
+        frame.loading = "lazy";
         frame.src = card.dataset.src;
-        var entry = { frame: frame, driver: 0, removeTimer: 0 };
+        var entry = { frame: frame, driver: 0, removeTimer: 0, active: false, loaded: false };
         mounted.set(card, entry);
+        resizeObserver.observe(card);
         updateScale(card);
         frame.addEventListener("load", function () {
             if (!mounted.has(card)) return;
+            entry.loaded = true;
             card.classList.add("is-preview-ready");
             if (card._effect.legacy) prepareLegacyPreview(frame);
             driveLegacyPreview(card, frame);
+            frame.contentWindow.postMessage({ type: "motion-preview-active", active: entry.active }, "*");
         }, { once: true });
         mount.appendChild(frame);
     }
@@ -197,6 +212,7 @@
         window.clearTimeout(entry.removeTimer);
         function remove() {
             if (entry.driver) cancelAnimationFrame(entry.driver);
+            resizeObserver.unobserve(card);
             entry.frame.remove();
             mounted.delete(card);
             card.classList.remove("is-preview-ready");
@@ -209,7 +225,8 @@
     function reconcilePreviews() {
         reconcileFrame = 0;
         var viewportCenter = window.innerHeight * 0.5;
-        var limit = window.innerWidth <= 760 ? 2 : 4;
+        var mobile = window.innerWidth <= 760;
+        var limit = mobile ? 1 : 2;
         var candidates = Array.from(visibleCards).filter(function (card) { return !card.hidden; }).sort(function (a, b) {
             var ar = a.getBoundingClientRect(), br = b.getBoundingClientRect();
             return Math.abs(ar.top + ar.height * 0.5 - viewportCenter) - Math.abs(br.top + br.height * 0.5 - viewportCenter);
@@ -217,6 +234,15 @@
         var allowed = new Set(candidates.slice(0, limit));
         Array.from(mounted.keys()).forEach(function (card) { if (!allowed.has(card)) unmountPreview(card, true); });
         allowed.forEach(mountPreview);
+        var playLimit = mobile ? 1 : 2;
+        var playing = new Set(candidates.filter(function (card) { return activeCards.has(card); }).slice(0, playLimit));
+        mounted.forEach(function (entry, card) {
+            var active = playing.has(card);
+            if (entry.active === active) return;
+            entry.active = active;
+            if (entry.frame.contentWindow) entry.frame.contentWindow.postMessage({ type: "motion-preview-active", active: active }, "*");
+            if (active && card._effect.legacy && entry.loaded && !entry.driver) driveLegacyPreview(card, entry.frame);
+        });
     }
 
     function scheduleReconcile() {
@@ -233,11 +259,18 @@
 
     cards.forEach(function (card) { observer.observe(card); });
 
+    var activeObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) activeCards.add(entry.target); else activeCards.delete(entry.target);
+        });
+        scheduleReconcile();
+    }, { threshold: 0.08 });
+    cards.forEach(function (card) { activeObserver.observe(card); });
+
     var resizeObserver = new ResizeObserver(function (entries) {
         entries.forEach(function (entry) { if (mounted.has(entry.target)) updateScale(entry.target); });
         scheduleReconcile();
     });
-    cards.forEach(function (card) { resizeObserver.observe(card); });
 
     function applyFilter() {
         var query = search.value.trim().toLocaleLowerCase();

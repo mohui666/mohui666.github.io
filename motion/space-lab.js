@@ -535,48 +535,23 @@
         const label = document.querySelector("[data-morph-label]");
         const percent = document.querySelector("[data-morph-percent]");
         const meter = document.querySelector("[data-morph-meter]");
-        if (!lab || !stage || !path || !echo) return;
+        const turbulence = document.querySelector("[data-turbulence]");
+        const displacement = document.querySelector("[data-displacement]");
+        if (!lab || !stage || !path || !echo || !turbulence || !displacement) return;
 
-        const labels = ["ORBIT", "STAR", "PETAL", "WAVE"];
-        const forms = [
-            [332, 332, 332, 332, 332, 332, 332, 332],
-            [360, 155, 350, 145, 360, 155, 350, 145],
-            [365, 210, 292, 350, 176, 346, 286, 218],
-            [255, 375, 238, 344, 275, 370, 225, 350]
-        ];
-
-        const formAt = (progress) => {
-            const phase = clamp(progress) * (forms.length - 1);
-            const fromIndex = Math.min(forms.length - 2, Math.floor(phase));
-            const amount = phase - fromIndex;
-            return forms[fromIndex].map((radius, index) => lerp(radius, forms[fromIndex + 1][index], amount));
-        };
-
-        const pointsFor = (radii) => radii.map((radius, index) => {
-            const angle = -Math.PI / 2 + index * Math.PI / 4;
-            const xScale = 1 + Math.sin(index * 1.7) * 0.035;
-            const yScale = 0.96 + Math.cos(index * 1.3) * 0.035;
-            return [500 + Math.cos(angle) * radius * xScale, 500 + Math.sin(angle) * radius * yScale];
-        });
-
-        const pathFromPoints = (points) => {
-            const midpoint = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-            const start = midpoint(points[points.length - 1], points[0]);
-            let data = `M ${start[0].toFixed(2)} ${start[1].toFixed(2)}`;
-            points.forEach((point, index) => {
-                const next = points[(index + 1) % points.length];
-                const mid = midpoint(point, next);
-                data += ` Q ${point[0].toFixed(2)} ${point[1].toFixed(2)} ${mid[0].toFixed(2)} ${mid[1].toFixed(2)}`;
-            });
-            return `${data} Z`;
-        };
+        const labels = ["CALM", "DRIFT", "CHURN", "BURST"];
 
         const render = (progress) => {
-            const currentPath = pathFromPoints(pointsFor(formAt(progress)));
-            const echoPath = pathFromPoints(pointsFor(formAt(Math.max(0, progress - 0.045))));
-            path.setAttribute("d", currentPath);
-            echo.setAttribute("d", echoPath);
-            stage.style.setProperty("--morph-rotation", `${progress * 128}deg`);
+            const eased = clamp(progress);
+            const frequencyX = lerp(0.006, 0.031, eased);
+            const frequencyY = lerp(0.012, 0.006, eased);
+            turbulence.setAttribute("baseFrequency", `${frequencyX.toFixed(4)} ${frequencyY.toFixed(4)}`);
+            turbulence.setAttribute("numOctaves", String(2 + Math.floor(eased * 2)));
+            turbulence.setAttribute("seed", String(7 + Math.floor(eased * 19)));
+            displacement.setAttribute("scale", lerp(18, 142, Math.sin(eased * Math.PI * 0.5)).toFixed(1));
+            path.style.strokeWidth = lerp(22, 8, eased).toFixed(2);
+            echo.style.opacity = lerp(0.2, 0.72, eased).toFixed(3);
+            stage.style.setProperty("--morph-rotation", `${progress * 52}deg`);
             stage.style.setProperty("--morph-light-x", `${65 + Math.sin(progress * Math.PI * 2) * 9}%`);
             stage.style.setProperty("--morph-light-y", `${44 + Math.cos(progress * Math.PI * 2) * 7}%`);
             if (label) label.textContent = labels[Math.min(labels.length - 1, Math.floor(progress * labels.length))];

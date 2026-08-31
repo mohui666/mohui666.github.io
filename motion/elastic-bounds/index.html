@@ -3,27 +3,27 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Elastic Bounds 弹性边界：拖拽物按释放速度撞击边缘，发生反弹、压缩并受边缘阻力减速。">
+    <meta name="description" content="Compliant Boundary Contact 柔顺边界接触：物体可有限穿透边界，由接触弹簧、阻尼和法向力连续推出。">
     <meta name="theme-color" content="#ff7045">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
     <link rel="stylesheet" href="../drag-physics.css?v=20260831-ui">
     <script src="../drag-physics.js?v=20260831-ui" defer></script>
-    <title>Elastic Bounds · Motion Field 36</title>
+    <title>Compliant Boundary Contact · Motion Field 36</title>
     <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="elastic-bounds">
     <a class="skip-link" href="#experiment">跳到弹性边界实验</a>
     <header class="physics-nav">
         <a href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
-        <p><i></i> Elastic Bounds</p>
+        <p><i></i> Compliant Boundary Contact</p>
         <b aria-label="第 36 个实验，共 545 个">36 / 545</b>
     </header>
 
     <main class="physics-lab" id="experiment">
         <section class="physics-copy" aria-labelledby="page-title">
-            <p class="physics-kicker">EXPERIMENT 36 · COLLISION</p>
-            <h1 id="page-title">HIT THE<br><em>EDGE.</em></h1>
-            <p class="physics-description" id="elastic-description">甩出方块，让速度真正进入边界碰撞。接触瞬间会沿法线压缩并反向速度，越靠近边缘，阻力越明显。</p>
+            <p class="physics-kicker">EXPERIMENT 36 · PENALTY CONTACT</p>
+            <h1 id="page-title">SOFT<br><em>BOUNDARY.</em></h1>
+            <p class="physics-description" id="elastic-description">边界不再硬性截断位置。方块可有限穿透，接触弹簧按穿透深度施加法向力，阻尼抑制震荡后把物体连续推出。</p>
             <p class="physics-hint"><span aria-hidden="true">✦</span> 快速拖甩 · 方向键施加冲量 · Home 重置</p>
             <dl class="physics-readout" aria-label="边界碰撞实时数据">
                 <div><dt>STATE</dt><dd data-readout="state" aria-live="polite">RESTING</dd></div>
@@ -35,16 +35,16 @@
         <section class="physics-stage elastic-stage" data-physics-stage aria-label="带弹性碰撞的拖拽区域">
             <p class="mobile-touch-hint">按住并拖动</p>
             <div class="edge-meter" data-edge-meter aria-hidden="true"></div>
-            <p class="stage-label top">RESTITUTION 0.74 / EDGE DRAG</p>
-            <p class="stage-label side">COLLISION NORMAL</p>
+            <p class="stage-label top">STIFFNESS 92 / DAMPING 13</p>
+            <p class="stage-label side">COMPLIANT NORMAL FORCE</p>
             <div class="physics-object elastic-puck" data-physics-object tabindex="0" role="group" aria-label="弹性边界拖拽物体" aria-describedby="elastic-description">
-                <b>BOUNCE</b><small>BODY / 36</small>
+                <b>CONTACT</b><small>SPRING / 36</small>
             </div>
         </section>
     </main>
 
     <button class="physics-reset" data-reset type="button">↺ RESET</button>
-    <a class="physics-next" href="../momentum-throw/" aria-label="前往下一个实验：Momentum Throw"><small>NEXT · 37 / 545</small><span>Momentum Throw</span><b aria-hidden="true">↗</b></a>
+    <a class="physics-next" href="../momentum-throw/" aria-label="前往下一个实验：Ballistic Throw"><small>NEXT · 37 / 545</small><span>Ballistic Throw</span><b aria-hidden="true">↗</b></a>
     <noscript><p class="no-script">启用 JavaScript 后即可体验弹性边界。</p></noscript>
 </body>
 </html>

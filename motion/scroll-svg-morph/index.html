@@ -3,52 +3,57 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="SVG Path Morphing on Scroll 滚动驱动 SVG 路径形变：滚动实时插值路径节点，在波形、星形与花瓣之间连续变形。">
+    <meta name="description" content="Scroll-driven SVG Filter Displacement 滚动驱动 SVG 滤镜位移：滚动连续调制湍流频率、位移强度与光晕色散。">
     <meta name="theme-color" content="#180d31">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
     <link rel="stylesheet" href="../space-lab.css?v=20260831-ui">
     <script src="../space-lab.js?v=20260831-ui" defer></script>
-    <title>SVG Path Morphing on Scroll · Motion Field 26</title>
+    <title>Scroll-driven SVG Filter Displacement · Motion Field 26</title>
     <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="scroll-svg-morph">
     <a class="skip-link" href="#experiment">跳到实验区</a>
     <header class="lab-nav">
         <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
-        <p><i></i> SVG Path Morphing on Scroll</p>
+        <p><i></i> SVG Filter Displacement</p>
         <b aria-label="第 26 个实验，共 545 个">26 / 545</b>
     </header>
 
     <main class="morph-lab" id="experiment" data-morph-lab>
         <div class="morph-sticky">
             <svg class="morph-svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="morph-title morph-desc">
-                <title id="morph-title">随滚动连续变化的 SVG 路径</title>
-                <desc id="morph-desc">路径会依次在圆形、星形、花瓣和波动环之间插值。</desc>
+                <title id="morph-title">随滚动变化的 SVG 湍流位移场</title>
+                <desc id="morph-desc">固定矢量轮廓由 feTurbulence 与 feDisplacementMap 组成的滤镜实时扭曲。</desc>
                 <defs>
                     <linearGradient id="morph-gradient" x1="0" y1="0" x2="1" y2="1">
                         <stop offset="0" stop-color="#9ef9ff"></stop>
                         <stop offset="0.48" stop-color="#ac7cff"></stop>
                         <stop offset="1" stop-color="#ff6bb2"></stop>
                     </linearGradient>
-                    <filter id="morph-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="12" result="blur"></feGaussianBlur><feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter>
+                    <filter id="morph-glow" x="-45%" y="-45%" width="190%" height="190%">
+                        <feTurbulence data-turbulence type="fractalNoise" baseFrequency="0.008 0.014" numOctaves="2" seed="7" result="noise"></feTurbulence>
+                        <feDisplacementMap data-displacement in="SourceGraphic" in2="noise" scale="28" xChannelSelector="R" yChannelSelector="B" result="warped"></feDisplacementMap>
+                        <feGaussianBlur in="warped" stdDeviation="12" result="blur"></feGaussianBlur>
+                        <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="warped"></feMergeNode></feMerge>
+                    </filter>
                 </defs>
-                <path class="morph-echo" data-morph-echo d="M 500 160 L 740 260 L 840 500 L 740 740 L 500 840 L 260 740 L 160 500 L 260 260 Z"></path>
-                <path class="morph-path" data-morph-path d="M 500 160 L 740 260 L 840 500 L 740 740 L 500 840 L 260 740 L 160 500 L 260 260 Z"></path>
+                <path class="morph-echo" data-morph-echo d="M500 154 C690 154 846 310 846 500 C846 690 690 846 500 846 C310 846 154 690 154 500 C154 310 310 154 500 154 Z"></path>
+                <path class="morph-path" data-morph-path d="M500 154 C690 154 846 310 846 500 C846 690 690 846 500 846 C310 846 154 690 154 500 C154 310 310 154 500 154 Z"></path>
             </svg>
             <section class="morph-copy">
-                <p class="lab-kicker">EXPERIMENT 26 · VECTOR INTERPOLATION</p>
-                <h1>PATHS<br><em>IN FLUX.</em></h1>
-                <p>滚动不是播放预制关键帧，而是实时插值八个路径节点，再重新写入 SVG 的 <code>d</code> 属性。</p>
+                <p class="lab-kicker">EXPERIMENT 26 · SVG FILTER PIPELINE</p>
+                <h1>NOISE<br><em>DISPLACED.</em></h1>
+                <p>轮廓保持不变；滚动直接调制 <code>feTurbulence</code> 的频率和 <code>feDisplacementMap</code> 的强度，让像素经过真实 SVG 滤镜场位移。</p>
             </section>
-            <div class="morph-state"><small>CURRENT FORM</small><b data-morph-label>ORBIT</b><span data-morph-percent>000%</span></div>
-            <div class="morph-timeline" aria-hidden="true"><span>ORBIT</span><span>STAR</span><span>PETAL</span><span>WAVE</span><i data-morph-meter></i></div>
-            <p class="scroll-cue">SCROLL TO MORPH <span aria-hidden="true">↓</span></p>
+            <div class="morph-state"><small>FILTER PHASE</small><b data-morph-label>CALM</b><span data-morph-percent>000%</span></div>
+            <div class="morph-timeline" aria-hidden="true"><span>CALM</span><span>DRIFT</span><span>CHURN</span><span>BURST</span><i data-morph-meter></i></div>
+            <p class="scroll-cue">SCROLL TO DISPLACE <span aria-hidden="true">↓</span></p>
         </div>
     </main>
     <footer class="morph-footer">
-        <p>EIGHT NODES / CONTINUOUS PATH</p>
+        <p>FRACTAL NOISE / DISPLACEMENT MAP</p>
         <a href="../reaction-diffusion/" aria-label="前往下一个实验：Reaction–Diffusion" class="motion-next"><small>NEXT · 27 / 545</small><span>Reaction–Diffusion</span><b aria-hidden="true">↗</b></a>
     </footer>
-    <noscript><p class="no-script">启用 JavaScript 后即可滚动改变 SVG 路径。</p></noscript>
+    <noscript><p class="no-script">启用 JavaScript 后即可滚动调制 SVG 滤镜。</p></noscript>
 </body>
 </html>

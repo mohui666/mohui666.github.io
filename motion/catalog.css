@@ -1233,8 +1233,8 @@ h1 em {
 
 .catalog-sections { display: grid; gap: 92px; }
 .live-section {
-    content-visibility: visible;
-    contain-intrinsic-size: none;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 5200px;
 }
 .live-section[hidden],
 .live-card[hidden] { display: none !important; }
@@ -1346,6 +1346,12 @@ h1 em {
 @keyframes previewPulse { 50% { opacity: .32; transform: scale(.72); } }
 
 @media (max-width: 760px) {
+    .site-nav,
+    .catalog-tools {
+        background: rgba(7, 10, 20, .96);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
     .catalog-tools { top: 76px; grid-template-columns: 1fr; }
     .catalog-result { min-width: 76px; min-height: 36px; }
     .catalog-sections { gap: 68px; }

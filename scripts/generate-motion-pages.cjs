@@ -13,9 +13,10 @@ function escapeHtml(value) {
 
 for (const effect of data.effects.filter((item) => item.id >= 46)) {
     const next = data.byId[effect.id === data.maxId ? 1 : effect.id + 1];
-    const [algorithmTitle, recipeTitle] = effect.titleEn.split(" — ");
-    const layoutMode = effect.recipeIndex === 3 ? "scroll" : "pointer";
-    const action = effect.familyId === "audio-spatial" ? "START AUDIO" : effect.recipeIndex === 4 ? "NEXT SIGNAL" : "CHANGE PRESET";
+    const algorithmTitle = effect.titleEn;
+    const familyTitle = data.sections[effect.sectionId][0];
+    const layoutMode = effect.mechanism.driver === "parameter-scroll" ? "scroll" : "pointer";
+    const action = effect.familyId === "audio-spatial" ? "START AUDIO" : effect.mechanism.driver === "sequenced-forcing" ? "NEXT SIGNAL" : "CHANGE STATE";
     const html = `<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -24,13 +25,13 @@ for (const effect of data.effects.filter((item) => item.id >= 46)) {
     <meta name="description" content="${escapeHtml(effect.titleZh)}：${escapeHtml(effect.summaryZh)}">
     <meta name="theme-color" content="#050817">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../extended-lab.css?v=20260901-545">
-    <script src="../effects-data.js?v=20260901-545" defer></script>
-    <script src="../extended-lab.js?v=20260901-545" defer></script>
-    <script src="../generated-engine.js?v=20260901-545" defer></script>
+    <link rel="stylesheet" href="../extended-lab.css?v=20260901-canonical2">
+    <script src="../effects-data.js?v=20260901-canonical2" defer></script>
+    <script src="../extended-lab.js?v=20260901-canonical2" defer></script>
+    <script src="../generated-engine.js?v=20260901-canonical2" defer></script>
     <title>${escapeHtml(effect.titleEn)} · Motion Field ${effect.id}</title>
 </head>
-<body data-effect="generated-effect" data-effect-id="${effect.id}" data-mode="${layoutMode}" data-interaction="${effect.interactionMode}" style="--accent:${effect.palette[0]};--accent-2:${effect.palette[1]};--accent-rgb:${effect.palette[2]}">
+<body data-effect="generated-effect" data-effect-id="${effect.id}" data-mechanism-key="${escapeHtml(effect.mechanismKey)}" data-mode="${layoutMode}" data-interaction="${effect.interactionMode}" style="--accent:${effect.palette[0]};--accent-2:${effect.palette[1]};--accent-rgb:${effect.palette[2]}">
     <a class="skip-link" href="#experiment">跳到${escapeHtml(effect.titleZh)}实验</a>
     <header class="extended-nav">
         <a href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
@@ -42,7 +43,7 @@ for (const effect of data.effects.filter((item) => item.id >= 46)) {
         <div class="extended-sticky" data-surface>
             <section class="extended-copy" aria-labelledby="page-title">
                 <p class="extended-eyebrow"><span>${String(effect.id).padStart(3, "0")}</span> ${escapeHtml(data.sections[effect.sectionId][2])}</p>
-                <h1 id="page-title">${escapeHtml(algorithmTitle)}<br><em>${escapeHtml(recipeTitle)}.</em></h1>
+                <h1 id="page-title">${escapeHtml(algorithmTitle)}<br><em>${escapeHtml(familyTitle)}.</em></h1>
                 <p class="extended-description">${escapeHtml(effect.summaryZh)} ${escapeHtml(effect.instructionZh)}</p>
             </section>
 
