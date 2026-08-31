@@ -311,12 +311,6 @@ body[data-mode="scroll"] .extended-sticky {
     background: #fff;
 }
 
-body[data-effect="generated-effect"] .extended-copy h1 {
-    font-size: clamp(2.35rem, 4.6vw, 5.25rem);
-    line-height: .88;
-    overflow-wrap: anywhere;
-}
-
 /* DOM experiment primitives */
 .demo-center { position: absolute; inset: 0; display: grid; place-items: center; }
 .demo-panel { border: 1px solid rgba(255,255,255,.2); background: rgba(4,7,15,.72); box-shadow: 0 28px 70px rgba(0,0,0,.34); }

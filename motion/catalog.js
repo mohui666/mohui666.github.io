@@ -17,7 +17,7 @@
 
     if (!Data || !catalog) return;
 
-    function pad(value) { return String(value).padStart(3, "0"); }
+    function pad(value) { return String(value).padStart(2, "0"); }
 
     function createCard(effect) {
         var card = document.createElement("article");
