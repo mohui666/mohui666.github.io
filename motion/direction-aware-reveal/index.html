@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Direction-Aware Hover Reveal 方向感知揭示：悬停遮罩从指针进入卡片的边缘出现。">
+    <meta name="theme-color" content="#100b13">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="preload" href="../assets/bg8-720.webp" as="image" type="image/webp">
+    <link rel="stylesheet" href="../light-lab.css">
+    <script src="../light-lab.js" defer></script>
+    <title>Direction-Aware Reveal · Motion Field 09</title>
+</head>
+<body data-effect="reveal">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="lab-nav">
+        <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
+        <p class="lab-title"><i aria-hidden="true"></i> Direction-Aware Reveal</p>
+        <p class="lab-count" aria-label="第九个实验，共三十四个">09 / 34</p>
+    </header>
+
+    <main class="lab-stage reveal-stage" id="experiment">
+        <section class="lab-copy" aria-labelledby="page-title">
+            <p class="eyebrow"><span>09</span> EDGE / ENTRY / REVEAL</p>
+            <h1 id="page-title">DIRECTION<br><em>AWARE</em><br>REVEAL</h1>
+            <p class="description">遮罩会判断你从上、右、下、左哪条边进入卡片，并从同一方向完成揭示。触摸时点击卡片切换状态。</p>
+        </section>
+        <div class="reveal-grid" aria-label="方向感知图片卡片">
+            <button class="reveal-tile" type="button" data-reveal-tile data-enter="bottom">
+                <img src="../assets/bg8-720.webp" alt="蓝紫色抽象空间" draggable="false">
+                <span class="reveal-panel"><strong>NORTH<br>LIGHT</strong><small>ENTER FROM ANY EDGE</small></span>
+            </button>
+            <button class="reveal-tile" type="button" data-reveal-tile data-enter="bottom">
+                <img src="../assets/bg9-720.webp" alt="暖色抽象空间" draggable="false">
+                <span class="reveal-panel"><strong>SOFT<br>IMPACT</strong><small>VECTOR DETECTED</small></span>
+            </button>
+            <button class="reveal-tile" type="button" data-reveal-tile data-enter="bottom">
+                <img src="../assets/bg0-720.webp" alt="绿色抽象空间" draggable="false">
+                <span class="reveal-panel"><strong>AFTER<br>IMAGE</strong><small>EDGE BECOMES MOTION</small></span>
+            </button>
+            <button class="reveal-tile" type="button" data-reveal-tile data-enter="bottom">
+                <img src="../assets/bg11-720.webp" alt="深色流体纹理" draggable="false">
+                <span class="reveal-panel"><strong>VOID<br>SIGNAL</strong><small>POINTER KNOWS THE WAY</small></span>
+            </button>
+        </div>
+    </main>
+
+    <footer class="lab-footer">
+        <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>CHOOSE AN EDGE</span></p>
+        <p class="method">ANGLE → DIRECTION → MASK</p>
+        <a class="next-link" href="../direction-aware-marquee/"><span><small>NEXT 10</small>Marquee Hover</span><b aria-hidden="true">↗</b></a>
+    </footer>
+    <noscript><p class="no-script">启用 JavaScript 后，遮罩会识别指针进入方向。</p></noscript>
+</body>
+</html>

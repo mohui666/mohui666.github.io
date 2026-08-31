@@ -171,9 +171,16 @@
     var animationFrame = 0;
 
     function resize() {
-        var dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 760 ? 1.25 : 1.5);
-        var width = Math.max(1, Math.round(canvas.clientWidth * dpr));
-        var height = Math.max(1, Math.round(canvas.clientHeight * dpr));
+        var cssWidth = Math.max(1, canvas.clientWidth);
+        var cssHeight = Math.max(1, canvas.clientHeight);
+        var dpr = Math.min(
+            window.devicePixelRatio || 1,
+            window.innerWidth < 760 ? 1.25 : 1.5,
+            1280 / cssWidth,
+            720 / cssHeight
+        );
+        var width = Math.max(1, Math.round(cssWidth * dpr));
+        var height = Math.max(1, Math.round(cssHeight * dpr));
         if (canvas.width === width && canvas.height === height) return;
         canvas.width = width;
         canvas.height = height;

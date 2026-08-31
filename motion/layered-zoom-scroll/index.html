@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Layered Zoom Scroll 分层推镜滚动：滚动穿过四层嵌套画框，形成连续镜头推进。">
+    <meta name="theme-color" content="#e96342">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../space-lab.css?v=20260831">
+    <script src="../space-lab.js?v=20260831" defer></script>
+    <title>Layered Zoom Scroll · Motion Field 24</title>
+</head>
+<body data-effect="layered-zoom-scroll">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="lab-nav">
+        <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
+        <p><i></i> Layered Zoom Scroll</p>
+        <b aria-label="第二十四个实验，共三十四个">24 / 34</b>
+    </header>
+
+    <main class="zoom-lab" id="experiment" data-zoom-lab>
+        <div class="zoom-sticky">
+            <div class="zoom-frame zoom-frame-1" data-zoom-frame="0">
+                <img src="../assets/bg9-720.webp" alt="红橙色抽象画面">
+                <span>FRAME 01 / SURFACE</span>
+            </div>
+            <div class="zoom-frame zoom-frame-2" data-zoom-frame="1">
+                <img src="../assets/bg11-720.webp" alt="蓝紫色抽象画面">
+                <span>FRAME 02 / CURRENT</span>
+            </div>
+            <div class="zoom-frame zoom-frame-3" data-zoom-frame="2">
+                <img src="../assets/bg0-720.webp" alt="紫色抽象画面">
+                <span>FRAME 03 / CORE</span>
+            </div>
+            <div class="zoom-frame zoom-frame-4" data-zoom-frame="3">
+                <img src="../assets/bg8-720.webp" alt="蓝色抽象画面">
+                <span>FRAME 04 / BEYOND</span>
+            </div>
+            <section class="zoom-copy">
+                <p class="lab-kicker">EXPERIMENT 24 · NESTED SCALE</p>
+                <h1>ENTER<br><em>THE FRAME</em></h1>
+            </section>
+            <div class="zoom-hud" aria-hidden="true"><b data-zoom-percent>000%</b><span data-zoom-label>SURFACE</span><i data-zoom-meter></i></div>
+            <p class="scroll-cue">SCROLL TO PUSH IN <span aria-hidden="true">↓</span></p>
+        </div>
+    </main>
+    <footer class="zoom-footer">
+        <p>FOUR FRAMES / ONE CAMERA</p>
+        <a href="../scroll-3d-stack/"><small>NEXT 25</small><span>Scroll 3D Stack</span> ↗</a>
+    </footer>
+    <noscript><p class="no-script">启用 JavaScript 后即可滚动穿过嵌套画框。</p></noscript>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="SVG Stroke Drawing 路径描边：通过描边偏移把矢量网络逐段书写出来。">
+    <meta name="theme-color" content="#08101a">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../light-lab.css">
+    <script src="../light-lab.js" defer></script>
+    <title>SVG Stroke Drawing · Motion Field 13</title>
+</head>
+<body data-effect="stroke">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="lab-nav">
+        <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
+        <p class="lab-title"><i aria-hidden="true"></i> SVG Stroke Drawing</p>
+        <p class="lab-count" aria-label="第十三个实验，共三十四个">13 / 34</p>
+    </header>
+
+    <main class="lab-stage stroke-stage" id="experiment" tabindex="0" aria-label="拖动进度滑块绘制 SVG 路径，空格播放或暂停">
+        <section class="lab-copy" aria-labelledby="page-title">
+            <p class="eyebrow"><span>13</span> LENGTH / DASH / TRACE</p>
+            <h1 id="page-title">STROKE<br><em>DRAWING</em></h1>
+            <p class="description">每条矢量路径先测量真实长度，再用 dash offset 暴露描边。拖动进度尺逐帧检查，或播放完整书写过程。</p>
+        </section>
+        <div class="stroke-board" aria-hidden="true">
+            <svg viewBox="0 0 860 560">
+                <path class="stroke-guide" d="M80 302 C150 72 372 72 431 214 C491 355 654 480 792 267"/>
+                <path class="stroke-guide" d="M101 414 C223 486 307 405 358 270 C412 127 590 37 747 154"/>
+                <path class="draw-path" data-draw-path d="M80 302 C150 72 372 72 431 214 C491 355 654 480 792 267"/>
+                <path class="draw-path secondary" data-draw-path d="M101 414 C223 486 307 405 358 270 C412 127 590 37 747 154"/>
+                <path class="draw-path" data-draw-path d="M144 156 C228 238 278 321 358 270 C463 201 520 199 614 341"/>
+                <path class="draw-path secondary" data-draw-path d="M221 423 C251 307 189 212 144 156 M431 214 C515 114 659 95 747 154 M614 341 C689 350 750 325 792 267"/>
+                <circle class="stroke-node" cx="80" cy="302" r="8"/><circle class="stroke-node" cx="144" cy="156" r="8"/><circle class="stroke-node" cx="358" cy="270" r="8"/><circle class="stroke-node" cx="431" cy="214" r="8"/><circle class="stroke-node" cx="614" cy="341" r="8"/><circle class="stroke-node" cx="747" cy="154" r="8"/><circle class="stroke-node" cx="792" cy="267" r="8"/>
+            </svg>
+        </div>
+        <div class="control-dock stroke-controls">
+            <button class="control-pill" type="button" data-stroke-play aria-pressed="false">PLAY</button>
+            <label><span class="skip-link">绘制进度</span><input type="range" min="0" max="100" value="0" data-stroke-slider aria-label="SVG 描边绘制进度"></label>
+            <output class="stroke-percent" data-stroke-percent>0%</output>
+        </div>
+    </main>
+
+    <footer class="lab-footer">
+        <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>STROKE IN PROGRESS</span></p>
+        <p class="method">LENGTH → OFFSET → REVEAL</p>
+        <a class="next-link" href="../svg-mask-reveal/"><span><small>NEXT 14</small>Mask Reveal</span><b aria-hidden="true">↗</b></a>
+    </footer>
+    <noscript><p class="no-script">启用 JavaScript 后，可播放并拖动 SVG 描边进度。</p></noscript>
+</body>
+</html>

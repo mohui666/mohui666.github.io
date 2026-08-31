@@ -524,6 +524,136 @@ h1 em {
 .card-trail:hover .trail-preview i:nth-child(2) { transform: translate(-48%, -48%) rotate(2deg); }
 .card-trail:hover .trail-preview i:nth-child(3) { transform: translate(-4%, -30%) rotate(14deg); }
 
+.lexicon-block {
+    margin-top: clamp(96px, 13vw, 170px);
+}
+
+.lexicon-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: 22px;
+    padding: 0 2px 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.lexicon-heading p,
+.lexicon-heading > span {
+    margin: 0;
+    color: rgba(238, 242, 255, 0.42);
+    font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+}
+
+.lexicon-heading h2 {
+    margin: 10px 0 0;
+    font-size: clamp(2.5rem, 5vw, 5.2rem);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+}
+
+.term-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.term-card {
+    --mx: 50%;
+    --my: 50%;
+    position: relative;
+    display: grid;
+    min-height: 230px;
+    align-content: end;
+    overflow: hidden;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background:
+        radial-gradient(circle at var(--mx) var(--my), color-mix(in srgb, var(--term-accent) 20%, transparent), transparent 42%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.06);
+    transition: border-color 220ms ease, transform 280ms var(--ease), background 220ms ease;
+}
+
+.term-card::before {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 58px;
+    aspect-ratio: 1;
+    border: 1px solid color-mix(in srgb, var(--term-accent) 52%, transparent);
+    border-radius: 50%;
+    content: "";
+    box-shadow: inset 0 0 28px color-mix(in srgb, var(--term-accent) 18%, transparent);
+    transition: border-radius 420ms var(--ease), transform 420ms var(--ease);
+}
+
+.term-card:hover,
+.term-card:focus-visible {
+    border-color: color-mix(in srgb, var(--term-accent) 55%, rgba(255, 255, 255, 0.3));
+    transform: translateY(-5px);
+}
+
+.term-card:hover::before,
+.term-card:focus-visible::before {
+    border-radius: 38% 62% 58% 42%;
+    transform: rotate(42deg) scale(1.16);
+}
+
+.term-card > span {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    color: var(--term-accent);
+    font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    font-size: 0.66rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+}
+
+.term-card h3 {
+    max-width: 88%;
+    margin: 0 0 8px;
+    font-size: clamp(1.2rem, 2vw, 1.72rem);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+}
+
+.term-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+}
+
+.term-card small {
+    position: absolute;
+    right: 52px;
+    bottom: 23px;
+    color: rgba(238, 242, 255, 0.32);
+    font-size: 0.5rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+}
+
+.term-card b {
+    position: absolute;
+    right: 23px;
+    bottom: 20px;
+    color: var(--term-accent);
+    font-size: 1rem;
+    font-weight: 500;
+    transition: transform 220ms var(--ease);
+}
+
+.term-card:hover b,
+.term-card:focus-visible b {
+    transform: translate(3px, -3px);
+}
+
 .catalog-footer {
     display: flex;
     width: min(1240px, calc(100% - 40px));
@@ -582,6 +712,39 @@ h1 em {
     .experiment-grid {
         grid-template-columns: 1fr;
         gap: 14px;
+    }
+
+    .term-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lexicon-block {
+        margin-top: 92px;
+    }
+
+    .lexicon-heading h2 {
+        font-size: clamp(2.7rem, 12vw, 4.5rem);
+    }
+
+    .term-card {
+        min-height: 190px;
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .term-card > span {
+        top: 20px;
+        left: 20px;
+    }
+
+    .term-card::before {
+        top: 20px;
+        right: 20px;
+    }
+
+    .term-card small,
+    .term-card b {
+        bottom: 19px;
     }
 
     .experiment-card {

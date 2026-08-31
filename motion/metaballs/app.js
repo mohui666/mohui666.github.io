@@ -56,7 +56,12 @@
         const previousHeight = height || stage.clientHeight;
         width = stage.clientWidth;
         height = stage.clientHeight;
-        pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+        pixelRatio = Math.min(
+            window.devicePixelRatio || 1,
+            1.5,
+            1280 / Math.max(1, width),
+            720 / Math.max(1, height)
+        );
 
         canvas.width = Math.round(width * pixelRatio);
         canvas.height = Math.round(height * pixelRatio);

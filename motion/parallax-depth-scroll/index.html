@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Parallax Depth Scroll 视差深度滚动：前景、主体、文字和背景以不同速度制造空间纵深。">
+    <meta name="theme-color" content="#0a1530">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../space-lab.css?v=20260831">
+    <script src="../space-lab.js?v=20260831" defer></script>
+    <title>Parallax Depth Scroll · Motion Field 23</title>
+</head>
+<body data-effect="parallax-depth-scroll">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="lab-nav">
+        <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
+        <p><i></i> Parallax Depth Scroll</p>
+        <b aria-label="第二十三个实验，共三十四个">23 / 34</b>
+    </header>
+
+    <main class="depth-lab" id="experiment" data-depth-lab>
+        <div class="depth-sticky">
+            <div class="depth-layer depth-back" data-depth-layer="0.16" aria-hidden="true"><img src="../assets/bg8-720.webp" alt=""></div>
+            <div class="depth-layer depth-haze" data-depth-layer="0.34" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="depth-layer depth-title" data-depth-layer="0.62">
+                <p class="lab-kicker">EXPERIMENT 23 · Z-SPACE</p>
+                <h1>DEPTH<br>IS <em>TIME.</em></h1>
+                <p>滚动同样的距离，不同图层走出不同位移。速度差会被眼睛读成空间深度。</p>
+            </div>
+            <figure class="depth-layer depth-portal" data-depth-layer="1.08">
+                <img src="../assets/bg0-720.webp" alt="紫色抽象空间">
+                <figcaption><span>NEAR PLANE</span><b data-depth-value>Z 000</b></figcaption>
+            </figure>
+            <div class="depth-layer depth-foreground" data-depth-layer="1.42" aria-hidden="true"><i></i><i></i><i></i><b>23</b></div>
+            <div class="depth-scale" aria-hidden="true"><span>FAR</span><i data-depth-meter></i><span>NEAR</span></div>
+            <p class="scroll-cue">SCROLL THROUGH DEPTH <span aria-hidden="true">↓</span></p>
+        </div>
+    </main>
+    <footer class="depth-footer">
+        <p>FOUR PLANES / FOUR SPEEDS</p>
+        <a href="../layered-zoom-scroll/"><small>NEXT 24</small><span>Layered Zoom Scroll</span> ↗</a>
+    </footer>
+    <noscript><p class="no-script">启用 JavaScript 后即可看到多层视差。</p></noscript>
+</body>
+</html>

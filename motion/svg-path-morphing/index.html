@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="SVG Path Morphing 路径形变：在具有相同拓扑的矢量轮廓之间连续插值。">
+    <meta name="theme-color" content="#10091c">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../light-lab.css">
+    <script src="../light-lab.js" defer></script>
+    <title>SVG Path Morphing · Motion Field 12</title>
+</head>
+<body data-effect="morph">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="lab-nav">
+        <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
+        <p class="lab-title"><i aria-hidden="true"></i> SVG Path Morphing</p>
+        <p class="lab-count" aria-label="第十二个实验，共三十四个">12 / 34</p>
+    </header>
+
+    <main class="lab-stage morph-stage" id="experiment" tabindex="0" aria-label="选择按钮切换 SVG 形态，左右方向键循环">
+        <section class="lab-copy" aria-labelledby="page-title">
+            <p class="eyebrow"><span>12</span> POINTS / CURVES / FORM</p>
+            <h1 id="page-title">PATH<br><em>MORPHING</em></h1>
+            <p class="description">同一组贝塞尔控制点在四套坐标之间插值，让圆、潮汐、脉冲和棱镜保持连续形变。左右方向键可循环切换。</p>
+        </section>
+        <div class="morph-canvas" aria-hidden="true">
+            <svg viewBox="0 0 360 360">
+                <defs><linearGradient id="morph-gradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#70f1d0"/><stop offset=".5" stop-color="#c69cff"/><stop offset="1" stop-color="#ff72a8"/></linearGradient></defs>
+                <circle class="morph-ring" cx="180" cy="180" r="165"/>
+                <path class="morph-shape" data-morph-shape d="M 180 40 C 257 40 320 103 320 180 C 320 257 257 320 180 320 C 103 320 40 257 40 180 C 40 103 103 40 180 40 Z"/>
+            </svg>
+            <p class="morph-label" data-morph-label>ORBIT</p>
+        </div>
+        <div class="control-dock morph-controls" aria-label="形态选择">
+            <button class="mode-button" type="button" data-morph-mode="orbit" aria-pressed="true">ORBIT</button>
+            <button class="mode-button" type="button" data-morph-mode="tide" aria-pressed="false">TIDE</button>
+            <button class="mode-button" type="button" data-morph-mode="pulse" aria-pressed="false">PULSE</button>
+            <button class="mode-button" type="button" data-morph-mode="prism" aria-pressed="false">PRISM</button>
+        </div>
+    </main>
+
+    <footer class="lab-footer">
+        <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>ORBIT GEOMETRY</span></p>
+        <p class="method">COORDINATES → INTERPOLATE → SHAPE</p>
+        <a class="next-link" href="../svg-stroke-drawing/"><span><small>NEXT 13</small>Stroke Drawing</span><b aria-hidden="true">↗</b></a>
+    </footer>
+    <noscript><p class="no-script">启用 JavaScript 后，可在四种 SVG 轮廓间连续形变。</p></noscript>
+</body>
+</html>

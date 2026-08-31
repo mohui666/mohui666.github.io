@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Drag-driven Parallax Carousel 拖拽视差轮播：拖动轨道时，图像、编号与文字以不同速度错位。">
+    <meta name="theme-color" content="#171713">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../space-lab.css?v=20260831">
+    <script src="../space-lab.js?v=20260831" defer></script>
+    <title>Drag-driven Parallax Carousel · Motion Field 21</title>
+</head>
+<body data-effect="drag-parallax-carousel">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="lab-nav">
+        <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
+        <p><i></i> Drag-driven Parallax Carousel</p>
+        <b aria-label="第二十一个实验，共三十四个">21 / 34</b>
+    </header>
+
+    <main class="carousel-lab" id="experiment">
+        <section class="carousel-heading">
+            <p class="lab-kicker">EXPERIMENT 21 · DEPTH BY DRAG</p>
+            <h1>PARALLAX<br><em>ARCHIVE</em></h1>
+            <p>左右拖动。卡片移动一层，照片在裁切框内移动另一层，编号再反向偏移一层。</p>
+        </section>
+
+        <div class="carousel-window" data-carousel-window tabindex="0" aria-label="可左右拖动的视差轮播，也可以使用左右方向键">
+            <div class="carousel-track" data-carousel-track>
+                <article class="parallax-card" data-carousel-card>
+                    <span class="card-index">01</span><div class="parallax-photo"><img src="../assets/bg8-720.webp" alt="蓝色抽象景象" draggable="false"></div><footer><b>AETHER</b><small>LIGHT / 2026</small></footer>
+                </article>
+                <article class="parallax-card tall-card" data-carousel-card>
+                    <span class="card-index">02</span><div class="parallax-photo"><img src="../assets/bg9-720.webp" alt="红色抽象景象" draggable="false"></div><footer><b>ORBIT</b><small>HEAT / 2026</small></footer>
+                </article>
+                <article class="parallax-card" data-carousel-card>
+                    <span class="card-index">03</span><div class="parallax-photo"><img src="../assets/bg0-720.webp" alt="紫色抽象景象" draggable="false"></div><footer><b>VEIL</b><small>SPACE / 2026</small></footer>
+                </article>
+                <article class="parallax-card wide-card" data-carousel-card>
+                    <span class="card-index">04</span><div class="parallax-photo"><img src="../assets/bg11-720.webp" alt="青紫色抽象景象" draggable="false"></div><footer><b>TIDELINE</b><small>FLOW / 2026</small></footer>
+                </article>
+                <article class="parallax-card" data-carousel-card>
+                    <span class="card-index">05</span><div class="parallax-photo"><img src="../assets/bg8-720.webp" alt="蓝色抽象景象" draggable="false"></div><footer><b>RETURN</b><small>LOOP / 2026</small></footer>
+                </article>
+            </div>
+        </div>
+
+        <div class="carousel-meter" aria-hidden="true"><i data-carousel-meter></i><span>DRAG PROGRESS</span></div>
+        <p class="gesture-chip"><span aria-hidden="true">↔</span><b data-carousel-status>DRAG THE ARCHIVE</b></p>
+        <a class="lab-next" href="../horizontal-scroll/"><small>NEXT 22</small><span>Horizontal Scroll</span> ↗</a>
+    </main>
+    <noscript><p class="no-script">启用 JavaScript 后即可拖动视差轮播。</p></noscript>
+</body>
+</html>

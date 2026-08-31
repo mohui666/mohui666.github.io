@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="Reaction–Diffusion 互动实验：Gray–Scott 反应扩散生成不断分裂的有机纹理。"><meta name="theme-color" content="#05070d">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon"><link rel="stylesheet" href="../gpu-lab.css?v=20260831"><script src="../gpu-lab.js?v=20260831" defer></script>
+    <title>Reaction–Diffusion · Motion Field</title>
+</head><body data-effect="reaction-diffusion">
+    <a class="skip-link" href="#experiment">跳到实验</a>
+    <header class="lab-nav"><a class="back-link" href="../"><span aria-hidden="true">←</span><span>Motion Field</span></a><p class="nav-label"><i></i> Reaction–Diffusion</p><p class="nav-counter" aria-label="第 27 个实验，共 34 个">27 / 34</p></header>
+    <main id="experiment" class="lab-stage" data-stage>
+        <canvas id="lab-canvas" aria-label="实时反应扩散画布"></canvas><div class="lab-grid" aria-hidden="true"></div><div class="lab-vignette" aria-hidden="true"></div><div class="lab-noise" aria-hidden="true"></div>
+        <section class="hero-copy" aria-labelledby="page-title"><p class="eyebrow"><span>27</span> Chemical pattern study</p><h1 id="page-title">REACTION<br><em>DIFFUSION</em></h1><p class="intro">两种虚拟化学物质以不同速度扩散、消耗和补充。按住画布播种，斑点会自行分裂成珊瑚、细胞与迷宫。</p></section>
+        <aside class="lab-note"><p>GRAY–SCOTT MODEL</p><strong>∂V = Dᵥ∇²V + UV² − (F+k)V</strong><span>低分辨率场逐步积分，再放大为连续的浓度纹理。</span></aside>
+        <section class="interaction-dock"><div class="live-state"><i></i><p><span data-state>SIMULATING</span><small data-prompt>拖动播种新的反应核</small></p></div><button class="lab-button" type="button" data-action="reset">重新播种</button></section>
+        <p class="fallback" data-fallback hidden></p><a class="next-link" href="../sdf-ray-marching/"><span><small>NEXT / 28</small>SDF Ray Marching</span><i>→</i></a>
+    </main><noscript><p class="no-script">启用 JavaScript 后即可运行反应扩散。</p></noscript>
+</body></html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="FLIP Layout Transition 布局转场：测量变化前后几何位置，让网格重排保持连续运动。">
+    <meta name="theme-color" content="#080d18">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="preload" href="../assets/bg8-720.webp" as="image" type="image/webp">
+    <link rel="stylesheet" href="../light-lab.css">
+    <script src="../light-lab.js" defer></script>
+    <title>FLIP Layout Transition · Motion Field 17</title>
+</head>
+<body data-effect="flip">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="lab-nav">
+        <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
+        <p class="lab-title"><i aria-hidden="true"></i> FLIP Layout Transition</p>
+        <p class="lab-count" aria-label="第十七个实验，共三十四个">17 / 34</p>
+    </header>
+
+    <main class="lab-stage flip-stage" id="experiment">
+        <section class="lab-copy" aria-labelledby="page-title">
+            <p class="eyebrow"><span>17</span> FIRST / LAST / INVERT / PLAY</p>
+            <h1 id="page-title">FLIP<br><em>LAYOUT</em></h1>
+            <p class="description">先记录每张卡片旧位置，再改变真实布局，最后用反向变换消除跳跃。切换网格与列表、随机排序，或点击卡片放大。</p>
+        </section>
+        <div class="flip-workspace">
+            <div class="flip-tools" aria-label="布局控制">
+                <button class="mode-button" type="button" data-flip-layout="grid" aria-pressed="true">GRID</button>
+                <button class="mode-button" type="button" data-flip-layout="list" aria-pressed="false">LIST</button>
+                <button class="control-pill" type="button" data-flip-shuffle>SHUFFLE</button>
+            </div>
+            <div class="flip-grid" data-flip-grid data-layout="grid">
+                <button class="flip-card" type="button" data-flip-card><img src="../assets/bg8-720.webp" alt="蓝紫色抽象空间"><span><b>01</b><b>ECHO</b></span></button>
+                <button class="flip-card" type="button" data-flip-card><img src="../assets/bg9-720.webp" alt="暖色抽象空间"><span><b>02</b><b>FLARE</b></span></button>
+                <button class="flip-card" type="button" data-flip-card><img src="../assets/bg0-720.webp" alt="绿色抽象空间"><span><b>03</b><b>TIDE</b></span></button>
+                <button class="flip-card" type="button" data-flip-card><img src="../assets/bg11-720.webp" alt="深色流体纹理"><span><b>04</b><b>VOID</b></span></button>
+                <button class="flip-card" type="button" data-flip-card><img src="../assets/bg9-720.webp" alt="暖色光影纹理"><span><b>05</b><b>EMBER</b></span></button>
+                <button class="flip-card" type="button" data-flip-card><img src="../assets/bg8-720.webp" alt="冷色光影纹理"><span><b>06</b><b>HALO</b></span></button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="lab-footer">
+        <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>SELECT A LAYOUT</span></p>
+        <p class="method">FIRST → LAST → INVERT → PLAY</p>
+        <a class="next-link" href="../shared-element-transition/"><span><small>NEXT 18</small>Shared Element</span><b aria-hidden="true">↗</b></a>
+    </footer>
+    <noscript><p class="no-script">启用 JavaScript 后，布局重排会通过 FLIP 保持连续运动。</p></noscript>
+</body>
+</html>

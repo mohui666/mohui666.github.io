@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="SVG Path Morphing on Scroll 滚动驱动 SVG 路径形变：滚动实时插值路径节点，在波形、星形与花瓣之间连续变形。">
+    <meta name="theme-color" content="#180d31">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../space-lab.css?v=20260831">
+    <script src="../space-lab.js?v=20260831" defer></script>
+    <title>SVG Path Morphing on Scroll · Motion Field 26</title>
+</head>
+<body data-effect="scroll-svg-morph">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="lab-nav">
+        <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
+        <p><i></i> SVG Path Morphing on Scroll</p>
+        <b aria-label="第二十六个实验，共三十四个">26 / 34</b>
+    </header>
+
+    <main class="morph-lab" id="experiment" data-morph-lab>
+        <div class="morph-sticky">
+            <svg class="morph-svg" viewBox="0 0 1000 1000" role="img" aria-labelledby="morph-title morph-desc">
+                <title id="morph-title">随滚动连续变化的 SVG 路径</title>
+                <desc id="morph-desc">路径会依次在圆形、星形、花瓣和波动环之间插值。</desc>
+                <defs>
+                    <linearGradient id="morph-gradient" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#9ef9ff"></stop>
+                        <stop offset="0.48" stop-color="#ac7cff"></stop>
+                        <stop offset="1" stop-color="#ff6bb2"></stop>
+                    </linearGradient>
+                    <filter id="morph-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="12" result="blur"></feGaussianBlur><feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter>
+                </defs>
+                <path class="morph-echo" data-morph-echo d="M 500 160 L 740 260 L 840 500 L 740 740 L 500 840 L 260 740 L 160 500 L 260 260 Z"></path>
+                <path class="morph-path" data-morph-path d="M 500 160 L 740 260 L 840 500 L 740 740 L 500 840 L 260 740 L 160 500 L 260 260 Z"></path>
+            </svg>
+            <section class="morph-copy">
+                <p class="lab-kicker">EXPERIMENT 26 · VECTOR INTERPOLATION</p>
+                <h1>PATHS<br><em>IN FLUX.</em></h1>
+                <p>滚动不是播放预制关键帧，而是实时插值八个路径节点，再重新写入 SVG 的 <code>d</code> 属性。</p>
+            </section>
+            <div class="morph-state"><small>CURRENT FORM</small><b data-morph-label>ORBIT</b><span data-morph-percent>000%</span></div>
+            <div class="morph-timeline" aria-hidden="true"><span>ORBIT</span><span>STAR</span><span>PETAL</span><span>WAVE</span><i data-morph-meter></i></div>
+            <p class="scroll-cue">SCROLL TO MORPH <span aria-hidden="true">↓</span></p>
+        </div>
+    </main>
+    <footer class="morph-footer">
+        <p>EIGHT NODES / CONTINUOUS PATH</p>
+        <a href="../reaction-diffusion/"><small>NEXT 27</small><span>Reaction–Diffusion</span> ↗</a>
+    </footer>
+    <noscript><p class="no-script">启用 JavaScript 后即可滚动改变 SVG 路径。</p></noscript>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Inertial Drag 惯性拖拽：释放卡片后，速度、摩擦和边界碰撞继续塑造运动。">
+    <meta name="theme-color" content="#e7ff57">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../space-lab.css?v=20260831">
+    <script src="../space-lab.js?v=20260831" defer></script>
+    <title>Inertial Drag · Motion Field 20</title>
+</head>
+<body data-effect="inertial-drag">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="lab-nav nav-dark">
+        <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
+        <p><i></i> Inertial Drag</p>
+        <b aria-label="第二十个实验，共三十四个">20 / 34</b>
+    </header>
+
+    <main class="inertia-lab" id="experiment">
+        <section class="inertia-copy">
+            <p class="lab-kicker">EXPERIMENT 20 · MOMENTUM</p>
+            <h1>THROW<br>THE <em>FRAME.</em></h1>
+            <p>拖住中央画框，用力甩向任意方向。释放时的速度会被保留下来，摩擦让它减速，边界让它反弹。</p>
+            <dl class="motion-readout" aria-label="实时运动数据">
+                <div><dt>VELOCITY X</dt><dd data-velocity-x>0.00</dd></div>
+                <div><dt>VELOCITY Y</dt><dd data-velocity-y>0.00</dd></div>
+                <div><dt>ENERGY</dt><dd data-energy>0%</dd></div>
+            </dl>
+        </section>
+
+        <div class="inertia-arena" data-inertia-arena>
+            <div class="arena-grid" aria-hidden="true"></div>
+            <article class="drag-puck" data-drag-puck tabindex="0" aria-label="可拖拽并带惯性的画框，按方向键也可推动">
+                <img src="../assets/bg11-720.webp" alt="抽象蓝紫色动态画面" draggable="false">
+                <span>GRAB</span>
+                <footer><b>INERTIA / 20</b><i data-puck-state>RESTING</i></footer>
+            </article>
+            <span class="arena-label label-top">FRICTION 0.94</span>
+            <span class="arena-label label-side">BOUNCE / ACTIVE</span>
+        </div>
+
+        <p class="gesture-chip dark-chip"><span aria-hidden="true">✦</span><b>DRAG FAST · RELEASE · WATCH</b></p>
+        <a class="lab-next dark-next" href="../drag-parallax-carousel/"><small>NEXT 21</small><span>Drag Parallax Carousel</span> ↗</a>
+    </main>
+    <noscript><p class="no-script">启用 JavaScript 后即可拖拽并抛出画框。</p></noscript>
+</body>
+</html>

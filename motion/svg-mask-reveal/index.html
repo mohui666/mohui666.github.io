@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="SVG Mask Reveal 蒙版揭示：移动可变光圈，在单色底图上显露彩色图像。">
+    <meta name="theme-color" content="#120b0b">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="preload" href="../assets/bg9-720.webp" as="image" type="image/webp">
+    <link rel="stylesheet" href="../light-lab.css">
+    <script src="../light-lab.js" defer></script>
+    <title>SVG Mask Reveal · Motion Field 14</title>
+</head>
+<body data-effect="mask">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="lab-nav">
+        <a class="back-link" href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
+        <p class="lab-title"><i aria-hidden="true"></i> SVG Mask Reveal</p>
+        <p class="lab-count" aria-label="第十四个实验，共三十四个">14 / 34</p>
+    </header>
+
+    <main class="lab-stage mask-stage" id="experiment" tabindex="0" aria-label="在图片上移动指针控制 SVG 蒙版，点击改变光圈大小；方向键移动，加减键缩放">
+        <section class="lab-copy" aria-labelledby="page-title">
+            <p class="eyebrow"><span>14</span> MASK / APERTURE / COLOR</p>
+            <h1 id="page-title">SVG MASK<br><em>REVEAL</em></h1>
+            <p class="description">一张彩色图像被真正的 SVG mask 限制在圆形光圈内。移动探索，点击切换光圈；方向键与加减键可精确控制。</p>
+        </section>
+        <div class="mask-frame" data-mask-frame>
+            <img src="../assets/bg9-720.webp" alt="单色抽象背景">
+            <svg class="mask-svg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" aria-label="由圆形蒙版揭示的彩色抽象图像">
+                <defs><mask id="spotlight-mask"><rect width="1000" height="700" fill="black"/><circle class="mask-circle" data-mask-circle cx="620" cy="336" r="150" fill="white"/></mask></defs>
+                <image href="../assets/bg9-720.webp" width="1000" height="700" preserveAspectRatio="xMidYMid slice" mask="url(#spotlight-mask)"/>
+            </svg>
+            <i class="mask-ring" data-mask-ring aria-hidden="true"></i>
+            <p class="mask-readout" data-mask-readout aria-live="polite">X 620 · Y 336 · R 150</p>
+        </div>
+    </main>
+
+    <footer class="lab-footer">
+        <p><span class="live-dot" aria-hidden="true"></span><span data-live-state>MOVE THE APERTURE</span></p>
+        <p class="method">MASK → POSITION → REVEAL</p>
+        <a class="next-link" href="../css-motion-path/"><span><small>NEXT 15</small>Motion Path</span><b aria-hidden="true">↗</b></a>
+    </footer>
+    <noscript><p class="no-script">启用 JavaScript 后，蒙版光圈会追随指针。</p></noscript>
+</body>
+</html>
