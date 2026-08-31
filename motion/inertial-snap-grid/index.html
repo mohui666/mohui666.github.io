@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Inertial Snap Grid 惯性网格吸附：根据释放速度预测落点，再以弹簧把物体吸附到最近网格交点。">
+    <meta name="theme-color" content="#06272d">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../drag-physics.css?v=20260831">
+    <script src="../drag-physics.js?v=20260831" defer></script>
+    <title>Inertial Snap Grid · Motion Field 38</title>
+</head>
+<body data-effect="inertial-snap-grid">
+    <a class="skip-link" href="#experiment">跳到惯性网格实验</a>
+    <header class="physics-nav">
+        <a href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
+        <p><i></i> Inertial Snap Grid</p>
+        <b aria-label="第 38 个实验，共 44 个">38 / 44</b>
+    </header>
+
+    <main class="physics-lab" id="experiment">
+        <section class="physics-copy" aria-labelledby="page-title">
+            <p class="physics-kicker">EXPERIMENT 38 · PREDICT + SNAP</p>
+            <h1 id="page-title">AIM PAST<br><em>THE GRID.</em></h1>
+            <p class="physics-description" id="snap-description">释放后先按惯性预测停止位置，蓝色标记显示候选交点；物体短暂滑行，再由弹簧吸附并收敛到网格。</p>
+            <p class="physics-hint"><span aria-hidden="true">⌗</span> 拖甩并释放 · 方向键逐格吸附 · Home 重置</p>
+            <dl class="physics-readout" aria-label="网格吸附实时数据">
+                <div><dt>STATE</dt><dd data-readout="state" aria-live="polite">RESTING</dd></div>
+                <div><dt>PREDICTED CELL</dt><dd data-readout="cell">+0, +0</dd></div>
+                <div><dt>VELOCITY X/Y</dt><dd data-readout="velocity">0, 0</dd></div>
+            </dl>
+        </section>
+
+        <section class="physics-stage snap-stage" data-physics-stage aria-label="带落点预测的网格拖拽区域">
+            <p class="stage-label top">GRID 72PX / LANDING PREDICTION</p>
+            <p class="stage-label side">SPRING SNAP</p>
+            <span class="snap-target" data-snap-target aria-hidden="true"></span>
+            <span class="snap-vector" data-snap-vector aria-hidden="true"></span>
+            <button class="physics-object snap-puck" data-physics-object type="button" aria-describedby="snap-description">
+                <b>SNAP</b><small>GRID / 38</small>
+            </button>
+        </section>
+    </main>
+
+    <button class="physics-reset" data-reset type="button">↺ RESET</button>
+    <a class="physics-next" href="../magnetic-docking/"><small>NEXT 39</small><span>Magnetic Docking</span><b aria-hidden="true">↗</b></a>
+    <noscript><p class="no-script">启用 JavaScript 后即可预测并吸附落点。</p></noscript>
+</body>
+</html>

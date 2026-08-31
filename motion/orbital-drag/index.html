@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Orbital Drag 轨道拖拽：拖动物只能沿椭圆轨道运动，释放后保留角动量并逐渐阻尼。">
+    <meta name="theme-color" content="#0c0718">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../constraint-physics.css?v=20260831">
+    <script src="../constraint-physics.js?v=20260831" defer></script>
+    <title>Orbital Drag · Motion Field 42</title>
+</head>
+<body data-effect="orbital-drag">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="field-nav">
+        <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
+        <p><i aria-hidden="true"></i> Orbital Drag</p>
+        <b aria-label="第四十二个实验，共四十四个">42 / 44</b>
+    </header>
+
+    <main class="physics-lab orbit-lab" id="experiment">
+        <section class="physics-copy" aria-labelledby="page-title">
+            <p class="physics-kicker">EXPERIMENT 42 · ANGULAR MOMENTUM</p>
+            <h1 id="page-title">BEND<br>THE <em>PATH.</em></h1>
+            <p class="physics-description" id="orbit-instructions">拖住光球朝任何方向移动，它都会被投影回椭圆轨道。松手时的角速度会留下来，随后被阻尼一点点磨掉。</p>
+            <dl class="physics-readout" aria-label="实时轨道数据">
+                <div><dt>ANGLE</dt><dd data-angle>0.0°</dd></div>
+                <div><dt>ANGULAR V</dt><dd data-angular-velocity>+0.00 rad/s</dd></div>
+                <div><dt>ELLIPSE</dt><dd data-orbit-radius>0 × 0</dd></div>
+            </dl>
+            <div class="physics-actions">
+                <button class="reset-button" type="button" data-reset>↺ Reset orbit</button>
+                <p class="key-hint">拖住光球沿轨道甩动 · ← → 施加扭矩 · 空格制动</p>
+            </div>
+        </section>
+
+        <section class="physics-stage orbit-stage" aria-label="椭圆轨道约束实验场">
+            <canvas class="physics-canvas" data-orbit-canvas tabindex="0" role="application" aria-describedby="orbit-instructions">你的浏览器需要支持 Canvas。</canvas>
+            <p class="stage-tag">ELLIPSE / SINGLE DEGREE</p>
+            <p class="stage-status" data-status aria-live="polite">READY / ORBIT LOCKED</p>
+        </section>
+
+        <a class="field-next" href="../rubber-band-drag/"><small>NEXT 43</small><span>Rubber-band Drag</span> ↗</a>
+    </main>
+    <noscript><p class="no-script">启用 JavaScript 后即可沿椭圆轨道拖动光球。</p></noscript>
+</body>
+</html>

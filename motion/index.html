@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="mohui666 的 Motion Field：34 个独立网页动效实验，涵盖指针、滚动、SVG、Canvas 与 WebGL。">
+    <meta name="description" content="mohui666 的 Motion Field：44 个独立网页动效实验，涵盖指针、滚动、物理拖拽、SVG、Canvas 与 WebGL。">
     <meta name="theme-color" content="#070a14">
     <meta property="og:title" content="Motion Field · mohui666">
-    <meta property="og:description" content="34 个独立网页，34 种可以亲手操控的动效。">
+    <meta property="og:description" content="44 个独立网页，44 种可以亲手操控的动效。">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mohui666.github.io/motion/">
     <meta property="og:image" content="https://mohui666.github.io/motion/og.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Motion Field · mohui666">
-    <meta name="twitter:description" content="34 个独立网页，34 种可以亲手操控的动效。">
+    <meta name="twitter:description" content="44 个独立网页，44 种可以亲手操控的动效。">
     <meta name="twitter:image" content="https://mohui666.github.io/motion/og.png">
     <link rel="icon" href="../images/cover.ico" type="image/x-icon">
     <link rel="stylesheet" href="catalog.css?v=20260831" type="text/css">
@@ -28,7 +28,7 @@
             <span>mohui666</span>
         </a>
         <p class="nav-title"><i aria-hidden="true"></i> Motion Field</p>
-        <p class="nav-count" aria-hidden="true">34 experiments</p>
+        <p class="nav-count" aria-hidden="true">44 experiments</p>
     </header>
 
     <main>
@@ -36,14 +36,14 @@
             <div class="hero-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
             <p class="eyebrow"><span>INDEX</span> Interactive motion archive</p>
             <h1 id="page-title">一个特效，<br><em>一个世界。</em></h1>
-            <p class="hero-lead">34 个独立网页，各自只研究一种运动。选择一个名词，然后用指针、触摸或滚动亲手把它启动。</p>
+            <p class="hero-lead">44 个独立网页，各自只研究一种运动。选择一个名词，然后用指针、触摸或滚动亲手把它启动。</p>
             <a class="scroll-link" href="#experiments">浏览实验 <span aria-hidden="true">↓</span></a>
         </section>
 
         <section class="catalog" id="experiments" aria-label="动效实验目录">
             <div class="catalog-heading">
                 <p>CORE EXPERIMENTS</p>
-                <p>01—06 / 34</p>
+                <p>01—06 / 44</p>
             </div>
 
             <div class="experiment-grid">
@@ -181,12 +181,34 @@
                     <a class="term-card" href="morph-targets/" data-card style="--term-accent:#34d399"><span>34</span><h3>3D Morph Targets</h3><p>三维形态目标动画</p><small>CLICK</small><b>↗</b></a>
                 </div>
             </section>
+
+            <section class="lexicon-block" aria-labelledby="physics-title">
+                <div class="lexicon-heading">
+                    <div>
+                        <p>DRAG · INERTIA · CONSTRAINTS</p>
+                        <h2 id="physics-title">物理拖拽实验</h2>
+                    </div>
+                    <span>35—44</span>
+                </div>
+                <div class="term-grid">
+                    <a class="term-card" href="spring-drag/" data-card style="--term-accent:#5eead4"><span>35</span><h3>Spring Drag</h3><p>二阶弹簧跟随拖拽</p><small>SPRING</small><b>↗</b></a>
+                    <a class="term-card" href="elastic-bounds/" data-card style="--term-accent:#fb7185"><span>36</span><h3>Elastic Bounds</h3><p>弹性边界与撞墙回弹</p><small>BOUNCE</small><b>↗</b></a>
+                    <a class="term-card" href="momentum-throw/" data-card style="--term-accent:#fbbf24"><span>37</span><h3>Momentum Throw</h3><p>速度采样与动量投掷</p><small>THROW</small><b>↗</b></a>
+                    <a class="term-card" href="inertial-snap-grid/" data-card style="--term-accent:#60a5fa"><span>38</span><h3>Inertial Snap Grid</h3><p>惯性预测与网格吸附</p><small>SNAP</small><b>↗</b></a>
+                    <a class="term-card" href="magnetic-docking/" data-card style="--term-accent:#c084fc"><span>39</span><h3>Magnetic Docking</h3><p>距离磁力与停靠锁定</p><small>MAGNET</small><b>↗</b></a>
+                    <a class="term-card" href="rope-constraint/" data-card style="--term-accent:#f97316"><span>40</span><h3>Rope Constraint Drag</h3><p>绳段长度约束拖拽</p><small>VERLET</small><b>↗</b></a>
+                    <a class="term-card" href="collision-drag/" data-card style="--term-accent:#34d399"><span>41</span><h3>Multi-body Collision Drag</h3><p>多物体碰撞与投掷</p><small>COLLIDE</small><b>↗</b></a>
+                    <a class="term-card" href="orbital-drag/" data-card style="--term-accent:#818cf8"><span>42</span><h3>Orbital Constraint Drag</h3><p>轨道约束与角动量</p><small>ORBIT</small><b>↗</b></a>
+                    <a class="term-card" href="rubber-band-drag/" data-card style="--term-accent:#e879f9"><span>43</span><h3>Rubber-band Drag</h3><p>渐进阻力与橡皮筋回弹</p><small>RESIST</small><b>↗</b></a>
+                    <a class="term-card" href="physics-reorder/" data-card style="--term-accent:#a3e635"><span>44</span><h3>Physics Reorder</h3><p>弹簧让位式拖拽重排</p><small>REORDER</small><b>↗</b></a>
+                </div>
+            </section>
         </section>
     </main>
 
     <footer class="catalog-footer">
         <p>MOHUI666 · MOTION FIELD</p>
-        <p>34 EFFECTS / 34 PAGES</p>
+        <p>44 EFFECTS / 44 PAGES</p>
     </footer>
 </body>
 </html>

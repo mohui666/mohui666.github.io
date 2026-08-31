@@ -3,7 +3,7 @@
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="description" content="Volumetric God Rays：片元着色器沿视线积累散射，生成可交互体积光束。"><meta name="theme-color" content="#05070d">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon"><link rel="stylesheet" href="../gpu-lab.css?v=20260831"><script src="../gpu-lab.js?v=20260831" defer></script><title>Volumetric God Rays · Motion Field</title>
 </head><body data-effect="volumetric-god-rays">
-    <a class="skip-link" href="#experiment">跳到实验</a><header class="lab-nav"><a class="back-link" href="../"><span>←</span><span>Motion Field</span></a><p class="nav-label"><i></i> Volumetric God Rays</p><p class="nav-counter" aria-label="第 33 个实验，共 34 个">33 / 34</p></header>
+    <a class="skip-link" href="#experiment">跳到实验</a><header class="lab-nav"><a class="back-link" href="../"><span>←</span><span>Motion Field</span></a><p class="nav-label"><i></i> Volumetric God Rays</p><p class="nav-counter" aria-label="第 33 个实验，共 44 个">33 / 44</p></header>
     <main id="experiment" class="lab-stage" data-stage><canvas id="lab-canvas" aria-label="实时体积光束画布"></canvas><div class="lab-grid"></div><div class="lab-vignette"></div><div class="lab-noise"></div>
         <section class="hero-copy" aria-labelledby="page-title"><p class="eyebrow"><span>33</span> Volumetric light study</p><h1 id="page-title">GOD<br><em>RAYS</em></h1><p class="intro">光不只照亮表面，也会在雾中留下体积。着色器沿着像素到光源的方向累积散射，让遮挡缝隙被拉成可移动的光束。</p></section>
         <aside class="lab-note"><p>RADIAL SCATTERING</p><strong>L = Σ density(uv − n·Δ)</strong><span>移动太阳改变光束方向；按下会短暂提升雾的散射密度。</span></aside>

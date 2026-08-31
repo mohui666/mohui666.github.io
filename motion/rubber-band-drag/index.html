@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Rubber-band Drag 橡皮筋拖拽：越过舒适半径后阻力递增，释放时由弹簧回到中心。">
+    <meta name="theme-color" content="#ffd9cf">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../constraint-physics.css?v=20260831">
+    <script src="../constraint-physics.js?v=20260831" defer></script>
+    <title>Rubber-band Drag · Motion Field 43</title>
+</head>
+<body data-effect="rubber-band-drag">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="field-nav">
+        <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
+        <p><i aria-hidden="true"></i> Rubber-band Drag</p>
+        <b aria-label="第四十三个实验，共四十四个">43 / 44</b>
+    </header>
+
+    <main class="physics-lab rubber-lab" id="experiment">
+        <section class="physics-copy" aria-labelledby="page-title">
+            <p class="physics-kicker">EXPERIMENT 43 · NONLINEAR SPRING</p>
+            <h1 id="page-title">PULL<br>PAST <em>EASY.</em></h1>
+            <p class="physics-description" id="rubber-instructions">舒适圈内，圆点和手指保持一比一移动；越过虚线以后，距离越远阻力越大。松手，它会带着弹性振荡回到中心。</p>
+            <dl class="physics-readout" aria-label="实时橡皮筋数据">
+                <div><dt>RAW PULL</dt><dd data-pull>0 px</dd></div>
+                <div><dt>RESISTANCE</dt><dd data-resistance>0%</dd></div>
+                <div><dt>COMFORT</dt><dd data-comfort>0 px</dd></div>
+            </dl>
+            <div class="physics-actions">
+                <button class="reset-button" type="button" data-reset>↺ Reset spring</button>
+                <p class="key-hint">拖住圆点向外拉 · 方向键拉伸 · Shift 加大拉力</p>
+            </div>
+        </section>
+
+        <section class="physics-stage rubber-stage" aria-label="非线性橡皮筋拖拽实验场">
+            <canvas class="physics-canvas" data-rubber-canvas tabindex="0" role="application" aria-describedby="rubber-instructions">你的浏览器需要支持 Canvas。</canvas>
+            <p class="stage-tag">SOFT ZONE → HEAVY ZONE</p>
+            <p class="stage-status" data-status aria-live="polite">READY / COMFORT ZONE</p>
+        </section>
+
+        <a class="field-next" href="../physics-reorder/"><small>NEXT 44</small><span>Physics Reorder</span> ↗</a>
+    </main>
+    <noscript><p class="no-script">启用 JavaScript 后即可体验递增阻力与橡皮筋回弹。</p></noscript>
+</body>
+</html>

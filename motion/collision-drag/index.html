@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Collision Drag 碰撞拖拽：拖动并投掷多个圆体，观察边界与圆体之间的弹性碰撞。">
+    <meta name="theme-color" content="#f0eddf">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../constraint-physics.css?v=20260831">
+    <script src="../constraint-physics.js?v=20260831" defer></script>
+    <title>Collision Drag · Motion Field 41</title>
+</head>
+<body data-effect="collision-drag">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="field-nav">
+        <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
+        <p><i aria-hidden="true"></i> Collision Drag</p>
+        <b aria-label="第四十一个实验，共四十四个">41 / 44</b>
+    </header>
+
+    <main class="physics-lab collision-lab" id="experiment">
+        <section class="physics-copy" aria-labelledby="page-title">
+            <p class="physics-kicker">EXPERIMENT 41 · ELASTIC IMPULSE</p>
+            <h1 id="page-title">THROW<br>THE <em>FIELD.</em></h1>
+            <p class="physics-description" id="collision-instructions">抓住任意圆体甩出去。速度会在相撞时沿法线交换，墙面也会把动量弹回场内；试着制造一场连锁碰撞。</p>
+            <dl class="physics-readout" aria-label="实时碰撞数据">
+                <div><dt>MAX SPEED</dt><dd data-speed>0.00 px/f</dd></div>
+                <div><dt>COLLISIONS</dt><dd data-collisions>000</dd></div>
+                <div><dt>SELECTED</dt><dd data-selected>BODY 01</dd></div>
+            </dl>
+            <div class="physics-actions">
+                <button class="reset-button" type="button" data-reset>↺ Reset bodies</button>
+                <p class="key-hint">拖拽 / 投掷 · 数字 1—6 选择 · 方向键施加冲量 · 空格刹停</p>
+            </div>
+        </section>
+
+        <section class="physics-stage collision-stage" aria-label="多圆体弹性碰撞实验场">
+            <canvas class="physics-canvas" data-collision-canvas tabindex="0" role="application" aria-describedby="collision-instructions">你的浏览器需要支持 Canvas。</canvas>
+            <p class="stage-tag">BOUNCE 0.82 · BODY 06</p>
+            <p class="stage-status" data-status aria-live="polite">READY / THROW A BODY</p>
+        </section>
+
+        <a class="field-next" href="../orbital-drag/"><small>NEXT 42</small><span>Orbital Drag</span> ↗</a>
+    </main>
+    <noscript><p class="no-script">启用 JavaScript 后即可拖动、投掷并碰撞圆体。</p></noscript>
+</body>
+</html>

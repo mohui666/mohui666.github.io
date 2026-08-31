@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Magnetic Docking 磁性停靠：多个停靠点按距离产生不同磁力，释放后锁入当前最强的磁场。">
+    <meta name="theme-color" content="#160f1c">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../drag-physics.css?v=20260831">
+    <script src="../drag-physics.js?v=20260831" defer></script>
+    <title>Magnetic Docking · Motion Field 39</title>
+</head>
+<body data-effect="magnetic-docking">
+    <a class="skip-link" href="#experiment">跳到磁性停靠实验</a>
+    <header class="physics-nav">
+        <a href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
+        <p><i></i> Magnetic Docking</p>
+        <b aria-label="第 39 个实验，共 44 个">39 / 44</b>
+    </header>
+
+    <main class="physics-lab" id="experiment">
+        <section class="physics-copy" aria-labelledby="page-title">
+            <p class="physics-kicker">EXPERIMENT 39 · DISTANCE FIELD</p>
+            <h1 id="page-title">FIND THE<br><em>STRONGEST.</em></h1>
+            <p class="physics-description" id="dock-description">五个停靠点随距离改变磁力。拖动时物体会受到附近磁场偏转；释放后选择当前最强点，并用弹簧锁入中心。</p>
+            <p class="physics-hint"><span aria-hidden="true">◎</span> 拖动探测 · 方向键移动 · Enter 锁定 · 可点停靠点</p>
+            <dl class="physics-readout" aria-label="磁场实时数据">
+                <div><dt>STATE</dt><dd data-readout="state" aria-live="polite">SEEKING</dd></div>
+                <div><dt>ACTIVE DOCK</dt><dd data-readout="dock">C</dd></div>
+                <div><dt>FIELD / DISTANCE</dt><dd><span data-readout="field">0%</span> · <span data-readout="distance">0 px</span></dd></div>
+            </dl>
+        </section>
+
+        <section class="physics-stage magnetic-stage" data-physics-stage aria-label="具有五个磁性停靠点的拖拽区域">
+            <p class="stage-label top">5 DOCKS / DISTANCE FORCE</p>
+            <p class="stage-label side">RELEASE TO LOCK</p>
+            <button class="dock" data-dock="A" type="button" style="left:18%;top:20%" aria-label="锁入停靠点 A"><b>A</b></button>
+            <button class="dock" data-dock="B" type="button" style="left:81%;top:22%" aria-label="锁入停靠点 B"><b>B</b></button>
+            <button class="dock" data-dock="C" type="button" style="left:50%;top:51%" aria-label="锁入停靠点 C"><b>C</b></button>
+            <button class="dock" data-dock="D" type="button" style="left:20%;top:79%" aria-label="锁入停靠点 D"><b>D</b></button>
+            <button class="dock" data-dock="E" type="button" style="left:82%;top:77%" aria-label="锁入停靠点 E"><b>E</b></button>
+            <button class="physics-object magnetic-puck" data-physics-object type="button" aria-describedby="dock-description">
+                <b>SEEK</b><small>FIELD / 39</small>
+            </button>
+        </section>
+    </main>
+
+    <button class="physics-reset" data-reset type="button">↺ RESET</button>
+    <a class="physics-next" href="../rope-constraint/"><small>NEXT 40</small><span>Rope Constraint</span><b aria-hidden="true">↗</b></a>
+    <noscript><p class="no-script">启用 JavaScript 后即可感受磁性停靠。</p></noscript>
+</body>
+</html>

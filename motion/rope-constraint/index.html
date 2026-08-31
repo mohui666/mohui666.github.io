@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Rope Constraint 绳索约束：用轻量 Verlet 约束链拖动末端，每一段始终保持固定长度。">
+    <meta name="theme-color" content="#070914">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../constraint-physics.css?v=20260831">
+    <script src="../constraint-physics.js?v=20260831" defer></script>
+    <title>Rope Constraint · Motion Field 40</title>
+</head>
+<body data-effect="rope-constraint">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="field-nav">
+        <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
+        <p><i aria-hidden="true"></i> Rope Constraint</p>
+        <b aria-label="第四十个实验，共四十四个">40 / 44</b>
+    </header>
+
+    <main class="physics-lab rope-lab" id="experiment">
+        <section class="physics-copy" aria-labelledby="page-title">
+            <p class="physics-kicker">EXPERIMENT 40 · VERLET CHAIN</p>
+            <h1 id="page-title">HOLD<br>THE <em>LINE.</em></h1>
+            <p class="physics-description" id="rope-instructions">拖住绳尾的发光节点。每次移动都会经过多轮长度约束：你能改变整条绳的姿态，却不能拉长任何一节。</p>
+            <dl class="physics-readout" aria-label="实时绳索数据">
+                <div><dt>TENSION</dt><dd data-tension>0%</dd></div>
+                <div><dt>TOTAL LENGTH</dt><dd data-rope-length>0 px</dd></div>
+                <div><dt>SEGMENTS</dt><dd data-segments>15</dd></div>
+            </dl>
+            <div class="physics-actions">
+                <button class="reset-button" type="button" data-reset>↺ Reset rope</button>
+                <p class="key-hint">触摸 / 指针拖绳尾 · 聚焦画布后用方向键拉动</p>
+            </div>
+        </section>
+
+        <section class="physics-stage rope-stage" aria-label="绳索约束实验场">
+            <canvas class="physics-canvas" data-rope-canvas tabindex="0" role="application" aria-describedby="rope-instructions">你的浏览器需要支持 Canvas。</canvas>
+            <p class="stage-tag">ANCHOR 01 · LENGTH LOCK</p>
+            <p class="stage-status" data-status aria-live="polite">READY / ENDPOINT FREE</p>
+        </section>
+
+        <a class="field-next" href="../collision-drag/"><small>NEXT 41</small><span>Collision Drag</span> ↗</a>
+    </main>
+    <noscript><p class="no-script">启用 JavaScript 后即可拖动受长度约束的绳索。</p></noscript>
+</body>
+</html>

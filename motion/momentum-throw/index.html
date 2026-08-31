@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Momentum Throw 动量投掷：连续采样拖拽速度，释放后按动量滑行，并绘制速度向量与运动轨迹。">
+    <meta name="theme-color" content="#090a0e">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../drag-physics.css?v=20260831">
+    <script src="../drag-physics.js?v=20260831" defer></script>
+    <title>Momentum Throw · Motion Field 37</title>
+</head>
+<body data-effect="momentum-throw">
+    <a class="skip-link" href="#experiment">跳到动量投掷实验</a>
+    <header class="physics-nav">
+        <a href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
+        <p><i></i> Momentum Throw</p>
+        <b aria-label="第 37 个实验，共 44 个">37 / 44</b>
+    </header>
+
+    <main class="physics-lab" id="experiment">
+        <section class="physics-copy" aria-labelledby="page-title">
+            <p class="physics-kicker">EXPERIMENT 37 · VELOCITY SAMPLE</p>
+            <h1 id="page-title">KEEP THE<br><em>MOMENTUM.</em></h1>
+            <p class="physics-description" id="momentum-description">拖动期间持续采样最近一段位移，释放时换算为速度。红色轨迹记录运动，黄色箭头显示当前速度方向与大小。</p>
+            <p class="physics-hint"><span aria-hidden="true">➜</span> 快速甩出 · 方向键投掷 · Home 清空</p>
+            <dl class="physics-readout" aria-label="动量实时数据">
+                <div><dt>STATE</dt><dd data-readout="state" aria-live="polite">RESTING</dd></div>
+                <div><dt>SPEED</dt><dd data-readout="speed">0 px/s</dd></div>
+                <div><dt>ANGLE / TRAIL</dt><dd><span data-readout="angle">—</span> · <span data-readout="samples">1</span></dd></div>
+            </dl>
+        </section>
+
+        <section class="physics-stage momentum-stage" data-physics-stage aria-label="动量投掷与轨迹区域">
+            <canvas class="trail-canvas" data-trail-canvas aria-hidden="true"></canvas>
+            <p class="stage-label top">SAMPLE WINDOW 150MS / VECTOR</p>
+            <p class="stage-label side">MOMENTUM DECAY</p>
+            <button class="physics-object momentum-puck" data-physics-object type="button" aria-describedby="momentum-description">
+                <b>THROW</b><small>VECTOR / 37</small>
+            </button>
+        </section>
+    </main>
+
+    <button class="physics-reset" data-reset type="button">↺ RESET</button>
+    <a class="physics-next" href="../inertial-snap-grid/"><small>NEXT 38</small><span>Inertial Snap Grid</span><b aria-hidden="true">↗</b></a>
+    <noscript><p class="no-script">启用 JavaScript 后即可采样并投掷。</p></noscript>
+</body>
+</html>

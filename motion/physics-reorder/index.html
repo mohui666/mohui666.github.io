@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Physics Reorder 物理重排：拖动列表项换槽，其他项目用弹簧让位，释放时保留惯性并落入最近位置。">
+    <meta name="theme-color" content="#e4e9ff">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../constraint-physics.css?v=20260831">
+    <script src="../constraint-physics.js?v=20260831" defer></script>
+    <title>Physics Reorder · Motion Field 44</title>
+</head>
+<body data-effect="physics-reorder">
+    <a class="skip-link" href="#experiment">跳到实验区</a>
+    <header class="field-nav">
+        <a href="../" aria-label="返回 Motion Field 总览">← <span>Motion Field</span></a>
+        <p><i aria-hidden="true"></i> Physics Reorder</p>
+        <b aria-label="第四十四个实验，共四十四个">44 / 44</b>
+    </header>
+
+    <main class="physics-lab reorder-lab" id="experiment">
+        <section class="physics-copy" aria-labelledby="page-title">
+            <p class="physics-kicker">EXPERIMENT 44 · SPRING SORT</p>
+            <h1 id="page-title">MAKE<br>ROOM <em>FAST.</em></h1>
+            <p class="physics-description" id="reorder-instructions">提起一项穿过列表，邻项会用弹簧主动让出空位。松手速度还会参与落槽预测，所以快甩和慢放会得到不同结果。</p>
+            <dl class="physics-readout" aria-label="实时重排数据">
+                <div><dt>ORDER</dt><dd data-order>01 · 02 · 03 · 04 · 05 · 06</dd></div>
+                <div><dt>ACTIVE SLOT</dt><dd data-slot-readout>— / 06</dd></div>
+                <div><dt>VELOCITY</dt><dd data-reorder-velocity>0.00 px/f</dd></div>
+            </dl>
+            <div class="physics-actions">
+                <button class="reset-button" type="button" data-reset>↺ Reset order</button>
+                <p class="key-hint">拖动任意项 · 键盘聚焦后按空格提起，↑ ↓ 移动，再按空格落槽</p>
+            </div>
+        </section>
+
+        <section class="physics-stage reorder-stage" aria-label="带弹簧让位的列表重排实验场">
+            <p class="stage-tag">SPRING 0.17 · DROP PREDICTION</p>
+            <div class="reorder-board" data-reorder-board role="group" aria-label="可重排项目" aria-describedby="reorder-instructions">
+                <button class="reorder-item" data-reorder-item type="button" style="--item-color:#315cff"><span class="drag-handle" aria-hidden="true">⠿</span><span class="item-slot" data-item-slot>01</span><span class="item-title">Constraint notes</span><span class="item-code">PINNED</span></button>
+                <button class="reorder-item" data-reorder-item type="button" style="--item-color:#ff4d4d"><span class="drag-handle" aria-hidden="true">⠿</span><span class="item-slot" data-item-slot>02</span><span class="item-title">Collision study</span><span class="item-code">ELASTIC</span></button>
+                <button class="reorder-item" data-reorder-item type="button" style="--item-color:#00a889"><span class="drag-handle" aria-hidden="true">⠿</span><span class="item-slot" data-item-slot>03</span><span class="item-title">Orbital sketch</span><span class="item-code">ANGULAR</span></button>
+                <button class="reorder-item" data-reorder-item type="button" style="--item-color:#f0a400"><span class="drag-handle" aria-hidden="true">⠿</span><span class="item-slot" data-item-slot>04</span><span class="item-title">Spring response</span><span class="item-code">DAMPED</span></button>
+                <button class="reorder-item" data-reorder-item type="button" style="--item-color:#9b4de3"><span class="drag-handle" aria-hidden="true">⠿</span><span class="item-slot" data-item-slot>05</span><span class="item-title">Momentum pass</span><span class="item-code">INERTIA</span></button>
+                <button class="reorder-item" data-reorder-item type="button" style="--item-color:#25304f"><span class="drag-handle" aria-hidden="true">⠿</span><span class="item-slot" data-item-slot>06</span><span class="item-title">Final field log</span><span class="item-code">LOOP</span></button>
+            </div>
+            <p class="stage-status" data-status aria-live="polite">READY / LIFT AN ITEM</p>
+        </section>
+
+        <a class="field-next" href="../fluid-distortion/"><small>LOOP / 01</small><span>Interactive Fluid Distortion</span> ↗</a>
+    </main>
+    <noscript><p class="no-script">启用 JavaScript 后即可拖动列表并观察弹簧让位。</p></noscript>
+</body>
+</html>
