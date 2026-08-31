@@ -166,7 +166,7 @@ a {
 
 .fluid-fallback {
     z-index: -4;
-    background-image: url("../images/BackGround/bg11.png");
+    background-image: url("assets/bg11-720.webp");
     background-position: center;
     background-size: cover;
     filter: saturate(0.78) brightness(0.76);
@@ -577,7 +577,7 @@ h1 span {
 }
 
 .expansion-plane::before {
-    background-image: url("../images/BackGround/bg0.png");
+    background-image: url("assets/bg0-720.webp");
     background-position: center;
     background-size: cover;
     filter: saturate(0.92) contrast(1.04);

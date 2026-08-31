@@ -253,7 +253,7 @@
         textureReady = true;
         stage.classList.add("fluid-ready");
     });
-    image.src = stage.getAttribute("data-fluid-image") || "../images/BackGround/bg11.png";
+    image.src = stage.getAttribute("data-fluid-image") || "../assets/bg11-720.webp";
 
     function render(time) {
         animationFrame = 0;
