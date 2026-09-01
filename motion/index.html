@@ -3,31 +3,32 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="mohui666 的 Motion Field：145 个独立网页动效实验，覆盖界面编排、HCI、计算几何、图像处理、空间渲染、数值物理、生成系统、数据运动与音频信号。">
+    <meta name="description" content="mohui666 的 Motion Field：44 个独立网页动效实验，涵盖指针、滚动、物理拖拽、SVG、Canvas 与 WebGL。">
     <meta name="theme-color" content="#070a14">
     <meta property="og:title" content="Motion Field · mohui666">
-    <meta property="og:description" content="145 个独立网页，145 个可以亲手操控的动效实验。">
+    <meta property="og:description" content="44 个独立网页，44 种可以亲手操控的动效。">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mohui666.github.io/motion/">
     <meta property="og:image" content="https://mohui666.github.io/motion/og.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Motion Field · mohui666">
-    <meta name="twitter:description" content="145 个独立网页，145 个可以亲手操控的动效实验。">
+    <meta name="twitter:description" content="44 个独立网页，44 种可以亲手操控的动效。">
     <meta name="twitter:image" content="https://mohui666.github.io/motion/og.png">
     <link rel="icon" href="../images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="catalog.css?v=20260901-flagship01" type="text/css">
-    <script src="study-manifest.js?v=20260901-field145" defer></script>
-    <script src="effects-data.js?v=20260901-field145" defer></script>
-    <script src="catalog.js?v=20260901-flagship02" defer></script>
-    <title>Motion Field · 145 个动效实验</title>
+    <link rel="stylesheet" href="catalog.css?v=20260831-covers" type="text/css">
+    <script src="catalog.js?v=20260831-covers" defer></script>
+    <title>Motion Field · 动效实验目录</title>
 </head>
 <body>
     <a class="skip-link" href="#experiments">跳到实验目录</a>
 
     <header class="site-nav">
-        <a class="home-link" href="../index.html" aria-label="返回 mohui666 主页"><span aria-hidden="true">←</span><span>mohui666</span></a>
+        <a class="home-link" href="../index.html" aria-label="返回 mohui666 主页">
+            <span aria-hidden="true">←</span>
+            <span>mohui666</span>
+        </a>
         <p class="nav-title"><i aria-hidden="true"></i> Motion Field</p>
-        <p class="nav-count" aria-hidden="true">145 experiments</p>
+        <p class="nav-count" aria-hidden="true">44 experiments</p>
     </header>
 
     <main>
@@ -35,27 +36,293 @@
             <div class="hero-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
             <p class="eyebrow"><span>INDEX</span> Interactive motion archive</p>
             <h1 id="page-title">一个特效，<br><em>一个世界。</em></h1>
-            <p class="hero-lead">145 个独立网页、16 个动效领域。已有 20 个旗舰实验重构为彼此不同的交互系统：从动态命中域、世界坐标拖选和四元数操控，到内容感知裁剪、逆运动学、人工进化与真实拨弦合成。每张封面仍运行对应详情页，目录里看到的就是实际效果。</p>
+            <p class="hero-lead">44 个独立网页，各自只研究一种运动。选择一个名词，然后用指针、触摸或滚动亲手把它启动。</p>
             <a class="scroll-link" href="#experiments">浏览实验 <span aria-hidden="true">↓</span></a>
         </section>
 
         <section class="catalog" id="experiments" aria-label="动效实验目录">
-            <div class="catalog-tools" data-tools>
-                <label class="catalog-search"><span>SEARCH / 145</span><input type="search" data-search placeholder="搜索名称、中文或机制，例如：fluid、Voronoi、HRTF" autocomplete="off"></label>
-                <label class="catalog-filter"><span>FAMILY</span><select data-filter><option value="all">全部领域 · ALL</option></select></label>
-                <p class="catalog-result" data-result aria-live="polite">145 / 145</p>
+            <div class="catalog-heading">
+                <p>CORE EXPERIMENTS</p>
+                <p>01—06 / 44</p>
             </div>
 
-            <div class="catalog-sections" data-catalog></div>
-            <p class="catalog-empty" data-empty hidden>没有匹配的动效。换一个机制名试试。</p>
+            <div class="experiment-grid">
+                <a class="experiment-card card-fluid" href="fluid-distortion/" data-card>
+                    <div class="card-visual" style="--poster: url('assets/bg11-720.webp')" aria-hidden="true">
+                        <i class="fluid-lens"></i>
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-number">01</span>
+                        <div><h2>Interactive Fluid Distortion</h2><p>交互式流体扭曲 · POINTER</p></div>
+                        <span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                </a>
+
+                <a class="experiment-card card-expand" href="fullscreen-expansion/" data-card>
+                    <div class="card-visual" style="--poster: url('assets/bg0-720.webp')" aria-hidden="true">
+                        <i class="expanding-frame"></i>
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-number">02</span>
+                        <div><h2>Full-screen Expansion</h2><p>全屏扩展转场 · SCROLL</p></div>
+                        <span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                </a>
+
+                <a class="experiment-card card-scenes" href="scroll-scenes/" data-card>
+                    <div class="card-visual scene-preview" aria-hidden="true">
+                        <i style="--poster: url('assets/bg8-720.webp')"></i>
+                        <i style="--poster: url('assets/bg9-720.webp')"></i>
+                        <i style="--poster: url('assets/bg0-720.webp')"></i>
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-number">03</span>
+                        <div><h2>Scroll-driven Scenes</h2><p>滚动驱动场景切换 · SCROLL</p></div>
+                        <span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                </a>
+
+                <a class="experiment-card card-type" href="kinetic-typography/" data-card>
+                    <div class="card-visual type-preview" aria-hidden="true">
+                        <span>KINETIC</span><span>TYPE IN</span><span>MOTION</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-number">04</span>
+                        <div><h2>Kinetic Typography</h2><p>动态排版 · SCROLL</p></div>
+                        <span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                </a>
+
+                <a class="experiment-card card-meta-balls" href="metaballs/" data-card>
+                    <div class="card-visual balls-preview" aria-hidden="true">
+                        <i></i><i></i><i></i><i></i>
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-number">05</span>
+                        <div><h2>Metaballs / Gooey Effect</h2><p>融球 / 黏性融合 · POINTER</p></div>
+                        <span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                </a>
+
+                <a class="experiment-card card-trail" href="image-motion-trail/" data-card>
+                    <div class="card-visual trail-preview" aria-hidden="true">
+                        <i style="--poster: url('assets/bg8-720.webp')"></i>
+                        <i style="--poster: url('assets/bg9-720.webp')"></i>
+                        <i style="--poster: url('assets/bg0-720.webp')"></i>
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-number">06</span>
+                        <div><h2>Image Motion Trail</h2><p>图像运动拖尾 · POINTER</p></div>
+                        <span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                </a>
+            </div>
+
+            <section class="lexicon-block" aria-labelledby="light-title">
+                <div class="lexicon-heading">
+                    <div>
+                        <p>POINTER · SVG · LAYOUT</p>
+                        <h2 id="light-title">轻量交互实验</h2>
+                    </div>
+                    <span>07—18</span>
+                </div>
+                <div class="experiment-grid section-grid">
+                    <a class="experiment-card" href="magnetic-cursor/" data-card>
+                        <div class="card-visual effect-preview preview-magnetic-cursor" style="--poster:url('assets/bg11-720.webp');--preview-accent:#7dd3fc" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">FIELD / ATTRACT</span></div>
+                        <div class="card-meta"><span class="card-number">07</span><div><h3>Magnetic Cursor</h3><p>磁吸光标 · POINTER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="fullscreen-crosshair/" data-card>
+                        <div class="card-visual effect-preview preview-crosshair" style="--poster:url('assets/bg8-720.webp');--preview-accent:#f0abfc" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">X 0640 / Y 0360</span></div>
+                        <div class="card-meta"><span class="card-number">08</span><div><h3>Fullscreen Crosshair Cursor</h3><p>全屏十字准星 · POINTER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="direction-aware-reveal/" data-card>
+                        <div class="card-visual effect-preview preview-direction-reveal" style="--poster:url('assets/bg9-720.webp');--preview-accent:#fb7185" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">EDGE / ENTRY</span></div>
+                        <div class="card-meta"><span class="card-number">09</span><div><h3>Direction-Aware Hover Reveal</h3><p>方向感知悬停揭示 · HOVER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="direction-aware-marquee/" data-card>
+                        <div class="card-visual effect-preview preview-marquee" style="--poster:url('assets/bg11-720.webp');--preview-accent:#facc15" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">DIRECTION / SPEED</span></div>
+                        <div class="card-meta"><span class="card-number">10</span><div><h3>Direction-Aware Marquee</h3><p>方向感知跑马灯 · HOVER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="tilt-hover/" data-card>
+                        <div class="card-visual effect-preview preview-tilt" style="--poster:url('assets/bg8-720.webp');--preview-accent:#a5b4fc" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">TILT / PARALLAX</span></div>
+                        <div class="card-meta"><span class="card-number">11</span><div><h3>Tilt Hover / Pointer Parallax</h3><p>倾斜悬停与指针视差 · POINTER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="svg-path-morphing/" data-card>
+                        <div class="card-visual effect-preview preview-path-morph" style="--poster:url('assets/bg0-720.webp');--preview-accent:#34d399" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">PATH / MORPH</span></div>
+                        <div class="card-meta"><span class="card-number">12</span><div><h3>SVG Path Morphing</h3><p>SVG 路径形变 · CONTROL</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="svg-stroke-drawing/" data-card>
+                        <div class="card-visual effect-preview preview-stroke" style="--poster:url('assets/bg11-720.webp');--preview-accent:#60a5fa" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">STROKE / DRAW</span></div>
+                        <div class="card-meta"><span class="card-number">13</span><div><h3>SVG Stroke Drawing</h3><p>SVG 路径描边 · POINTER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="svg-mask-reveal/" data-card>
+                        <div class="card-visual effect-preview preview-mask" style="--poster:url('assets/bg9-720.webp');--preview-accent:#f97316" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">MASK / REVEAL</span></div>
+                        <div class="card-meta"><span class="card-number">14</span><div><h3>SVG Mask Reveal</h3><p>SVG 蒙版揭示 · POINTER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="css-motion-path/" data-card>
+                        <div class="card-visual effect-preview preview-motion-path" style="--poster:url('assets/bg8-720.webp');--preview-accent:#22d3ee" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">OFFSET / PATH</span></div>
+                        <div class="card-meta"><span class="card-number">15</span><div><h3>CSS Motion Path</h3><p>CSS 运动路径 · CONTROL</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="split-text-reveal/" data-card>
+                        <div class="card-visual effect-preview preview-split-text" style="--poster:url('assets/bg11-720.webp');--preview-accent:#c084fc" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">SPLIT / REVEAL</span></div>
+                        <div class="card-meta"><span class="card-number">16</span><div><h3>Split-Text Mask Reveal</h3><p>分割文字蒙版揭示 · CLICK</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="flip-layout-transition/" data-card>
+                        <div class="card-visual effect-preview preview-flip" style="--poster:url('assets/bg0-720.webp');--preview-accent:#4ade80" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">FIRST / LAST</span></div>
+                        <div class="card-meta"><span class="card-number">17</span><div><h3>FLIP Layout Transition</h3><p>FLIP 布局转场 · CLICK</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="shared-element-transition/" data-card>
+                        <div class="card-visual effect-preview preview-shared" style="--poster:url('assets/bg9-720.webp');--preview-accent:#f472b6" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">SOURCE / TARGET</span></div>
+                        <div class="card-meta"><span class="card-number">18</span><div><h3>Shared Element Transition</h3><p>共享元素视图转场 · CLICK</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                </div>
+            </section>
+
+            <section class="lexicon-block" aria-labelledby="space-title">
+                <div class="lexicon-heading">
+                    <div>
+                        <p>SCROLL · DRAG · SPACE</p>
+                        <h2 id="space-title">空间运动实验</h2>
+                    </div>
+                    <span>19—26</span>
+                </div>
+                <div class="experiment-grid section-grid">
+                    <a class="experiment-card" href="infinite-canvas/" data-card>
+                        <div class="card-visual effect-preview preview-infinite" style="--poster:url('assets/bg8-720.webp');--preview-accent:#38bdf8" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">PAN / ∞ CANVAS</span></div>
+                        <div class="card-meta"><span class="card-number">19</span><div><h3>Infinite Pannable Canvas</h3><p>无限可平移画布 · DRAG</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="inertial-drag/" data-card>
+                        <div class="card-visual effect-preview preview-inertia" style="--poster:url('assets/bg11-720.webp');--preview-accent:#fbbf24" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">VELOCITY / DECAY</span></div>
+                        <div class="card-meta"><span class="card-number">20</span><div><h3>Inertial Drag</h3><p>惯性拖拽 · DRAG</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="drag-parallax-carousel/" data-card>
+                        <div class="card-visual effect-preview preview-carousel" style="--poster:url('assets/bg9-720.webp');--preview-accent:#fb7185" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">DRAG / PARALLAX</span></div>
+                        <div class="card-meta"><span class="card-number">21</span><div><h3>Drag-Driven Parallax Carousel</h3><p>拖拽驱动视差轮播 · DRAG</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="horizontal-scroll/" data-card>
+                        <div class="card-visual effect-preview preview-horizontal" style="--poster:url('assets/bg0-720.webp');--preview-accent:#a78bfa" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">VERTICAL → HORIZONTAL</span></div>
+                        <div class="card-meta"><span class="card-number">22</span><div><h3>Vertical-to-Horizontal Scroll</h3><p>纵向滚动驱动横向轨道 · SCROLL</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="parallax-depth-scroll/" data-card>
+                        <div class="card-visual effect-preview preview-parallax" style="--poster:url('assets/bg8-720.webp');--preview-accent:#2dd4bf" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">DEPTH / 03 PLANES</span></div>
+                        <div class="card-meta"><span class="card-number">23</span><div><h3>Parallax Depth Scroll</h3><p>视差深度滚动 · SCROLL</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="layered-zoom-scroll/" data-card>
+                        <div class="card-visual effect-preview preview-zoom" style="--poster:url('assets/bg9-720.webp');--preview-accent:#f97316" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">LAYER / ZOOM</span></div>
+                        <div class="card-meta"><span class="card-number">24</span><div><h3>Layered Zoom Scroll</h3><p>分层推镜滚动 · SCROLL</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="scroll-3d-stack/" data-card>
+                        <div class="card-visual effect-preview preview-stack" style="--poster:url('assets/bg11-720.webp');--preview-accent:#818cf8" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">STACK / Z-DEPTH</span></div>
+                        <div class="card-meta"><span class="card-number">25</span><div><h3>On-Scroll 3D Stack Motion</h3><p>滚动驱动三维卡片堆栈 · SCROLL</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="scroll-svg-morph/" data-card>
+                        <div class="card-visual effect-preview preview-scroll-morph" style="--poster:url('assets/bg0-720.webp');--preview-accent:#e879f9" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">SCROLL / MORPH</span></div>
+                        <div class="card-meta"><span class="card-number">26</span><div><h3>SVG Path Morphing on Scroll</h3><p>滚动驱动 SVG 路径形变 · SCROLL</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                </div>
+            </section>
+
+            <section class="lexicon-block" aria-labelledby="gpu-title">
+                <div class="lexicon-heading">
+                    <div>
+                        <p>CANVAS · WEBGL · GPU</p>
+                        <h2 id="gpu-title">计算视觉实验</h2>
+                    </div>
+                    <span>27—34</span>
+                </div>
+                <div class="experiment-grid section-grid">
+                    <a class="experiment-card" href="reaction-diffusion/" data-card>
+                        <div class="card-visual effect-preview preview-reaction" style="--poster:url('assets/bg11-720.webp');--preview-accent:#b9ff7d" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">FEED / KILL / DIFFUSE</span></div>
+                        <div class="card-meta"><span class="card-number">27</span><div><h3>Reaction–Diffusion</h3><p>反应–扩散模拟 · POINTER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="sdf-ray-marching/" data-card>
+                        <div class="card-visual effect-preview preview-raymarch" style="--poster:url('assets/bg8-720.webp');--preview-accent:#60a5fa" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">SDF / RAY STEPS</span></div>
+                        <div class="card-meta"><span class="card-number">28</span><div><h3>SDF Ray Marching</h3><p>距离场光线步进 · WEBGL</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="gpgpu-particles/" data-card>
+                        <div class="card-visual effect-preview preview-particles" style="--poster:url('assets/bg11-720.webp');--preview-accent:#c084fc" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">15K / PARTICLES</span></div>
+                        <div class="card-meta"><span class="card-number">29</span><div><h3>GPU Procedural Particle Field</h3><p>GPU 程序化粒子流场 · POINTER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="lens-refraction/" data-card>
+                        <div class="card-visual effect-preview preview-lens" style="--poster:url('assets/bg11-720.webp');--preview-accent:#67e8f9" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">REFRACT / FRESNEL</span></div>
+                        <div class="card-meta"><span class="card-number">30</span><div><h3>WebGL Lens Refraction</h3><p>WebGL 透镜折射 · POINTER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="rgb-shift/" data-card>
+                        <div class="card-visual effect-preview preview-rgb" style="--poster:url('assets/bg11-720.webp');--preview-accent:#fb7185" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">R / G / B OFFSET</span></div>
+                        <div class="card-meta"><span class="card-number">31</span><div><h3>RGB Shift / Chromatic Aberration</h3><p>RGB 通道偏移与色差 · POINTER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="afterimage-feedback/" data-card>
+                        <div class="card-visual effect-preview preview-afterimage" style="--poster:url('assets/bg11-720.webp');--preview-accent:#a5b4fc" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">FRAME / FEEDBACK</span></div>
+                        <div class="card-meta"><span class="card-number">32</span><div><h3>Afterimage Feedback</h3><p>残像反馈 · POINTER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="volumetric-god-rays/" data-card>
+                        <div class="card-visual effect-preview preview-rays" style="--poster:url('assets/bg9-720.webp');--preview-accent:#fde68a" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">LIGHT / SCATTER</span></div>
+                        <div class="card-meta"><span class="card-number">33</span><div><h3>Volumetric God Rays</h3><p>体积光束 · POINTER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="morph-targets/" data-card>
+                        <div class="card-visual effect-preview preview-targets" style="--poster:url('assets/bg8-720.webp');--preview-accent:#34d399" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">TARGET A → B → C</span></div>
+                        <div class="card-meta"><span class="card-number">34</span><div><h3>3D Morph Targets</h3><p>三维形态目标动画 · CLICK</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                </div>
+            </section>
+
+            <section class="lexicon-block" aria-labelledby="physics-title">
+                <div class="lexicon-heading">
+                    <div>
+                        <p>DRAG · INERTIA · CONSTRAINTS</p>
+                        <h2 id="physics-title">物理拖拽实验</h2>
+                    </div>
+                    <span>35—44</span>
+                </div>
+                <div class="experiment-grid section-grid">
+                    <a class="experiment-card" href="spring-drag/" data-card>
+                        <div class="card-visual effect-preview preview-spring" style="--poster:url('assets/bg11-720.webp');--preview-accent:#5eead4" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">SPRING / DAMPING</span></div>
+                        <div class="card-meta"><span class="card-number">35</span><div><h3>Spring Drag</h3><p>二阶弹簧跟随拖拽 · SPRING</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="elastic-bounds/" data-card>
+                        <div class="card-visual effect-preview preview-elastic" style="--poster:url('assets/bg9-720.webp');--preview-accent:#fb7185" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">BOUNDS / BOUNCE</span></div>
+                        <div class="card-meta"><span class="card-number">36</span><div><h3>Elastic Bounds</h3><p>弹性边界与撞墙回弹 · BOUNCE</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="momentum-throw/" data-card>
+                        <div class="card-visual effect-preview preview-momentum" style="--poster:url('assets/bg8-720.webp');--preview-accent:#fbbf24" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">MOMENTUM / THROW</span></div>
+                        <div class="card-meta"><span class="card-number">37</span><div><h3>Momentum Throw</h3><p>速度采样与动量投掷 · THROW</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="inertial-snap-grid/" data-card>
+                        <div class="card-visual effect-preview preview-snap" style="--poster:url('assets/bg11-720.webp');--preview-accent:#60a5fa" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">PREDICT / SNAP</span></div>
+                        <div class="card-meta"><span class="card-number">38</span><div><h3>Inertial Snap Grid</h3><p>惯性预测与网格吸附 · SNAP</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="magnetic-docking/" data-card>
+                        <div class="card-visual effect-preview preview-docking" style="--poster:url('assets/bg0-720.webp');--preview-accent:#c084fc" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">SEEK / DOCK / LOCK</span></div>
+                        <div class="card-meta"><span class="card-number">39</span><div><h3>Magnetic Docking</h3><p>距离磁力与停靠锁定 · MAGNET</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="rope-constraint/" data-card>
+                        <div class="card-visual effect-preview preview-rope" style="--poster:url('assets/bg9-720.webp');--preview-accent:#f97316" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">VERLET / CONSTRAINT</span></div>
+                        <div class="card-meta"><span class="card-number">40</span><div><h3>Rope Constraint Drag</h3><p>绳段长度约束拖拽 · VERLET</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="collision-drag/" data-card>
+                        <div class="card-visual effect-preview preview-collision" style="--poster:url('assets/bg8-720.webp');--preview-accent:#34d399" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">MULTI-BODY / COLLIDE</span></div>
+                        <div class="card-meta"><span class="card-number">41</span><div><h3>Multi-body Collision Drag</h3><p>多物体碰撞与投掷 · COLLIDE</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="orbital-drag/" data-card>
+                        <div class="card-visual effect-preview preview-orbit" style="--poster:url('assets/bg11-720.webp');--preview-accent:#818cf8" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">ORBIT / MOMENTUM</span></div>
+                        <div class="card-meta"><span class="card-number">42</span><div><h3>Orbital Constraint Drag</h3><p>轨道约束与角动量 · ORBIT</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="rubber-band-drag/" data-card>
+                        <div class="card-visual effect-preview preview-rubber" style="--poster:url('assets/bg9-720.webp');--preview-accent:#e879f9" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">PULL / RESIST / RETURN</span></div>
+                        <div class="card-meta"><span class="card-number">43</span><div><h3>Rubber-band Drag</h3><p>渐进阻力与橡皮筋回弹 · RESIST</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                    <a class="experiment-card" href="physics-reorder/" data-card>
+                        <div class="card-visual effect-preview preview-reorder" style="--poster:url('assets/bg0-720.webp');--preview-accent:#a3e635" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span class="preview-label">LIFT / SHIFT / SETTLE</span></div>
+                        <div class="card-meta"><span class="card-number">44</span><div><h3>Physics Reorder</h3><p>弹簧让位式拖拽重排 · REORDER</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    </a>
+                </div>
+            </section>
         </section>
     </main>
 
     <footer class="catalog-footer">
         <p>MOHUI666 · MOTION FIELD</p>
-        <p>145 EFFECTS / 145 PAGES · LIVE PAGE PREVIEWS</p>
+        <p>44 EFFECTS / 44 PAGES</p>
     </footer>
-
-    <noscript><p class="catalog-noscript">启用 JavaScript 后即可载入 145 个独立实验及其真实动态封面。</p></noscript>
 </body>
 </html>

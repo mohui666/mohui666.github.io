@@ -312,8 +312,8 @@
             if (edgeMeter) edgeMeter.style.setProperty("--impact", impact.toFixed(3));
         };
 
-        const collide = (axis, side, normalForce, penetration) => {
-            const force = clamp(Math.abs(normalForce) / 7200 + Math.abs(penetration) / 84, 0.04, 1);
+        const collide = (axis, side, incoming) => {
+            const force = clamp(Math.abs(incoming) / 1050, 0.08, 1);
             impact = Math.max(impact, force);
             if (axis === "x") {
                 scaleX = 1 - force * 0.28;
@@ -326,7 +326,7 @@
                 edgeMeter.style.setProperty("--impact-y", side < 0 ? "0%" : "100%");
                 edgeMeter.style.setProperty("--impact-x", `${clamp(50 + x / Math.max(1, stage.clientWidth) * 100, 8, 92)}%`);
             }
-            setState("COMPLIANT CONTACT");
+            setState("IMPACT");
         };
 
         const runner = createRunner((dt) => {
@@ -337,24 +337,27 @@
 
             if (pointerId === null && active) {
                 const limit = boundsFor(20);
-                const stiffness = 92;
-                const contactDamping = 13;
-                vx *= Math.exp(-0.48 * dt);
-                vy *= Math.exp(-0.48 * dt);
+                const edgeX = Math.max(0, 64 - (limit.x - Math.abs(x))) / 64;
+                const edgeY = Math.max(0, 64 - (limit.y - Math.abs(y))) / 64;
+                const drag = 1.1 + Math.max(edgeX, edgeY) * 2.7;
+                vx *= Math.exp(-drag * dt);
+                vy *= Math.exp(-drag * dt);
                 x += vx * dt;
                 y += vy * dt;
 
-                const penetrationX = x < -limit.x ? x + limit.x : x > limit.x ? x - limit.x : 0;
-                const penetrationY = y < -limit.y ? y + limit.y : y > limit.y ? y - limit.y : 0;
-                if (penetrationX) {
-                    const normalForceX = -stiffness * penetrationX - contactDamping * vx;
-                    vx += normalForceX * dt;
-                    collide("x", penetrationX < 0 ? -1 : 1, normalForceX, penetrationX);
+                if (x < -limit.x || x > limit.x) {
+                    const side = x < 0 ? -1 : 1;
+                    const incoming = vx;
+                    x = side * limit.x;
+                    vx = -vx * 0.74;
+                    collide("x", side, incoming);
                 }
-                if (penetrationY) {
-                    const normalForceY = -stiffness * penetrationY - contactDamping * vy;
-                    vy += normalForceY * dt;
-                    collide("y", penetrationY < 0 ? -1 : 1, normalForceY, penetrationY);
+                if (y < -limit.y || y > limit.y) {
+                    const side = y < 0 ? -1 : 1;
+                    const incoming = vy;
+                    y = side * limit.y;
+                    vy = -vy * 0.74;
+                    collide("y", side, incoming);
                 }
             }
 
@@ -480,8 +483,6 @@
         let y = 0;
         let vx = 0;
         let vy = 0;
-        let angle = 0;
-        let angularVelocity = 0;
         let pointerId = null;
         let grabX = 0;
         let grabY = 0;
@@ -547,52 +548,34 @@
 
         const render = () => {
             const magnitude = speed(vx, vy);
-            putObject(x, y, angle * 180 / Math.PI);
+            putObject(x, y, magnitude > 1 ? clamp(Math.atan2(vy, vx) * 180 / Math.PI, -180, 180) : 0);
             readout("speed", `${Math.round(magnitude)} px/s`);
-            readout("angle", `${Math.round((angle * 180 / Math.PI + 360) % 360)}°`);
+            readout("angle", magnitude > 1 ? `${Math.round((Math.atan2(vy, vx) * 180 / Math.PI + 360) % 360)}°` : "—");
             readout("samples", String(trail.length));
             drawTrail();
         };
 
         const runner = createRunner((dt) => {
             if (pointerId === null && active) {
-                const gravity = 1180;
-                vx *= Math.exp(-0.12 * dt);
-                vy += gravity * dt;
-                angularVelocity *= Math.exp(-0.18 * dt);
+                vx *= Math.exp(-1.55 * dt);
+                vy *= Math.exp(-1.55 * dt);
                 x += vx * dt;
                 y += vy * dt;
-                angle += angularVelocity * dt;
                 const limit = boundsFor(18);
                 if (x < -limit.x || x > limit.x) {
                     x = clamp(x, -limit.x, limit.x);
-                    vx *= -0.58;
-                    angularVelocity += vy * 0.0018;
+                    vx *= -0.42;
                 }
-                if (y > limit.y) {
-                    y = limit.y;
-                    if (vy > 70) {
-                        vy *= -0.46;
-                        vx *= 0.78;
-                        angularVelocity += vx * 0.0035;
-                        setState("GROUND IMPACT");
-                    } else {
-                        vy = 0;
-                        vx *= Math.exp(-5.4 * dt);
-                        angularVelocity *= Math.exp(-7.2 * dt);
-                    }
-                } else if (y < -limit.y) {
-                    y = -limit.y;
-                    vy = Math.abs(vy) * 0.38;
+                if (y < -limit.y || y > limit.y) {
+                    y = clamp(y, -limit.y, limit.y);
+                    vy *= -0.42;
                 }
                 addTrail();
             }
             render();
-            const limit = boundsFor(18);
-            if (pointerId === null && Math.abs(limit.y - y) < 0.5 && speed(vx, vy) < 5 && Math.abs(angularVelocity) < 0.04) {
+            if (pointerId === null && speed(vx, vy) < 5) {
                 vx = 0;
                 vy = 0;
-                angularVelocity = 0;
                 active = false;
                 setState("RESTING");
                 render();
@@ -607,7 +590,6 @@
             grabY = y - point.y;
             vx = 0;
             vy = 0;
-            angularVelocity = 0;
             active = true;
             trail.length = 0;
             samples.clear(x, y);
@@ -627,7 +609,6 @@
             const sampled = samples.velocity();
             vx = sampled.x;
             vy = sampled.y;
-            angularVelocity = clamp(sampled.x * 0.006 - sampled.y * 0.002, -12, 12);
             addTrail();
             render();
         });
@@ -639,7 +620,6 @@
             const sampled = samples.velocity();
             vx = reducedMotion ? 0 : clamp(sampled.x, -2200, 2200);
             vy = reducedMotion ? 0 : clamp(sampled.y, -2200, 2200);
-            angularVelocity = reducedMotion ? 0 : clamp(sampled.x * 0.006 - sampled.y * 0.002, -13, 13);
             active = !reducedMotion && speed(vx, vy) > 5;
             setState(active ? "THROWN" : "PLACED");
             runner.wake();
@@ -652,7 +632,6 @@
             pointerId = null;
             vx = 0;
             vy = 0;
-            angularVelocity = 0;
             active = false;
             setState("PLACED");
             render();
@@ -673,7 +652,6 @@
             } else {
                 vx += vector[0];
                 vy += vector[1];
-                angularVelocity += vector[0] * 0.004;
                 active = true;
                 trail.length = 0;
                 addTrail();
@@ -689,8 +667,6 @@
             y = 0;
             vx = 0;
             vy = 0;
-            angle = 0;
-            angularVelocity = 0;
             pointerId = null;
             active = false;
             trail.length = 0;

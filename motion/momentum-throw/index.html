@@ -3,27 +3,27 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Ballistic Throw 弹道投掷：释放速度进入重力积分，物体同时保存角速度、姿态惯量并发生地面碰撞。">
+    <meta name="description" content="Momentum Throw 动量投掷：连续采样拖拽速度，释放后按动量滑行，并绘制速度向量与运动轨迹。">
     <meta name="theme-color" content="#090a0e">
     <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
     <link rel="stylesheet" href="../drag-physics.css?v=20260831-ui">
     <script src="../drag-physics.js?v=20260831-ui" defer></script>
-    <title>Ballistic Throw · Motion Field 37</title>
+    <title>Momentum Throw · Motion Field 37</title>
     <link rel="stylesheet" href="../ui-shell.css?v=20260831-ui">
 </head>
 <body data-effect="momentum-throw">
     <a class="skip-link" href="#experiment">跳到动量投掷实验</a>
     <header class="physics-nav">
         <a href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
-        <p><i></i> Ballistic Throw</p>
-        <b aria-label="第 37 个实验，共 145 个">37 / 145</b>
+        <p><i></i> Momentum Throw</p>
+        <b aria-label="第 37 个实验，共 44 个">37 / 44</b>
     </header>
 
     <main class="physics-lab" id="experiment">
         <section class="physics-copy" aria-labelledby="page-title">
-            <p class="physics-kicker">EXPERIMENT 37 · BALLISTIC DYNAMICS</p>
-            <h1 id="page-title">THROW<br><em>WITH GRAVITY.</em></h1>
-            <p class="physics-description" id="momentum-description">释放时把线速度与角速度写入刚体状态；重力生成抛物线，地面冲量、摩擦与旋转惯量共同决定每次落地。</p>
+            <p class="physics-kicker">EXPERIMENT 37 · VELOCITY SAMPLE</p>
+            <h1 id="page-title">KEEP THE<br><em>MOMENTUM.</em></h1>
+            <p class="physics-description" id="momentum-description">拖动期间持续采样最近一段位移，释放时换算为速度。红色轨迹记录运动，黄色箭头显示当前速度方向与大小。</p>
             <p class="physics-hint"><span aria-hidden="true">➜</span> 快速甩出 · 方向键投掷 · Home 清空</p>
             <dl class="physics-readout" aria-label="动量实时数据">
                 <div><dt>STATE</dt><dd data-readout="state" aria-live="polite">RESTING</dd></div>
@@ -35,16 +35,16 @@
         <section class="physics-stage momentum-stage" data-physics-stage aria-label="动量投掷与轨迹区域">
             <p class="mobile-touch-hint">按住、拖动并甩出</p>
             <canvas class="trail-canvas" data-trail-canvas aria-hidden="true"></canvas>
-            <p class="stage-label top">GRAVITY 1180 / ANGULAR INERTIA</p>
-            <p class="stage-label side">BALLISTIC TRAJECTORY</p>
+            <p class="stage-label top">SAMPLE WINDOW 150MS / VECTOR</p>
+            <p class="stage-label side">MOMENTUM DECAY</p>
             <div class="physics-object momentum-puck" data-physics-object tabindex="0" role="group" aria-label="动量投掷物体" aria-describedby="momentum-description">
-                <b>THROW</b><small>RIGID BODY / 37</small>
+                <b>THROW</b><small>VECTOR / 37</small>
             </div>
         </section>
     </main>
 
     <button class="physics-reset" data-reset type="button">↺ RESET</button>
-    <a class="physics-next" href="../inertial-snap-grid/" aria-label="前往下一个实验：Inertial Snap Grid"><small>NEXT · 38 / 145</small><span>Inertial Snap Grid</span><b aria-hidden="true">↗</b></a>
+    <a class="physics-next" href="../inertial-snap-grid/" aria-label="前往下一个实验：Inertial Snap Grid"><small>NEXT · 38 / 44</small><span>Inertial Snap Grid</span><b aria-hidden="true">↗</b></a>
     <noscript><p class="no-script">启用 JavaScript 后即可采样并投掷。</p></noscript>
 </body>
 </html>
