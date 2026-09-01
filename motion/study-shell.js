@@ -21,6 +21,8 @@
     var visible = !document.hidden;
     var width = 1, height = 1, dpr = 1, now = performance.now(), last = now, lastPointerTime = now, frame = 0, accumulator = 0;
     var pointer = { x: 0.5, y: 0.5, px: 0.5, py: 0.5, vx: 0, vy: 0, down: false, inside: false, pressure: 0, type: "mouse" };
+    var activePointerIds = new Set();
+    var previewPointerId = -1;
     var audioContext = null;
     var lastState = "", lastPrompt = "", lastAction = "", lastMeter = -1;
 
@@ -93,10 +95,39 @@
         pointer.type = event && event.pointerType || pointer.type;
     }
 
+    function resetPointerMotion() {
+        pointer.down = activePointerIds.size > 0;
+        pointer.pressure = pointer.down ? pointer.pressure : 0;
+        if (!pointer.down) { pointer.vx = 0; pointer.vy = 0; }
+    }
+
+    function cancelPointer(event) {
+        if (!activePointerIds.has(event.pointerId)) return;
+        activePointerIds.delete(event.pointerId);
+        resetPointerMotion();
+        if (effect.pointerCancel) effect.pointerCancel(pointer, event);
+        else if (effect.pointerUp) effect.pointerUp(pointer, event);
+        wake();
+    }
+
+    function cancelAll(reason) {
+        var ids = Array.from(activePointerIds);
+        activePointerIds.clear();
+        resetPointerMotion();
+        ids.forEach(function (pointerId) {
+            var event = { pointerId: pointerId, type: reason, pressure: 0, pointerType: pointer.type };
+            if (effect.pointerCancel) effect.pointerCancel(pointer, event);
+            else if (effect.pointerUp) effect.pointerUp(pointer, event);
+        });
+        if (effect.cancelAll) effect.cancelAll(reason);
+        wake();
+    }
+
     stage.addEventListener("pointerenter", function () { pointer.inside = true; wake(); });
     stage.addEventListener("pointerleave", function () { pointer.inside = false; if (!pointer.down && effect.pointerLeave) effect.pointerLeave(pointer); wake(); });
     stage.addEventListener("pointerdown", function (event) {
         updatePointer(local(event), event);
+        activePointerIds.add(event.pointerId);
         pointer.down = true; pointer.inside = true;
         stage.focus({ preventScroll: true });
         stage.setPointerCapture(event.pointerId);
@@ -110,21 +141,19 @@
     }, { passive: true });
     stage.addEventListener("pointerup", function (event) {
         updatePointer(local(event), event);
-        pointer.down = false;
+        activePointerIds.delete(event.pointerId);
+        resetPointerMotion();
         if (effect.pointerUp) effect.pointerUp(pointer, event);
         wake();
     });
-    stage.addEventListener("pointercancel", function (event) {
-        pointer.down = false;
-        if (effect.pointerCancel) effect.pointerCancel(pointer, event);
-        else if (effect.pointerUp) effect.pointerUp(pointer, event);
-        wake();
-    });
+    stage.addEventListener("pointercancel", cancelPointer);
+    stage.addEventListener("lostpointercapture", cancelPointer);
     stage.addEventListener("wheel", function (event) {
         if (effect.wheel) { effect.wheel(event.deltaX, event.deltaY, event); event.preventDefault(); wake(); }
     }, { passive: false });
     stage.addEventListener("keydown", function (event) {
         if (effect.keyDown) effect.keyDown(event);
+        if (event.key === "Escape" && activePointerIds.size) cancelAll("escape");
         if (!event.defaultPrevented && (event.key === "Enter" || event.key === " ") && event.target === stage) { action.click(); event.preventDefault(); }
         wake();
     });
@@ -134,15 +163,28 @@
         if (!preview || reducedMotion) return;
         var cycle = time % 8;
         var pos = { x: 0.5 + Math.cos(time * 0.71 + study.id) * 0.28, y: 0.5 + Math.sin(time * 0.93 + study.id * 0.17) * 0.28 };
-        updatePointer(pos, null);
+        var previewEvent = { pointerId: previewPointerId, pointerType: "mouse", pressure: pointer.down ? 0.5 : 0, type: "pointermove" };
+        updatePointer(pos, previewEvent);
         pointer.inside = true;
         if (effect.demo) {
             effect.demo(time, cycle);
             return;
         }
-        if (cycle > 1 && cycle < 3.8 && !pointer.down) { pointer.down = true; if (effect.pointerDown) effect.pointerDown(pointer, null); }
-        if (pointer.down && effect.pointerMove) effect.pointerMove(pointer, null);
-        if (cycle >= 3.8 && pointer.down) { pointer.down = false; if (effect.pointerUp) effect.pointerUp(pointer, null); }
+        if (cycle > 1 && cycle < 3.8 && !pointer.down) {
+            activePointerIds.add(previewPointerId);
+            pointer.down = true;
+            previewEvent.type = "pointerdown";
+            previewEvent.pressure = 0.5;
+            if (effect.pointerDown) effect.pointerDown(pointer, previewEvent);
+        }
+        if (pointer.down && effect.pointerMove) { previewEvent.type = "pointermove"; previewEvent.pressure = 0.5; effect.pointerMove(pointer, previewEvent); }
+        if (cycle >= 3.8 && pointer.down) {
+            activePointerIds.delete(previewPointerId);
+            resetPointerMotion();
+            previewEvent.type = "pointerup";
+            previewEvent.pressure = 0;
+            if (effect.pointerUp) effect.pointerUp(pointer, previewEvent);
+        }
         if (cycle > 6.9 && cycle < 7.0 && effect.action) effect.action();
     }
 
@@ -172,11 +214,20 @@
     addEventListener("message", function (event) {
         if (!event.data || event.data.type !== "motion-preview-active") return;
         active = Boolean(event.data.active);
-        if (!active && frame) { cancelAnimationFrame(frame); frame = 0; }
+        if (!active) {
+            cancelAll("preview-hidden");
+            if (frame) { cancelAnimationFrame(frame); frame = 0; }
+        }
         wake();
     });
-    document.addEventListener("visibilitychange", function () { visible = !document.hidden; wake(); });
+    addEventListener("blur", function () { cancelAll("window-blur"); });
+    document.addEventListener("visibilitychange", function () {
+        visible = !document.hidden;
+        if (!visible) cancelAll("visibility-hidden");
+        wake();
+    });
     addEventListener("pagehide", function (event) {
+        cancelAll("pagehide");
         if (event.persisted) { active = false; if (frame) cancelAnimationFrame(frame); frame = 0; return; }
         if (effect.destroy) effect.destroy();
         if (audioContext) audioContext.close();

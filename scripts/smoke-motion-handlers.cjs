@@ -19,6 +19,53 @@ class FakeImageData {
     }
 }
 
+class FakeImage {
+    constructor() {
+        this.onload = null;
+        this.naturalWidth = 1280;
+        this.naturalHeight = 720;
+        this.complete = true;
+        this._src = "";
+    }
+    set src(value) {
+        this._src = value;
+        if (this.onload) this.onload();
+    }
+    get src() { return this._src; }
+}
+
+class FakeAudioContext {
+    constructor() {
+        this.sampleRate = 8000;
+        this.currentTime = 0;
+        this.state = "running";
+        this.destination = {};
+    }
+    resume() { this.state = "running"; return Promise.resolve(); }
+    createBuffer(channels, length) {
+        const data = Array.from({ length: channels }, () => new Float32Array(length));
+        return { getChannelData(channel) { return data[channel]; } };
+    }
+    createBufferSource() {
+        return {
+            buffer: null,
+            onended: null,
+            connect(node) { return node; },
+            start() {},
+            stop() { if (this.onended) this.onended(); }
+        };
+    }
+    createGain() {
+        const gain = {
+            value: 1,
+            cancelScheduledValues() {},
+            setValueAtTime(value) { this.value = value; },
+            linearRampToValueAtTime(value) { this.value = value; }
+        };
+        return { gain, connect(node) { return node; } };
+    }
+}
+
 function fakeNode() {
     return {
         style: {}, className: "", textContent: "", innerHTML: "",
@@ -76,6 +123,7 @@ const context = vm.createContext({
         createElementNS() { return fakeNode(); }
     },
     ImageData: FakeImageData,
+    Image: FakeImage,
     console,
     Math,
     performance: { now: () => 0 },
@@ -95,18 +143,39 @@ for (const bundle of ["choreography", "hci", "temporal", "geometry", "image", "s
 }
 load("flagship-ui.js");
 load("flagship-simulations.js");
+load("flagship-interactions-02.js");
+load("flagship-labs-02.js");
 
 const audioActions = new Set(["granular-synthesis", "karplus-strong", "hrtf-spatialization", "shepard-risset-glissando"]);
+const flagshipSlugs = new Set([
+    "predictive-back", "semantic-zoom", "marking-menu", "voronoi-tessellation", "svg-lighting-filter",
+    "recursive-portal-rendering", "stable-fluids", "xpbd-cloth", "wave-function-collapse", "stft-spectrogram",
+    "explode-transition", "bubble-cursor", "edge-scrolling", "marching-squares", "seam-carving",
+    "arcball-manipulation", "fabrik-inverse-kinematics", "interactive-evolution", "brushing-and-linking", "karplus-strong"
+]);
+const secondBatchSlugs = new Set([
+    "explode-transition", "bubble-cursor", "edge-scrolling", "marching-squares", "seam-carving",
+    "arcball-manipulation", "fabrik-inverse-kinematics", "interactive-evolution", "brushing-and-linking", "karplus-strong"
+]);
 
-for (const mobile of [false, true]) for (const study of studies) {
+function keyEvent(key) {
+    return {
+        key,
+        defaultPrevented: false,
+        preventDefault() { this.defaultPrevented = true; }
+    };
+}
+
+for (const mobile of [false, true]) for (const study of studies) for (const preview of secondBatchSlugs.has(study.slug) ? [true, false] : [true]) {
     const canvas = fakeCanvas();
+    const fakeAudio = !preview && study.slug === "karplus-strong" ? new FakeAudioContext() : null;
     const env = {
         API: windowObject.MotionStudy,
         study,
         canvas,
         dom: fakeNode(),
         pointer: { x: 0.6, y: 0.5, px: 0.59, py: 0.49, vx: 0.1, vy: 0.1, down: false, inside: true, pressure: 0.5, type: "mouse" },
-        preview: true,
+        preview,
         mobile,
         reducedMotion: false,
         width: 960,
@@ -117,12 +186,15 @@ for (const mobile of [false, true]) for (const study of studies) {
         accent: "#7dd3fc",
         accent2: "#f0abfc",
         setState() {}, setAction() {}, setMeter() {}, requestFrame() {},
-        audio() { throw new Error(`audio started during preview smoke: ${study.slug}`); }
+        audio() {
+            if (fakeAudio) return fakeAudio;
+            throw new Error(`unexpected audio during handler smoke: ${study.slug}`);
+        }
     };
     const factory = windowObject.MotionStudy.registry[study.slug];
     const effect = factory(env);
     if (effect.resize) effect.resize(env.width, env.height, env.dpr);
-    if (effect.demo) effect.demo(1.25, 1.25);
+    if (preview && effect.demo) effect.demo(1.25, 1.25);
     if (effect.pointerDown) { env.pointer.down = true; effect.pointerDown(env.pointer, null); }
     env.pointer.x = 0.72; env.pointer.y = 0.63; env.pointer.vx = 1.2; env.pointer.vy = 0.45;
     if (effect.pointerMove) effect.pointerMove(env.pointer, null);
@@ -136,8 +208,23 @@ for (const mobile of [false, true]) for (const study of studies) {
         effect.pointerCancel(env.pointer, null);
     }
     if (effect.wheel) effect.wheel(12, 72, null);
-    if (effect.keyDown) effect.keyDown({ key: "ArrowRight" });
+    if (effect.keyDown) {
+        effect.keyDown(keyEvent("ArrowRight"));
+        if (flagshipSlugs.has(study.slug)) {
+            effect.keyDown(keyEvent(" "));
+            effect.keyDown(keyEvent("Enter"));
+            effect.keyDown(keyEvent("Escape"));
+        }
+    }
     if (effect.action && !audioActions.has(study.slug)) effect.action();
+    if (study.slug === "marching-squares") {
+        const touch = (pointerId) => ({ pointerId, pointerType: "touch", pressure: 0.5 });
+        for (const pointerId of [11, 12, 13]) effect.pointerDown(env.pointer, touch(pointerId));
+        effect.pointerUp(env.pointer, touch(12));
+        effect.pointerMove(env.pointer, touch(11));
+        effect.pointerCancel(env.pointer, touch(11));
+        effect.pointerCancel(env.pointer, touch(13));
+    }
     for (let frame = 0; frame < 4; frame += 1) {
         env.time += env.dt;
         if (effect.update) effect.update(env.dt, env.time);
@@ -146,4 +233,4 @@ for (const mobile of [false, true]) for (const study of studies) {
     if (effect.destroy) effect.destroy();
 }
 
-console.log(`Exercised desktop and mobile interaction paths for all ${studies.length} exact study handlers without a runtime exception.`);
+console.log(`Exercised desktop/mobile preview paths for all ${studies.length} handlers plus live paths for 10 flagship studies without a runtime exception.`);

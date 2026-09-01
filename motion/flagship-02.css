@@ -1,0 +1,229 @@
+/* Batch 02 keeps the shared flagship shell while giving every lab its own visual instrument. */
+
+body[data-study="explode-transition"] {
+    --accent: #ffba52;
+    --accent-2: #72f1b8;
+    --flagship-panel: rgba(10, 14, 20, .78);
+    background: #080b11;
+}
+
+body[data-study="explode-transition"] .study-copy h1 {
+    max-width: 520px;
+    font-size: clamp(2.8rem, 5vw, 5.8rem);
+}
+
+body[data-study="explode-transition"] .flagship-hud {
+    border-radius: 8px;
+    background: rgba(8, 11, 17, .72);
+}
+
+body[data-study="bubble-cursor"] {
+    --ink: #16231d;
+    --muted: rgba(22, 35, 29, .62);
+    --line: rgba(22, 35, 29, .18);
+    --accent: #0d5b43;
+    --accent-2: #ff5a3d;
+    --flagship-line: rgba(22, 35, 29, .18);
+    --flagship-panel: rgba(244, 243, 235, .82);
+    color: var(--ink);
+    background: #f0efe8;
+}
+
+body[data-study="bubble-cursor"] .study-copy h1 {
+    font-size: clamp(3.2rem, 5.8vw, 6.8rem);
+    letter-spacing: -.085em;
+}
+
+body[data-study="edge-scrolling"] {
+    --accent: #79b7ff;
+    --accent-2: #f4ca72;
+    --flagship-panel: rgba(5, 12, 23, .78);
+    background: #07101c;
+}
+
+body[data-study="edge-scrolling"] .study-copy h1 {
+    font-family: "Cascadia Code", "SFMono-Regular", monospace;
+    font-size: clamp(2.65rem, 4.8vw, 5.5rem);
+    letter-spacing: -.075em;
+}
+
+body[data-study="marching-squares"] {
+    --accent: #74e6ff;
+    --accent-2: #ffd56e;
+    --flagship-panel: rgba(4, 8, 19, .76);
+    background: #060a17;
+}
+
+body[data-study="marching-squares"] .study-copy h1 {
+    font-size: clamp(2.7rem, 4.8vw, 5.6rem);
+}
+
+body[data-study="marching-squares"] .flagship-hud {
+    border-color: rgba(116, 230, 255, .24);
+    background: rgba(4, 9, 22, .72);
+}
+
+body[data-study="seam-carving"] {
+    --accent: #ffdf5d;
+    --accent-2: #5affaa;
+    --flagship-panel: rgba(7, 10, 14, .8);
+    background: #090d12;
+}
+
+body[data-study="seam-carving"] .study-copy h1 {
+    font-size: clamp(3rem, 5.5vw, 6.3rem);
+}
+
+body[data-study="seam-carving"] .study-eyebrow span {
+    color: #ffdf5d;
+}
+
+body[data-study="arcball-manipulation"] {
+    --ink: #191f2a;
+    --muted: rgba(25, 31, 42, .62);
+    --line: rgba(25, 31, 42, .17);
+    --accent: #4856ff;
+    --accent-2: #ff7a61;
+    --flagship-line: rgba(25, 31, 42, .17);
+    --flagship-panel: rgba(244, 240, 231, .83);
+    color: var(--ink);
+    background: #f2eee5;
+}
+
+body[data-study="arcball-manipulation"] .study-copy h1 {
+    font-size: clamp(3.1rem, 5.6vw, 6.4rem);
+}
+
+body[data-study="fabrik-inverse-kinematics"] {
+    --accent: #78d9ff;
+    --accent-2: #ffd36e;
+    --flagship-panel: rgba(8, 12, 21, .8);
+    background: #0b0f18;
+}
+
+body[data-study="fabrik-inverse-kinematics"] .study-copy h1 {
+    max-width: 560px;
+    font-size: clamp(2.55rem, 4.5vw, 5.25rem);
+}
+
+body[data-study="interactive-evolution"] {
+    --accent: #b789ff;
+    --accent-2: #72f1b8;
+    --flagship-panel: rgba(14, 8, 24, .78);
+    background: #100b19;
+}
+
+body[data-study="interactive-evolution"] .study-copy h1 {
+    font-size: clamp(2.55rem, 4.6vw, 5.4rem);
+}
+
+body[data-study="interactive-evolution"] .flagship-hud {
+    border-color: rgba(183, 137, 255, .25);
+    background: rgba(14, 8, 24, .76);
+}
+
+body[data-study="brushing-and-linking"] {
+    --accent: #6ee7ff;
+    --accent-2: #ff8db8;
+    --flagship-panel: rgba(4, 12, 17, .8);
+    background: #071016;
+}
+
+body[data-study="brushing-and-linking"] .study-copy h1 {
+    font-size: clamp(2.65rem, 4.8vw, 5.7rem);
+}
+
+body[data-study="karplus-strong"] {
+    --accent: #ffb65f;
+    --accent-2: #f46fc3;
+    --flagship-panel: rgba(8, 5, 8, .8);
+    background: #080709;
+}
+
+body[data-study="karplus-strong"] .study-copy h1 {
+    font-family: "Cascadia Code", "SFMono-Regular", monospace;
+    font-size: clamp(2.7rem, 4.8vw, 5.55rem);
+    letter-spacing: -.08em;
+}
+
+body[data-study="karplus-strong"] .flagship-hud {
+    border-radius: 3px;
+    border-color: rgba(255, 182, 95, .24);
+    background: rgba(8, 5, 8, .78);
+}
+
+body[data-study="bubble-cursor"] .study-nav,
+body[data-study="bubble-cursor"] .flagship-hud,
+body[data-study="arcball-manipulation"] .study-nav,
+body[data-study="arcball-manipulation"] .flagship-hud {
+    color: var(--ink);
+    background: rgba(244, 241, 233, .76);
+    box-shadow: inset 0 1px rgba(255, 255, 255, .9), 0 18px 52px rgba(25, 31, 42, .08);
+}
+
+body[data-study="bubble-cursor"] .study-nav > a,
+body[data-study="bubble-cursor"] .study-nav p,
+body[data-study="bubble-cursor"] .study-nav b,
+body[data-study="bubble-cursor"] .study-description,
+body[data-study="bubble-cursor"] .study-eyebrow,
+body[data-study="arcball-manipulation"] .study-nav > a,
+body[data-study="arcball-manipulation"] .study-nav p,
+body[data-study="arcball-manipulation"] .study-nav b,
+body[data-study="arcball-manipulation"] .study-description,
+body[data-study="arcball-manipulation"] .study-eyebrow {
+    color: var(--muted);
+    text-shadow: none;
+}
+
+body[data-study="bubble-cursor"] .study-copy,
+body[data-study="arcball-manipulation"] .study-copy {
+    text-shadow: none;
+}
+
+body[data-study="bubble-cursor"] .study-copy h1 em,
+body[data-study="arcball-manipulation"] .study-copy h1 em {
+    background-image: linear-gradient(100deg, var(--ink), var(--accent), var(--accent-2));
+}
+
+body[data-study="bubble-cursor"] .study-readout,
+body[data-study="bubble-cursor"] .study-action,
+body[data-study="bubble-cursor"] .study-next,
+body[data-study="arcball-manipulation"] .study-readout,
+body[data-study="arcball-manipulation"] .study-action,
+body[data-study="arcball-manipulation"] .study-next {
+    color: var(--ink);
+    box-shadow: inset 0 1px #fff, 0 16px 42px rgba(25, 31, 42, .1);
+}
+
+body[data-study="bubble-cursor"] .study-readout p,
+body[data-study="bubble-cursor"] .study-action,
+body[data-study="bubble-cursor"] .study-next span,
+body[data-study="bubble-cursor"] .flagship-hud kbd,
+body[data-study="arcball-manipulation"] .study-readout p,
+body[data-study="arcball-manipulation"] .study-action,
+body[data-study="arcball-manipulation"] .study-next span,
+body[data-study="arcball-manipulation"] .flagship-hud kbd {
+    color: var(--ink);
+}
+
+body[data-study="bubble-cursor"] .study-readout small,
+body[data-study="bubble-cursor"] .study-next small,
+body[data-study="arcball-manipulation"] .study-readout small,
+body[data-study="arcball-manipulation"] .study-next small {
+    color: var(--muted);
+}
+
+body[data-study="bubble-cursor"] .flagship-hud kbd,
+body[data-study="arcball-manipulation"] .flagship-hud kbd {
+    border-color: var(--line);
+    background: rgba(25, 31, 42, .055);
+}
+
+@media (max-width: 760px) {
+    body[data-study="fabrik-inverse-kinematics"] .study-copy h1,
+    body[data-study="interactive-evolution"] .study-copy h1,
+    body[data-study="brushing-and-linking"] .study-copy h1 {
+        max-width: 95%;
+        font-size: clamp(2.05rem, 9.6vw, 3.5rem);
+    }
+}

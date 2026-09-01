@@ -15,16 +15,26 @@
     var cards = [];
     var reconcileFrame = 0;
     var flagshipLayouts = {
+        48: "cinema",
         52: "cinema",
         56: "split",
         61: "poster",
+        64: "poster",
+        71: "cinema",
         76: "cinema",
+        81: "split",
         88: "split",
+        90: "cinema",
+        96: "poster",
         98: "cinema",
         106: "cinema",
         108: "split",
+        110: "cinema",
         116: "cinema",
-        136: "cinema"
+        123: "split",
+        131: "cinema",
+        136: "cinema",
+        140: "cinema"
     };
 
     if (!Data || !catalog) return;
