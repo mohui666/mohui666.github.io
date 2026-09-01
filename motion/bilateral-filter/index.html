@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Bilateral Filtering：空间距离与颜色距离共同加权，实现保边平滑。">
+    <meta name="theme-color" content="#060811">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../study-shell.css?v=20260901-field100">
+    <script src="../study-manifest.js?v=20260901-field100" defer></script>
+    <script src="../study-core.js?v=20260901-field100" defer></script>
+    <script src="../study-image.js?v=20260901-field100" defer></script>
+    <script src="../study-shell.js?v=20260901-field100" defer></script>
+    <title>Bilateral Filtering · Motion Field 91</title>
+</head>
+<body data-study="bilateral-filter" style="--accent:#5eead4;--accent-2:#38bdf8;--accent-rgb:94,234,212">
+    <a class="skip-link" href="#experiment">跳到 双边滤波 实验</a>
+    <header class="study-nav">
+        <a href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
+        <p><i aria-hidden="true"></i>Bilateral Filtering</p>
+        <b aria-label="第 91 个实验，共 145 个">91 / 145</b>
+    </header>
+    <main class="study-main" id="experiment">
+        <section class="study-copy" aria-labelledby="page-title">
+            <p class="study-eyebrow"><span>91</span>IMAGE · FILTER · PIXEL</p>
+            <h1 id="page-title">Bilateral<br><em>Filtering.</em></h1>
+            <p class="study-description">空间距离与颜色距离共同加权，实现保边平滑。权重依赖像素差异，不是固定卷积模糊。</p>
+        </section>
+        <section class="study-stage" data-study-stage tabindex="0" aria-label="双边滤波交互实验。移动探针并调整 sigma。">
+            <canvas data-study-canvas aria-hidden="true"></canvas>
+            <div class="study-dom" data-study-dom aria-hidden="true"></div>
+        </section>
+        <div class="study-console">
+            <div class="study-readout" data-study-meter><i aria-hidden="true"></i><p><span data-study-state>FILTER / READY</span><small data-study-prompt>移动探针并调整 sigma。</small></p></div>
+            <button class="study-action" data-study-action type="button">RESEED</button>
+            <a class="study-next" href="../kuwahara-filter/" aria-label="前往下一个实验：Kuwahara Filtering"><span><small>NEXT · 92 / 145</small>Kuwahara Filtering</span><b aria-hidden="true">↗</b></a>
+        </div>
+    </main>
+    <noscript><p class="study-no-script">启用 JavaScript 后即可体验 双边滤波。</p></noscript>
+</body>
+</html>

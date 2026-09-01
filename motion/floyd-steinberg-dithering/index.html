@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Floyd–Steinberg Dithering：量化误差按 7/16、3/16、5/16、1/16 向未处理像素扩散。">
+    <meta name="theme-color" content="#060811">
+    <link rel="icon" href="../../images/cover.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../study-shell.css?v=20260901-field100">
+    <script src="../study-manifest.js?v=20260901-field100" defer></script>
+    <script src="../study-core.js?v=20260901-field100" defer></script>
+    <script src="../study-image.js?v=20260901-field100" defer></script>
+    <script src="../study-shell.js?v=20260901-field100" defer></script>
+    <title>Floyd–Steinberg Dithering · Motion Field 93</title>
+</head>
+<body data-study="floyd-steinberg-dithering" style="--accent:#a3e635;--accent-2:#34d399;--accent-rgb:163,230,53">
+    <a class="skip-link" href="#experiment">跳到 Floyd–Steinberg 误差扩散 实验</a>
+    <header class="study-nav">
+        <a href="../" aria-label="返回 Motion Field 总览"><span aria-hidden="true">←</span><span>Motion Field</span></a>
+        <p><i aria-hidden="true"></i>Floyd–Steinberg Dithering</p>
+        <b aria-label="第 93 个实验，共 145 个">93 / 145</b>
+    </header>
+    <main class="study-main" id="experiment">
+        <section class="study-copy" aria-labelledby="page-title">
+            <p class="study-eyebrow"><span>93</span>IMAGE · FILTER · PIXEL</p>
+            <h1 id="page-title">Floyd–Steinberg<br><em>Dithering.</em></h1>
+            <p class="study-description">量化误差按 7/16、3/16、5/16、1/16 向未处理像素扩散。显式误差扩散，不生成网点筛纹。</p>
+        </section>
+        <section class="study-stage" data-study-stage tabindex="0" aria-label="Floyd–Steinberg 误差扩散交互实验。拖动量化分界线和色阶。">
+            <canvas data-study-canvas aria-hidden="true"></canvas>
+            <div class="study-dom" data-study-dom aria-hidden="true"></div>
+        </section>
+        <div class="study-console">
+            <div class="study-readout" data-study-meter><i aria-hidden="true"></i><p><span data-study-state>DITHER / READY</span><small data-study-prompt>拖动量化分界线和色阶。</small></p></div>
+            <button class="study-action" data-study-action type="button">RESEED</button>
+            <a class="study-next" href="../pixel-sorting/" aria-label="前往下一个实验：Pixel Sorting"><span><small>NEXT · 94 / 145</small>Pixel Sorting</span><b aria-hidden="true">↗</b></a>
+        </div>
+    </main>
+    <noscript><p class="study-no-script">启用 JavaScript 后即可体验 Floyd–Steinberg 误差扩散。</p></noscript>
+</body>
+</html>

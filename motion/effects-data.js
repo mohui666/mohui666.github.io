@@ -1,9 +1,10 @@
 (function (root, factory) {
     "use strict";
-    var data = factory();
+    var studies = typeof module === "object" && module.exports ? require("./study-manifest.js") : root.MotionStudyManifest;
+    var data = factory(studies || []);
     if (typeof module === "object" && module.exports) module.exports = data;
     root.MotionFieldData = data;
-}(typeof window !== "undefined" ? window : globalThis, function () {
+}(typeof window !== "undefined" ? window : globalThis, function (studies) {
     "use strict";
 
     var palettes = [
@@ -67,7 +68,17 @@
         space: ["Spatial Motion", "空间与滚动实验", "DRAG · SCROLL · DEPTH"],
         gpu: ["GPU / Canvas Lab", "GPU 与画布模拟", "WEBGL · CANVAS · SHADER"],
         physics: ["Drag Physics", "物理拖拽实验", "SPRING · INERTIA · CONSTRAINT"],
-        character: ["Character Systems", "角色与状态机", "STATE · SPRING · MORPH"]
+        character: ["Character Systems", "角色与状态机", "STATE · SPRING · MORPH"],
+        choreography: ["Interface Choreography", "界面编排", "TRANSITION · STATE · TIMING"],
+        hci: ["HCI Navigation", "人机交互与信息空间", "TARGET · GESTURE · ZOOM"],
+        temporal: ["Temporal Control", "时间、滚动与阅读控制", "SCROLL · RATE · TYPE"],
+        geometry: ["Computational Geometry", "计算几何", "TESSELLATION · HULL · SKELETON"],
+        image: ["Image Processes", "图像处理", "SVG · FILTER · PIXEL"],
+        spatial: ["Spatial Projection", "空间投影与渲染", "CAMERA · DEPTH · BSP"],
+        "physics-sim": ["Physical Simulation", "数值物理模拟", "GRID · CONSTRAINT · FIELD"],
+        generative: ["Emergent Systems", "涌现与生成系统", "GROWTH · AUTOMATA · CONSTRAINT"],
+        data: ["Data Motion", "数据运动", "LAYOUT · IDENTITY · FLOW"],
+        signal: ["Audio & Signal", "音频与信号", "FFT · SYNTHESIS · ACOUSTICS"]
     };
 
     var summaries = {
@@ -92,6 +103,25 @@
         };
     });
 
+    studies.forEach(function (study) {
+        effects.push({
+            id: study.id,
+            slug: study.slug,
+            titleEn: study.titleEn,
+            titleZh: study.titleZh,
+            modeLabel: study.modeLabel,
+            sectionId: study.sectionId,
+            legacy: false,
+            palette: palettes[(study.id - 1) % palettes.length],
+            summaryZh: study.mechanism,
+            algorithmKey: study.slug,
+            algorithmNote: study.differentiator,
+            interaction: study.interaction,
+            complexity: study.complexity,
+            bundle: study.bundle
+        });
+    });
+
     var byId = {};
     var bySlug = {};
     effects.forEach(function (effect) {
@@ -101,7 +131,7 @@
 
     return {
         total: effects.length,
-        maxId: effects.length,
+        maxId: effects[effects.length - 1].id,
         handAuthoredCount: effects.length,
         generatedCount: 0,
         effects: effects,
