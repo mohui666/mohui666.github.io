@@ -14,6 +14,18 @@
     var activeCards = new Set();
     var cards = [];
     var reconcileFrame = 0;
+    var flagshipLayouts = {
+        52: "cinema",
+        56: "split",
+        61: "poster",
+        76: "cinema",
+        88: "split",
+        98: "cinema",
+        106: "cinema",
+        108: "split",
+        116: "cinema",
+        136: "cinema"
+    };
 
     if (!Data || !catalog) return;
 
@@ -26,6 +38,10 @@
         card.dataset.effectId = effect.id;
         card.dataset.section = effect.sectionId;
         card.dataset.src = effect.slug + "/?preview=1";
+        if (flagshipLayouts[effect.id]) {
+            card.classList.add("flagship-card");
+            card.dataset.flagshipLayout = flagshipLayouts[effect.id];
+        }
         card.style.setProperty("--preview-accent", effect.palette[0]);
         card.style.setProperty("--preview-secondary", effect.palette[1]);
         var sectionInfo = Data.sections[effect.sectionId];
@@ -33,6 +49,7 @@
         card.innerHTML = '<div class="card-visual live-preview" aria-hidden="true">' +
             '<div class="preview-ambient"><i></i><i></i><b>' + pad(effect.id) + '</b></div>' +
             '<p class="preview-loading"><span></span> LIVE PAGE / ' + pad(effect.id) + '</p>' +
+            (flagshipLayouts[effect.id] ? '<p class="flagship-badge">DIRECT INTERACTION · REBUILT</p>' : '') +
             '<div class="preview-mount" data-preview-mount></div>' +
             '</div>' +
             '<div class="card-meta"><span class="card-number">' + pad(effect.id) + '</span><div><h3>' + effect.titleEn + '</h3><p>' + effect.titleZh + ' · ' + effect.modeLabel + '</p></div><span class="card-arrow" aria-hidden="true">↗</span></div>' +

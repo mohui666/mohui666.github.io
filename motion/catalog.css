@@ -1331,6 +1331,70 @@ h1 em {
 .live-card:hover .card-arrow,
 .live-card:has(.card-overlay:focus-visible) .card-arrow { color: #080b14; background: #fff; transform: rotate(45deg); }
 
+.flagship-card {
+    border-color: color-mix(in srgb, var(--preview-accent) 34%, rgba(255,255,255,.15));
+    background:
+        radial-gradient(circle at var(--mx) var(--my), color-mix(in srgb, var(--preview-accent) 14%, transparent), transparent 36%),
+        rgba(255,255,255,.045);
+}
+
+.flagship-card[data-flagship-layout="cinema"] {
+    grid-column: 1 / -1;
+}
+
+.flagship-card[data-flagship-layout="cinema"] .card-visual {
+    min-height: clamp(410px, 47vw, 610px);
+}
+
+.flagship-card[data-flagship-layout="split"] {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1.55fr) minmax(280px, .45fr);
+    gap: 0;
+    padding: 10px;
+}
+
+.flagship-card[data-flagship-layout="split"] .card-visual {
+    min-height: clamp(430px, 43vw, 570px);
+}
+
+.flagship-card[data-flagship-layout="split"] .card-meta {
+    grid-template-columns: 1fr;
+    align-content: end;
+    gap: 16px;
+    min-height: 100%;
+    padding: clamp(24px, 3vw, 46px);
+}
+
+.flagship-card[data-flagship-layout="split"] .card-number {
+    align-self: start;
+}
+
+.flagship-card[data-flagship-layout="split"] .card-arrow {
+    align-self: end;
+}
+
+.flagship-card[data-flagship-layout="poster"] .card-visual {
+    min-height: clamp(390px, 46vw, 560px);
+}
+
+.flagship-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 11;
+    margin: 0;
+    padding: 7px 9px;
+    border: 1px solid color-mix(in srgb, var(--preview-accent) 42%, transparent);
+    border-radius: 999px;
+    color: rgba(248,250,255,.76);
+    background: rgba(4,7,15,.62);
+    font: 800 .48rem/1 "Cascadia Code", monospace;
+    letter-spacing: .11em;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
 .catalog-empty,
 .catalog-noscript {
     width: min(720px, calc(100% - 32px));
@@ -1356,6 +1420,21 @@ h1 em {
     .catalog-result { min-width: 76px; min-height: 36px; }
     .catalog-sections { gap: 68px; }
     .live-card .card-visual { min-height: clamp(300px, 82vw, 430px); }
+    .flagship-card[data-flagship-layout] {
+        display: block;
+        grid-column: auto;
+        padding: 10px 10px 0;
+    }
+    .flagship-card[data-flagship-layout] .card-visual { min-height: clamp(340px, 96vw, 480px); }
+    .flagship-card[data-flagship-layout] .card-meta {
+        grid-template-columns: auto 1fr auto;
+        gap: 18px;
+        min-height: 104px;
+        padding: 12px 8px;
+    }
+    .flagship-card[data-flagship-layout] .card-number,
+    .flagship-card[data-flagship-layout] .card-arrow { align-self: auto; }
+    .flagship-badge { top: 11px; right: 11px; font-size: .42rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

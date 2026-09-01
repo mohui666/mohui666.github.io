@@ -98,6 +98,7 @@
     stage.addEventListener("pointerdown", function (event) {
         updatePointer(local(event), event);
         pointer.down = true; pointer.inside = true;
+        stage.focus({ preventScroll: true });
         stage.setPointerCapture(event.pointerId);
         if (effect.pointerDown) effect.pointerDown(pointer, event);
         wake();
@@ -115,7 +116,8 @@
     });
     stage.addEventListener("pointercancel", function (event) {
         pointer.down = false;
-        if (effect.pointerUp) effect.pointerUp(pointer, event);
+        if (effect.pointerCancel) effect.pointerCancel(pointer, event);
+        else if (effect.pointerUp) effect.pointerUp(pointer, event);
         wake();
     });
     stage.addEventListener("wheel", function (event) {
@@ -123,7 +125,7 @@
     }, { passive: false });
     stage.addEventListener("keydown", function (event) {
         if (effect.keyDown) effect.keyDown(event);
-        if ((event.key === "Enter" || event.key === " ") && event.target === stage) { action.click(); event.preventDefault(); }
+        if (!event.defaultPrevented && (event.key === "Enter" || event.key === " ") && event.target === stage) { action.click(); event.preventDefault(); }
         wake();
     });
     action.addEventListener("click", function () { if (effect.action) effect.action(); wake(); });

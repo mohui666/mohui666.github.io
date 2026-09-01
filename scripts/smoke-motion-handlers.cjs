@@ -93,6 +93,8 @@ load("study-core.js");
 for (const bundle of ["choreography", "hci", "temporal", "geometry", "image", "spatial", "physics-sim", "generative", "data", "signal"]) {
     load(`study-${bundle}.js`);
 }
+load("flagship-ui.js");
+load("flagship-simulations.js");
 
 const audioActions = new Set(["granular-synthesis", "karplus-strong", "hrtf-spatialization", "shepard-risset-glissando"]);
 
@@ -125,6 +127,14 @@ for (const mobile of [false, true]) for (const study of studies) {
     env.pointer.x = 0.72; env.pointer.y = 0.63; env.pointer.vx = 1.2; env.pointer.vy = 0.45;
     if (effect.pointerMove) effect.pointerMove(env.pointer, null);
     if (effect.pointerUp) { env.pointer.down = false; effect.pointerUp(env.pointer, null); }
+    if (effect.pointerCancel) {
+        env.pointer.down = true;
+        if (effect.pointerDown) effect.pointerDown(env.pointer, null);
+        env.pointer.x = 0.68; env.pointer.y = 0.58;
+        if (effect.pointerMove) effect.pointerMove(env.pointer, null);
+        env.pointer.down = false;
+        effect.pointerCancel(env.pointer, null);
+    }
     if (effect.wheel) effect.wheel(12, 72, null);
     if (effect.keyDown) effect.keyDown({ key: "ArrowRight" });
     if (effect.action && !audioActions.has(study.slug)) effect.action();
