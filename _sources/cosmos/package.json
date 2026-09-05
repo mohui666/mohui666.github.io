@@ -1,0 +1,19 @@
+{
+  "name": "cosmos-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build --base=/cosmos/",
+    "preview": "vite preview --base=/cosmos/ --host 0.0.0.0",
+    "test": "node --test tests/physics.test.js"
+  },
+  "dependencies": {
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "vite": "8.0.13",
+    "@playwright/test": "1.58.2"
+  }
+}
