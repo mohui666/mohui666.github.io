@@ -1,0 +1,7 @@
+.venv/
+vendor/
+data/
+runs/
+__pycache__/
+*.pyc
+core
