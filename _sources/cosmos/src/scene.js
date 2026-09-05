@@ -3,11 +3,13 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { textureUrls } from './surfaces.js';
 
 const v3 = a => new THREE.Vector3(...a);
+const TRAIL_CAPACITY = 2400;
+const TRAIL_SAMPLE_ANGLE = 2 * Math.PI / 240;
 export class UniverseView {
   constructor(host, onSelect) {
     this.host = host;
     this.onSelect = onSelect;
-    this.settings = { trails:true, references:true, labels:true, grid:true, vectors:false, bodyScale:1, trailLength:900 };
+    this.settings = { trails:true, references:true, labels:true, grid:true, vectors:false, bodyScale:1, trailLength:900, trueScale:false, showCollisionBounds:false };
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color('#080e16');
     this.camera = new THREE.PerspectiveCamera(42, 1, 0.00001, 1e7);
@@ -29,9 +31,14 @@ export class UniverseView {
     fill.position.set(-3, -5, 10);
     this.scene.add(fill);
     this.items = new Map();
+    this.trailSamples = new Map();
+    this.collisionEffects = [];
     const loader=new THREE.TextureLoader();this.surfaceMaps=new Map();
     for(const [id,url] of Object.entries(textureUrls)){const texture=loader.load(url,undefined,undefined,()=>{const notice=document.createElement('div');notice.className='texture-warning';notice.textContent=`${id} 表面图加载失败，请刷新检查网络。`;host.append(notice);});texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=Math.min(8,this.renderer.capabilities.getMaxAnisotropy());this.surfaceMaps.set(id,texture);}
     this.sphere = new THREE.SphereGeometry(1, 32, 24);
+    const boundsSphere = new THREE.SphereGeometry(1, 16, 10);
+    this.boundsGeometry = new THREE.WireframeGeometry(boundsSphere);
+    boundsSphere.dispose();
     this.raycaster = new THREE.Raycaster();
     this.pointer = new THREE.Vector2();
     this.labelLayer = document.createElement('div');
@@ -48,17 +55,49 @@ export class UniverseView {
     this.observer = new ResizeObserver(() => this.resize());
     this.observer.observe(host);
     this.resize();
-    let down;
-    this.renderer.domElement.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY];});
-    this.renderer.domElement.addEventListener('pointerup',e=>{
-      if (!down || Math.hypot(e.clientX-down[0],e.clientY-down[1])>5) return;
-      const r=this.renderer.domElement.getBoundingClientRect();
-      this.pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
-      this.raycaster.setFromCamera(this.pointer,this.camera);
-      const hits=this.raycaster.intersectObjects([...this.items.values()].map(i=>i.mesh).filter(mesh=>mesh.visible));
-      if(hits.length) this.onSelect(hits[0].object.userData.bodyId);
+    const pointers = new Set();
+    let tap = null;
+    const canvas = this.renderer.domElement;
+    const cancelPointer = e => { pointers.delete(e.pointerId); tap = null; };
+    canvas.addEventListener('pointerdown', e => {
+      pointers.add(e.pointerId);
+      tap = pointers.size === 1 && e.button === 0
+        ? { id:e.pointerId, x:e.clientX, y:e.clientY, tolerance:e.pointerType === 'touch' ? 10 : 5 }
+        : null;
     });
+    canvas.addEventListener('pointermove', e => {
+      if (tap?.id === e.pointerId && Math.hypot(e.clientX-tap.x,e.clientY-tap.y) > tap.tolerance) tap = null;
+    });
+    canvas.addEventListener('pointerup', e => {
+      const isTap = tap?.id === e.pointerId && Math.hypot(e.clientX-tap.x,e.clientY-tap.y) <= tap.tolerance;
+      pointers.delete(e.pointerId);
+      tap = null;
+      if (isTap && pointers.size === 0) this.pickBody(e);
+    });
+    canvas.addEventListener('pointercancel', cancelPointer);
+    canvas.addEventListener('lostpointercapture', cancelPointer);
     this.frame(6);
+  }
+  pickBody(event) {
+    const rect=this.renderer.domElement.getBoundingClientRect();
+    const x=event.clientX-rect.left,y=event.clientY-rect.top;
+    this.pointer.set(x/rect.width*2-1,-y/rect.height*2+1);
+    this.raycaster.setFromCamera(this.pointer,this.camera);
+    const visibleMeshes=[...this.items.values()].map(item=>item.mesh).filter(mesh=>mesh.visible);
+    const hits=this.raycaster.intersectObjects(visibleMeshes);
+    if(hits.length){this.onSelect(hits[0].object.userData.bodyId);return;}
+    if(event.pointerType !== 'touch')return;
+    // Tiny visible planets remain selectable by a finger at any camera distance.
+    let nearest=null,nearestDistance=Infinity;
+    for(const mesh of visibleMeshes){
+      const projected=mesh.position.clone().project(this.camera);
+      if(projected.z<=-1||projected.z>=1)continue;
+      const distance=Math.hypot((projected.x+1)*rect.width/2-x,(1-projected.y)*rect.height/2-y);
+      const worldPixel=this.camera.position.distanceTo(mesh.position)*2*Math.tan(this.camera.fov*Math.PI/360)/rect.height;
+      const touchRadius=Math.max(22,mesh.scale.x/worldPixel+8);
+      if(distance<=touchRadius&&distance<nearestDistance){nearest=mesh;nearestDistance=distance;}
+    }
+    if(nearest)this.onSelect(nearest.userData.bodyId);
   }
   resize() {
     const {width,height} = this.host.getBoundingClientRect();
@@ -117,16 +156,106 @@ export class UniverseView {
     this.camera.position.copy(p).add(offset);this.followId=body.id;
   }
   clearTrails() {
-    this.items.forEach(item=>{item.history=[];item.trail.geometry.setDrawRange(0,0);});
+    this.trailSamples.clear();
+    this.items.forEach(item=>{item.trail.geometry.setDrawRange(0,0);item.trailCount=0;});
   }
-  sync(bodies, record=false) {
+  recordStep(bodies, time) {
+    const byId=new Map(bodies.map(body=>[body.id,body]));
+    let primary=null,totalMass=0;
+    const center=[0,0,0],centerVelocity=[0,0,0];
+    for(const body of bodies){
+      if(!primary||body.mass>primary.mass)primary=body;
+      totalMass+=body.mass;
+      for(let axis=0;axis<3;axis++){center[axis]+=body.mass*body.position[axis];centerVelocity[axis]+=body.mass*body.velocity[axis];}
+    }
+    if(totalMass)for(let axis=0;axis<3;axis++){center[axis]/=totalMass;centerVelocity[axis]/=totalMass;}
+    for(const body of bodies){
+      let sample=this.trailSamples.get(body.id);
+      if(!sample){sample={points:new Float64Array(TRAIL_CAPACITY*3),write:0,count:0,lastTime:time,dirty:true};this.trailSamples.set(body.id,sample);}
+      const parent=byId.get(body.orbitalElements?.centralId||body.parentId||body.referenceCenterId)||(primary!==body?primary:null);
+      const origin=parent?.position||center,velocity=parent?.velocity||centerVelocity;
+      let radiusSquared=0,speedSquared=0;
+      for(let axis=0;axis<3;axis++){radiusSquared+=(body.position[axis]-origin[axis])**2;speedSquared+=(body.velocity[axis]-velocity[axis])**2;}
+      // r / |v| resolves angular and radial motion; Moon uses Earth, not the Sun.
+      // Every stored point is an actual integration result, never an interpolated orbit.
+      if(speedSquared===0){speedSquared=body.velocity.reduce((sum,v)=>sum+v*v,0);radiusSquared=Math.max(radiusSquared,body.radius**2);}
+      const interval=speedSquared>0?TRAIL_SAMPLE_ANGLE*Math.sqrt(radiusSquared/speedSquared):Infinity;
+      if(sample.count&&Math.abs(time-sample.lastTime)<interval)continue;
+      const offset=sample.write*3;
+      for(let axis=0;axis<3;axis++)sample.points[offset+axis]=body.position[axis];
+      sample.write=(sample.write+1)%TRAIL_CAPACITY;
+      sample.count=Math.min(sample.count+1,TRAIL_CAPACITY);
+      sample.lastTime=time;sample.dirty=true;
+    }
+  }
+  updateTrail(item, body) {
+    const sample=this.trailSamples.get(body.id);
+    if(!sample)return;
+    const count=Math.min(sample.count,this.settings.trailLength,TRAIL_CAPACITY);
+    const position=item.trail.geometry.attributes.position,color=item.trail.geometry.attributes.color;
+    const rebuild=sample.dirty||count!==item.trailCount;
+    if(rebuild){
+      const start=(sample.write-count+TRAIL_CAPACITY)%TRAIL_CAPACITY;
+      for(let i=0;i<count;i++){
+        const offset=((start+i)%TRAIL_CAPACITY)*3;
+        position.setXYZ(i,sample.points[offset],sample.points[offset+1],sample.points[offset+2]);
+        const fade=.05+.95*i/count;color.setXYZ(i,fade,fade,fade);
+      }
+      color.setXYZ(count,1,1,1);color.needsUpdate=true;
+      position.clearUpdateRanges();position.addUpdateRange(0,(count+1)*3);
+      item.trail.geometry.setDrawRange(0,count+1);item.trailCount=count;sample.dirty=false;
+    }
+    const moved=body.position.some((value,axis)=>value!==item.trailEndpoint[axis]);
+    if(rebuild||moved){
+      // Keep the line attached between samples without rebuilding its cached history.
+      position.setXYZ(count,...body.position);
+      if(!rebuild){position.clearUpdateRanges();position.addUpdateRange(count*3,3);}
+      position.needsUpdate=true;item.trailEndpoint=[...body.position];
+    }
+  }
+  addCollisionEvents(events) {
+    for(const event of events){
+      const color=event.type==='fragment'?'#ff855b':event.type==='bounce'?'#8ce4ff':'#ffc77e';
+      const group=new THREE.Group();group.position.fromArray(event.position);
+      const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:this.glowMap,color,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
+      const ring=new THREE.Mesh(new THREE.RingGeometry(.92,1,64),new THREE.MeshBasicMaterial({color,side:THREE.DoubleSide,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
+      const particleCount=event.type==='fragment'?48:20,positions=[];
+      for(let i=0;i<particleCount;i++){
+        const z=1-2*(i+.5)/particleCount,r=Math.sqrt(1-z*z),angle=i*Math.PI*(3-Math.sqrt(5));
+        positions.push(r*Math.cos(angle),r*Math.sin(angle),z);
+      }
+      const particles=new THREE.Points(new THREE.BufferGeometry().setAttribute('position',new THREE.Float32BufferAttribute(positions,3)),new THREE.PointsMaterial({color,size:2.4,sizeAttenuation:false,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
+      group.add(glow,ring,particles);this.scene.add(group);
+      const worldPixel=this.camera.position.distanceTo(group.position)*2*Math.tan(this.camera.fov*Math.PI/360)/this.height;
+      this.collisionEffects.push({group,glow,ring,particles,started:performance.now(),duration:event.type==='bounce'?850:1500,radius:Math.max(event.radius*2,worldPixel*18),resultIds:event.resultIds});
+    }
+  }
+  updateCollisionEffects(now) {
+    // Wall-clock flashes describe an event; these particles never enter the physics state.
+    for(let i=this.collisionEffects.length-1;i>=0;i--){
+      const effect=this.collisionEffects[i],progress=(now-effect.started)/effect.duration;
+      if(progress>=1){
+        this.scene.remove(effect.group);
+        effect.glow.material.dispose();effect.ring.geometry.dispose();effect.ring.material.dispose();effect.particles.geometry.dispose();effect.particles.material.dispose();
+        this.collisionEffects.splice(i,1);continue;
+      }
+      effect.group.visible=!this.settings.isolateId||effect.resultIds.includes(this.settings.isolateId);
+      effect.ring.quaternion.copy(this.camera.quaternion);effect.ring.scale.setScalar(effect.radius*(.7+progress*3));effect.ring.material.opacity=(1-progress)*.85;
+      effect.glow.scale.setScalar(effect.radius*(3+progress*5));effect.glow.material.opacity=(1-progress)**2;
+      effect.particles.scale.setScalar(effect.radius*(.4+progress*5));effect.particles.material.opacity=(1-progress)**1.5;
+    }
+  }
+  sync(bodies) {
     const ids=new Set(bodies.map(b=>b.id));
+    for(const id of this.trailSamples.keys())if(!ids.has(id))this.trailSamples.delete(id);
+    if(!bodies.length)this.updateCollisionEffects(Infinity);
     for(const [id,item] of this.items) if(!ids.has(id)) {
-      this.scene.remove(item.mesh,item.glow,item.trail,item.reference,item.arrow);
+      this.scene.remove(item.mesh,item.glow,item.trail,item.reference,item.arrow,item.bounds);
       item.mesh.material.dispose();item.trail.geometry.dispose();item.trail.material.dispose();
       if(item.ring){item.ring.geometry.dispose();item.ring.material.dispose();}
       if(item.reference){item.reference.geometry.dispose();item.reference.material.dispose();}
       if(item.glow)item.glow.material.dispose();
+      item.bounds.material.dispose();
       item.label.remove();this.items.delete(id);
     }
     let biggest=bodies.reduce((a,b)=>!a||b.mass>a.mass?b:a,null);
@@ -152,14 +281,16 @@ export class UniverseView {
         }
         const label=document.createElement('button');label.className='body-label';label.onclick=()=>this.onSelect(b.id);this.labelLayer.append(label);
         const trail=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:b.color,transparent:true,opacity:.7,vertexColors:true}));
-        const cap=2401;trail.geometry.setAttribute('position',new THREE.BufferAttribute(new Float32Array(cap*3),3));trail.geometry.setAttribute('color',new THREE.BufferAttribute(new Float32Array(cap*3),3));trail.geometry.setDrawRange(0,0);trail.frustumCulled=false;
+        const cap=TRAIL_CAPACITY+1;trail.geometry.setAttribute('position',new THREE.BufferAttribute(new Float32Array(cap*3),3));trail.geometry.setAttribute('color',new THREE.BufferAttribute(new Float32Array(cap*3),3));trail.geometry.setDrawRange(0,0);trail.frustumCulled=false;
         let glow=null;
         if(luminous){glow=new THREE.Sprite(new THREE.SpriteMaterial({map:this.glowMap,color:b.color,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));this.scene.add(glow);}
         let reference=null;
         if(b.referenceOrbit){reference=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(b.referenceOrbit.map(v3)),new THREE.LineBasicMaterial({color:b.color,transparent:true,opacity:.16}));this.scene.add(reference);}
         const arrow=new THREE.ArrowHelper(new THREE.Vector3(1,0,0),new THREE.Vector3(),1,b.color);this.scene.add(arrow);
-        item={mesh,label,glow,trail,history:[],reference,arrow,ring};
-        this.items.set(b.id,item);this.scene.add(mesh,trail);
+        const bounds=new THREE.LineSegments(this.boundsGeometry,new THREE.LineBasicMaterial({color:'#ffb96e',transparent:true,opacity:.65,depthTest:false}));
+        bounds.renderOrder=9;
+        item={mesh,label,glow,trail,trailCount:0,trailEndpoint:[NaN,NaN,NaN],reference,arrow,ring,bounds};
+        this.items.set(b.id,item);this.scene.add(mesh,trail,bounds);
       }
       item.mesh.position.fromArray(b.position);item.label.textContent=b.name;
       item.mesh.material.color.set(this.surfaceMaps.has(b.id)&&(!b.originalColor||b.originalColor===b.color)?'#ffffff':b.color);item.trail.material.color.set(b.color);
@@ -167,20 +298,15 @@ export class UniverseView {
       const distance=this.camera.position.distanceTo(item.mesh.position);
       const worldPixel=distance*2*Math.tan(this.camera.fov*Math.PI/360)/Math.max(this.height,1);
       const isolated=this.settings.isolateId;
-      const radius=Math.max(b.radius,worldPixel*(isolated===b.id?Math.min(this.height*.17,this.width*.24):b.mass>.08?9:4.4)*this.settings.bodyScale);
+      const radius=this.settings.trueScale?b.radius:Math.max(b.radius,worldPixel*(isolated===b.id?Math.min(this.height*.17,this.width*.24):b.mass>.08?9:4.4)*this.settings.bodyScale);
       const shown=!isolated||isolated===b.id;
       item.mesh.visible=shown;
       item.mesh.scale.setScalar(radius);
+      item.bounds.visible=shown&&this.settings.showCollisionBounds;item.bounds.position.copy(item.mesh.position);item.bounds.scale.setScalar(b.radius);
       if(item.glow){item.glow.visible=shown;item.glow.position.copy(item.mesh.position);item.glow.scale.setScalar(radius*12);}
-      if(record){
-        item.history.push([...b.position]);if(item.history.length>this.settings.trailLength)item.history.splice(0,item.history.length-this.settings.trailLength);
-        const pos=item.trail.geometry.attributes.position, col=item.trail.geometry.attributes.color;
-        const n=item.history.length;
-        for(let i=0;i<n;i++){pos.setXYZ(i,...item.history[i]);const fade=.05+.95*i/n;col.setXYZ(i,fade,fade,fade);}
-        pos.needsUpdate=true;col.needsUpdate=true;item.trail.geometry.setDrawRange(0,n);
-      }
+      this.updateTrail(item,b);
       item.trail.visible=this.settings.trails&&shown&&!isolated;
-      if(item.reference){item.reference.visible=this.settings.references&&shown&&!isolated;const center=bodies.find(x=>x.id===b.referenceCenterId);if(center&&b.referenceCenter)item.reference.position.fromArray(center.position.map((x,i)=>x-b.referenceCenter[i]));}
+      if(item.reference){item.reference.visible=!!b.referenceOrbit&&this.settings.references&&shown&&!isolated;const center=bodies.find(x=>x.id===b.referenceCenterId);if(center&&b.referenceCenter)item.reference.position.fromArray(center.position.map((x,i)=>x-b.referenceCenter[i]));}
       item.arrow.visible=this.settings.vectors&&shown;
       if(this.settings.vectors){const vel=v3(b.velocity);item.arrow.position.fromArray(b.position);if(vel.length()>0){item.arrow.setDirection(vel.clone().normalize());const len=Math.min(vel.length()*.035,this.viewScale*.6);item.arrow.setLength(len,len*.16,len*.07);}else item.arrow.visible=false;}
       const projected=item.mesh.position.clone().project(this.camera);
@@ -194,13 +320,13 @@ export class UniverseView {
     labelCandidates.sort((a,b)=>(b.b.id===this.selectedId)-(a.b.id===this.selectedId)||b.b.mass-a.b.mass).forEach(c=>{const overlap=occupied.some(o=>c.x<o.x+o.w+4&&c.x+c.w+4>o.x&&Math.abs(c.y-o.y)<19);if(overlap)c.item.label.hidden=true;else occupied.push(c);});
     this.grid.visible=this.settings.grid&&!this.settings.isolateId;
     const selected=this.items.get(this.selectedId);
-    this.selectedRing.visible=!!selected;
+    this.selectedRing.visible=!!selected?.mesh.visible;
     if(selected){this.selectedRing.position.copy(selected.mesh.position);this.selectedRing.scale.copy(selected.mesh.scale);this.selectedRing.quaternion.copy(this.camera.quaternion);}
     if(this.followId){const item=this.items.get(this.followId);if(item){const offset=this.camera.position.clone().sub(this.controls.target);this.controls.target.copy(item.mesh.position);this.camera.position.copy(item.mesh.position).add(offset);}else this.followId=null;}
     this.cross.scale.setScalar(this.viewScale*.016);
     this.cross.visible=this.settings.grid&&!this.settings.isolateId;
   }
-  render() {this.controls.update();this.stars.position.copy(this.camera.position);this.renderer.render(this.scene,this.camera);}
+  render() {this.controls.update();this.updateCollisionEffects(performance.now());this.stars.position.copy(this.camera.position);this.renderer.render(this.scene,this.camera);}
   select(id) {this.selectedId=id;}
   snapshot() {return this.renderer.domElement.toDataURL('image/png');}
 }

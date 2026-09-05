@@ -131,7 +131,7 @@ export function createPreset(id, options = {}) {
   recenter(result.bodies);
   return {
     ...result,
-    params: { dt: preset.dt, softening, gravityScale: 1, integrator: 'verlet', collisionMode: 'none', restitution: 1 },
+    params: { dt: preset.dt, softening, gravityScale: 1, integrator: 'verlet', collisionMode: 'fragment', restitution: 1 },
     viewScale: result.viewScale ?? preset.scale,
     speed: preset.speed,
     description: preset.description,

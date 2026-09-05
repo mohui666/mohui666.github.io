@@ -7,7 +7,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build --base=/cosmos/",
     "preview": "vite preview --base=/cosmos/ --host 0.0.0.0",
-    "test": "node --test tests/physics.test.js"
+    "test": "node --test tests/physics.test.js tests/collisions.test.js"
   },
   "dependencies": {
     "three": "0.185.1"
