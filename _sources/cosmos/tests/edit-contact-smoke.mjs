@@ -1,0 +1,57 @@
+import {chromium} from '@playwright/test';
+import assert from 'node:assert/strict';
+import {mkdir} from 'node:fs/promises';
+const url=process.argv[2]||'http://localhost:4186/cosmos/';
+const browser=await chromium.launch({headless:true,args:['--no-sandbox','--enable-webgl','--use-gl=angle','--use-angle=swiftshader']});
+const page=await browser.newPage({viewport:{width:1440,height:960}}),errors=[];
+page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+async function snapshot(){const pending=page.waitForEvent('download');await page.locator('#export').click();const d=await pending,s=await d.createReadStream(),chunks=[];for await(const c of s)chunks.push(c);return JSON.parse(Buffer.concat(chunks).toString());}
+try{
+ await mkdir('/tmp/cosmos-edit-contact',{recursive:true});
+ await page.goto(url,{waitUntil:'networkidle'});await page.locator('#play').click();
+ const before=await snapshot(),earth=before.bodies.find(b=>b.id==='earth');
+ assert.equal(before.params.gravityModel,'gr1pn');assert.equal(before.params.integrator,'rk4');
+ await page.locator('.body-list-item[data-id="earth"]').click();
+ await page.screenshot({path:'/tmp/cosmos-edit-contact/before-mass.png'});
+ await page.locator('#body-mass').fill('0.1');await page.locator('#apply-body').click();
+ const changed=await snapshot(),edited=changed.bodies.find(b=>b.id==='earth');
+ assert.equal(edited.mass,.1);assert.equal(edited.radius,earth.radius);
+ assert.deepEqual(edited.position,earth.position);assert.deepEqual(edited.velocity,earth.velocity);
+ assert.equal(changed.time,before.time);
+ await page.screenshot({path:'/tmp/cosmos-edit-contact/after-mass.png'});
+ console.log('PASS mass-only edit: radius, position, velocity and time remain exactly unchanged across a stellar-mass threshold.');
+ // A real overlap is resolved on apply, even while paused.
+ await page.locator('#body-mass').fill(String(earth.mass));
+ const sun=changed.bodies.find(b=>b.id==='sun');
+ for(const [axis,i] of ['x','y','z'].map((axis,i)=>[axis,i]))await page.locator(`#body-p${axis}`).fill(String(sun.position[i]));
+ await page.locator('#apply-body').click();
+ const collided=await snapshot();
+ assert.equal(collided.bodies.length,9);assert.equal(collided.bodies.some(b=>b.id==='earth'),false);
+ assert.equal(collided.time,before.time);assert.equal(await page.locator('#play-state').textContent(),'已暂停');
+ assert.ok(Number(await page.locator('#collision-count').textContent())>=1);
+ await page.screenshot({path:'/tmp/cosmos-edit-contact/paused-contact.png'});
+ console.log('PASS paused overlap: Sun absorbs the repositioned Earth immediately, 9 bodies remain, simulation time unchanged.');
+ await page.locator('#reset').click();await page.locator('#play').click();
+ const fallInitial=await snapshot();
+ await page.locator('#fall-sun').click();await page.locator('#play').click();
+ const falling=await snapshot(),fallEarth=falling.bodies.find(b=>b.id==='earth'),initialEarth=fallInitial.bodies.find(b=>b.id==='earth');
+ assert.equal(fallEarth.mass,initialEarth.mass);assert.equal(fallEarth.radius,initialEarth.radius);
+ await page.locator('#play').click();
+ await page.waitForFunction(()=>[...document.querySelectorAll('#collision-log p')].some(p=>p.textContent.includes('太阳')&&p.textContent.includes('地球')),{},{timeout:45000});
+ await page.locator('#play').click();const fallen=await snapshot();
+ assert.equal(fallen.bodies.some(b=>b.id==='earth'),false);
+ assert.ok(Math.abs(fallen.bodies.find(b=>b.id==='sun').mass-(fallInitial.bodies.find(b=>b.id==='sun').mass+initialEarth.mass))<1e-14);
+ await page.locator('[data-tab="physics"]').click();await page.locator('#collision-log').scrollIntoViewIfNeeded();
+ await page.screenshot({path:'/tmp/cosmos-edit-contact/earth-sun-fall.png'});
+ console.log('PASS Earth–Sun free fall in the actual UI: unchanged initial mass/radius, Earth is absorbed and its mass is added to the Sun.');
+ await page.locator('#reset').click();await page.locator('#play').click();
+ await page.locator('[data-tab="physics"]').click();assert.equal(await page.locator('#integrator').isDisabled(),true);
+ await page.locator('#gravity-model').selectOption('newtonian');await page.locator('#integrator').selectOption('verlet');
+ await page.locator('#gravity-model').selectOption('gr1pn');assert.equal(await page.locator('#integrator').inputValue(),'rk4');
+ await page.setViewportSize({width:390,height:844});await page.locator('#mobile-bodies').click();await page.locator('.body-list-item[data-id="earth"]').click();
+ await page.locator('#impact-body').click();const radius=await page.locator('#impact-radius').inputValue();
+ await page.locator('#impact-mass').fill('75');assert.equal(await page.locator('#impact-radius').inputValue(),radius);
+ await page.locator('#impact-close').click();await page.locator('#right-panel .sheet-close').click();
+ await page.screenshot({path:'/tmp/cosmos-edit-contact/mobile.png'});
+ assert.deepEqual(errors,[]);console.log('PASS 1PN/Newtonian controls, mobile impactor mass/radius independence, no browser errors.');
+}finally{await browser.close();}

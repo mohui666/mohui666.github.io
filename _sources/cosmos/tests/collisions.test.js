@@ -2,13 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { G, PhysicsEngine } from '../src/physics.js';
 import { createPreset } from '../src/presets.js';
+const newtonian = (bodies, params = {}) => new PhysicsEngine(bodies, { integrator: 'verlet', ...params, gravityModel: 'newtonian' });
 
 const body = (id, mass, position, velocity, radius) => ({ id, name: id, mass, position, velocity, radius, spin: [0, 0, 0] });
 const difference = (a, b) => Math.hypot(...a.map((x, k) => x - b[k]));
 
 test('continuous contact catches a high-speed crossing and integrates the remaining time', () => {
   for (const integrator of ['verlet', 'rk4']) {
-    const engine = new PhysicsEngine([
+    const engine = newtonian([
       body('a', 1, [-1, 0, 0], [100, 0, 0], 0.001),
       body('b', 1, [1, 0, 0], [-100, 0, 0], 0.001),
     ], { gravityScale: 0, collisionMode: 'elastic', integrator });
@@ -24,7 +25,7 @@ test('continuous contact catches a high-speed crossing and integrates the remain
 
 test('a high-speed near-miss does not turn into a collision', () => {
   for (const integrator of ['verlet', 'rk4']) {
-    const engine = new PhysicsEngine([
+    const engine = newtonian([
       body('a', 1, [-1, 0, 0], [100, 0, 0], 0.001),
       body('b', 1, [1, 0.002001, 0], [-100, 0, 0], 0.001),
     ], { gravityScale: 0, collisionMode: 'fragment', integrator });
@@ -39,7 +40,7 @@ test('swept oblique merging preserves mass and linear/total angular momentum', (
   const a = body('a', 2, [-1, 0, 0], [100, 2, 0], 0.03);
   const b = body('b', 3, [1, 0.025, 0], [-100, 0, 0], 0.03);
   a.spin = [0.1, 0, 0.3];
-  const engine = new PhysicsEngine([a, b], { gravityScale: 0, collisionMode: 'merge' });
+  const engine = newtonian([a, b], { gravityScale: 0, collisionMode: 'merge' });
   const before = engine.diagnostics();
   engine.step(0.02);
   const after = engine.diagnostics();
@@ -57,7 +58,7 @@ test('gravitational focusing turns a straight-line near-miss into a resolved cur
   // Attraction bends this hyperbolic encounter into contact.
   const exactContactSpeed = Math.sqrt(1 + 2 * G * 0.000101 * (1 / radius - 1 / Math.hypot(0.01, 0.0012)));
   for (const integrator of ['verlet', 'rk4']) {
-    const engine = new PhysicsEngine([
+    const engine = newtonian([
       body('target', 0.0001, [0, 0, 0], [0, 0, 0], 0.001),
       body('projectile', 0.000001, [-0.01, 0.0012, 0], [1, 0, 0], 0.00001),
     ], { integrator, collisionMode: 'merge' });
@@ -73,7 +74,7 @@ test('energetic impacts produce non-overlapping gravitating fragments within an 
   const a = body('a', 2e-6, [-0.0001, 0, 0], [10, 1.2, 0], 0.0001);
   const b = body('b', 1e-6, [0.0001, 0, 0], [-12, -0.8, 0.2], 0.0001);
   a.spin = [1e-11, 2e-11, 3e-11];
-  const engine = new PhysicsEngine([a, b], { collisionMode: 'fragment', fragmentCount: 6 });
+  const engine = newtonian([a, b], { collisionMode: 'fragment', fragmentCount: 6 });
   const before = engine.diagnostics();
   engine.step(1e-9);
   const after = engine.diagnostics();
@@ -102,7 +103,7 @@ test('energetic impacts produce non-overlapping gravitating fragments within an 
 });
 
 test('coincident finite spheres have finite reference energy and stars accrete small impactors', () => {
-  const engine = new PhysicsEngine([
+  const engine = newtonian([
     body('sun', 1, [0, 0, 0], [0, 0, 0], 0.005),
     body('impactor', 1e-6, [0, 0, 0], [10000, 0, 0], 0.00005),
   ], { collisionMode: 'fragment', softening: 0 });
@@ -118,7 +119,7 @@ test('coincident finite spheres have finite reference energy and stars accrete s
 
 test('enabling continuous impacts preserves the default one-year solar-system accuracy', () => {
   const initial = createPreset('solar');
-  const engine = new PhysicsEngine(initial.bodies, { ...initial.params, collisionMode: 'fragment' });
+  const engine = newtonian(initial.bodies, { ...initial.params, collisionMode: 'fragment' });
   let maximumError = 0;
   for (let i = 0; i < 20000; i++) {
     engine.step(0.00005);

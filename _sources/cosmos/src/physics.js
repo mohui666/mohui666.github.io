@@ -1,3 +1,6 @@
+import { LIGHT_SPEED, relativisticState, eihAcceleration, eihIntegrals } from './relativity.js';
+export { LIGHT_SPEED } from './relativity.js';
+
 // JPL DE440 solar GM; exact IAU au and Julian year (365.25 days).
 // A solar mass here means GM_sun / G_SI, so body.mass is a solar-GM ratio.
 // Source: https://ssd.jpl.nasa.gov/astro_par.html
@@ -10,7 +13,8 @@ const DEFAULTS = {
   gravityScale: 1,
   softening: 0,
   dt: 0.0005,
-  integrator: 'verlet',
+  gravityModel: 'gr1pn',
+  integrator: 'rk4',
   collisionMode: 'fragment',
   restitution: 1,
   disruptionThreshold: 1,
@@ -81,6 +85,8 @@ export class PhysicsEngine {
     if (!(p.softening >= 0) || !Number.isFinite(p.softening) || !(p.gravityScale >= 0) || !Number.isFinite(p.gravityScale)) {
       throw new Error('引力倍率和软化长度必须为有限非负数。');
     }
+    if (!['newtonian', 'gr1pn'].includes(p.gravityModel)) throw new Error(`未知引力模型：${p.gravityModel}`);
+    if (p.gravityModel === 'gr1pn' && (p.integrator !== 'rk4' || p.softening !== 0)) throw new Error('EIH 1PN 使用速度相关 RK4 且软化必须为 0；Verlet 和软化仅适用于牛顿模式。');
     if (!['verlet', 'rk4'].includes(p.integrator)) throw new Error(`未知积分器：${p.integrator}`);
     if (!['fragment', 'merge', 'elastic', 'none'].includes(p.collisionMode)) throw new Error(`未知碰撞模型：${p.collisionMode}`);
     if (!(p.restitution >= 0 && p.restitution <= 1)) throw new Error('恢复系数必须在 0 到 1 之间。');
@@ -96,11 +102,11 @@ export class PhysicsEngine {
     }
   }
 
-  _accelerations(positions) {
+  _accelerations(positions, velocities = Float64Array.from(this.bodies.flatMap(b => b.velocity))) {
     const n = this.bodies.length;
     const a = new Float64Array(n * 3);
     const mu = G * this.params.gravityScale;
-    if (mu === 0) return a;
+
     const eps2 = this.params.softening ** 2;
     for (let i = 0; i < n; i++) {
       for (let j = i + 1; j < n; j++) {
@@ -115,6 +121,7 @@ export class PhysicsEngine {
         // retain Newton/Plummer forces. This is not a fluid-interior model.
         const core = this.params.collisionMode === 'none' ? 0 : this.bodies[i].radius + this.bodies[j].radius;
         const distance = Math.max(Math.sqrt(d2), core);
+        if (mu === 0) continue;
         if (distance === 0) throw new Error('点质量引力奇点：两个天体中心重合。请移动天体或设置软化长度。');
         const factor = mu / distance ** 3;
         const fi = factor * this.bodies[j].mass;
@@ -128,6 +135,12 @@ export class PhysicsEngine {
         a[l + 2] -= fj * dz;
       }
     }
+    if (this.params.gravityModel === 'gr1pn') {
+      const state = relativisticState(this.bodies, positions, velocities, mu, this.params.collisionMode !== 'none');
+      if (state.maximum >= 0.01) throw new Error('已超出 EIH 1PN 弱场慢速范围（势能 / c² 或 v² / c² ≥ 0.01）；本模型不能模拟强场或近光速运动。');
+      for (const body of this.bodies) if (body.radius > 0 && mu * body.mass / (body.radius * LIGHT_SPEED ** 2) >= 0.01) throw new Error(`${body.name}的质量与半径已超出弱场球体范围；半径保持不变，请调整参数。`);
+      return eihAcceleration(this.bodies, positions, velocities, a, mu, state);
+    }
     return a;
   }
 
@@ -139,14 +152,14 @@ export class PhysicsEngine {
       x.set(body.position, i * 3);
       v.set(body.velocity, i * 3);
     });
-    const a1 = initialAccelerations ?? this._accelerations(x);
+    const a1 = initialAccelerations ?? this._accelerations(x, v);
     if (this.params.integrator === 'verlet') {
       // Kick–drift–kick velocity Verlet, symplectic for a fixed step.
       for (let k = 0; k < size; k++) {
         v[k] += 0.5 * dt * a1[k];
         x[k] += dt * v[k];
       }
-      const a2 = this._accelerations(x);
+      const a2 = this._accelerations(x, v);
       for (let k = 0; k < size; k++) v[k] += 0.5 * dt * a2[k];
     } else {
       const x2 = new Float64Array(size);
@@ -159,17 +172,17 @@ export class PhysicsEngine {
         x2[k] = x[k] + 0.5 * dt * v[k];
         v2[k] = v[k] + 0.5 * dt * a1[k];
       }
-      const a2 = this._accelerations(x2);
+      const a2 = this._accelerations(x2, v2);
       for (let k = 0; k < size; k++) {
         x3[k] = x[k] + 0.5 * dt * v2[k];
         v3[k] = v[k] + 0.5 * dt * a2[k];
       }
-      const a3 = this._accelerations(x3);
+      const a3 = this._accelerations(x3, v3);
       for (let k = 0; k < size; k++) {
         x4[k] = x[k] + dt * v3[k];
         v4[k] = v[k] + dt * a3[k];
       }
-      const a4 = this._accelerations(x4);
+      const a4 = this._accelerations(x4, v4);
       for (let k = 0; k < size; k++) {
         x[k] += dt * (v[k] + 2 * v2[k] + 2 * v3[k] + v4[k]) / 6;
         v[k] += dt * (a1[k] + 2 * a2[k] + 2 * a3[k] + a4[k]) / 6;
@@ -345,13 +358,35 @@ export class PhysicsEngine {
 
   _contact(i, j) {
     const before = this._mechanics();
+    const eventId = this._eventId;
     if (this.params.collisionMode === 'merge') this._merge(i, j);
     else if (this.params.collisionMode === 'fragment') this._fragment(i, j, before);
     else this._bounce(this.bodies[i], this.bodies[j]);
+    if (this.params.gravityModel === 'gr1pn' && this._eventId !== eventId) {
+      // The contact material model is low-speed. Match its surviving bodies to
+      // the EIH total canonical momentum, including changed field contributions.
+      const ids = new Set(this.events.at(-1).resultIds);
+      const survivors = this.bodies.filter(body => ids.has(body.id));
+      const mass = survivors.reduce((sum, body) => sum + body.mass, 0);
+      for (let iteration = 0; iteration < 4; iteration++) {
+        const current = this._mechanics();
+        for (const body of survivors) for (let axis = 0; axis < 3; axis++) {
+          body.velocity[axis] += (before.momentum[axis] - current.momentum[axis]) / mass;
+        }
+      }
+      const current = this._mechanics();
+      for (let axis = 0; axis < 3; axis++) survivors[0].spin[axis] += before.angularMomentum[axis] - current.angularMomentum[axis];
+    }
     const after = this._mechanics();
     // Signed transfer of ORBITAL mechanical energy; this is not a heat meter.
     this.dissipated += before.energy - after.energy;
     this.collisionKineticLoss += before.kinetic - after.kinetic;
+  }
+
+  resolveContacts() {
+    this._checkParameters(this.params.dt);
+    this._resolveCollisions();
+    this._checkState();
   }
 
   _resolveCollisions() {
@@ -535,8 +570,27 @@ export class PhysicsEngine {
       }
     }
     if (mass > 0) for (let k = 0; k < 3; k++) com[k] /= mass;
-    const comVelocity = momentum.map(p => mass > 0 ? p / mass : 0);
-    return { mass, kinetic, potential, energy: kinetic + potential, momentum, angularMomentum, com, comVelocity, suggestedDt };
+    const newtonianMomentum = [...momentum];
+    const comVelocity = newtonianMomentum.map(p => mass > 0 ? p / mass : 0);
+    let pnEnergy = 0, pnParameter = 0, clockRates = this.bodies.map(() => 1), compactness = [];
+    if (this.params.gravityModel === 'gr1pn') {
+      const positions = Float64Array.from(this.bodies.flatMap(b => b.position));
+      const velocities = Float64Array.from(this.bodies.flatMap(b => b.velocity));
+      const state = relativisticState(this.bodies, positions, velocities, mu, this.params.collisionMode !== 'none');
+      const integrals = eihIntegrals(this.bodies, velocities, mu, state);
+      pnEnergy = integrals.energy; pnParameter = state.maximum;
+      clockRates = integrals.clockRates; compactness = integrals.compactness;
+      momentum.fill(0); angularMomentum.fill(0);
+      for (let i = 0; i < this.bodies.length; i++) {
+        const p = Array.from(integrals.momenta.slice(i * 3, i * 3 + 3));
+        const l = cross(this.bodies[i].position, p);
+        for (let axis = 0; axis < 3; axis++) {
+          momentum[axis] += p[axis]; angularMomentum[axis] += l[axis] + this.bodies[i].spin[axis];
+        }
+      }
+    }
+    return { mass, kinetic, potential, pnEnergy, energy: kinetic + potential + pnEnergy,
+      momentum, newtonianMomentum, angularMomentum, com, comVelocity, suggestedDt, pnParameter, clockRates, compactness };
   }
 
   resetReference() {

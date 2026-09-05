@@ -9,7 +9,7 @@ export class UniverseView {
   constructor(host, onSelect) {
     this.host = host;
     this.onSelect = onSelect;
-    this.settings = { trails:true, references:true, labels:true, grid:true, vectors:false, bodyScale:1, trailLength:900, trueScale:false, showCollisionBounds:false };
+    this.settings = { trails:true, references:true, labels:true, grid:true, vectors:false, bodyScale:1, trailLength:900, markers:true, showCollisionBounds:false };
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color('#080e16');
     this.camera = new THREE.PerspectiveCamera(42, 1, 0.00001, 1e7);
@@ -38,6 +38,7 @@ export class UniverseView {
     this.sphere = new THREE.SphereGeometry(1, 32, 24);
     const boundsSphere = new THREE.SphereGeometry(1, 16, 10);
     this.boundsGeometry = new THREE.WireframeGeometry(boundsSphere);
+    this.markerGeometry = new THREE.BufferGeometry().setFromPoints(Array.from({length:48},(_,i)=>new THREE.Vector3(Math.cos(i*Math.PI/24),Math.sin(i*Math.PI/24),0)));
     boundsSphere.dispose();
     this.raycaster = new THREE.Raycaster();
     this.pointer = new THREE.Vector2();
@@ -86,7 +87,7 @@ export class UniverseView {
     const visibleMeshes=[...this.items.values()].map(item=>item.mesh).filter(mesh=>mesh.visible);
     const hits=this.raycaster.intersectObjects(visibleMeshes);
     if(hits.length){this.onSelect(hits[0].object.userData.bodyId);return;}
-    if(event.pointerType !== 'touch')return;
+    if(event.pointerType !== 'touch'&&!this.settings.markers)return;
     // Tiny visible planets remain selectable by a finger at any camera distance.
     let nearest=null,nearestDistance=Infinity;
     for(const mesh of visibleMeshes){
@@ -94,7 +95,7 @@ export class UniverseView {
       if(projected.z<=-1||projected.z>=1)continue;
       const distance=Math.hypot((projected.x+1)*rect.width/2-x,(1-projected.y)*rect.height/2-y);
       const worldPixel=this.camera.position.distanceTo(mesh.position)*2*Math.tan(this.camera.fov*Math.PI/360)/rect.height;
-      const touchRadius=Math.max(22,mesh.scale.x/worldPixel+8);
+      const touchRadius=Math.max(event.pointerType==='touch'?22:9,mesh.scale.x/worldPixel+4);
       if(distance<=touchRadius&&distance<nearestDistance){nearest=mesh;nearestDistance=distance;}
     }
     if(nearest)this.onSelect(nearest.userData.bodyId);
@@ -131,6 +132,7 @@ export class UniverseView {
   }
   frame(scale=6, top=false) {
     this.viewScale=scale;
+    this.controls.minDistance=Math.max(scale*1e-4,1e-14);this.camera.near=Math.max(scale*1e-6,1e-15);this.camera.updateProjectionMatrix();
     const distanceScale=scale*Math.max(1,1/this.camera.aspect);
     this.controls.target.set(0,0,0);
     if(top)this.camera.position.set(0,-.001*distanceScale,distanceScale*2.8);
@@ -152,7 +154,11 @@ export class UniverseView {
   focus(body, close=false) {
     const p=v3(body.position),offset=this.camera.position.clone().sub(this.controls.target);
     this.controls.target.copy(p);
-    if(close)offset.set(.12,-1,.7).normalize().multiplyScalar(Math.max(body.radius*1000,.05));
+    if(close){
+      const distance=Math.max(body.radius*6,1e-8)*Math.max(1,1/this.camera.aspect);
+      offset.set(.12,-1,.7).normalize().multiplyScalar(distance);
+      this.controls.minDistance=Math.max(body.radius*1.05,1e-10);this.camera.near=distance/1000;this.camera.updateProjectionMatrix();
+    }
     this.camera.position.copy(p).add(offset);this.followId=body.id;
   }
   clearTrails() {
@@ -250,21 +256,22 @@ export class UniverseView {
     for(const id of this.trailSamples.keys())if(!ids.has(id))this.trailSamples.delete(id);
     if(!bodies.length)this.updateCollisionEffects(Infinity);
     for(const [id,item] of this.items) if(!ids.has(id)) {
-      this.scene.remove(item.mesh,item.glow,item.trail,item.reference,item.arrow,item.bounds);
+      this.scene.remove(item.mesh,item.glow,item.trail,item.reference,item.arrow,item.bounds,item.marker);
       item.mesh.material.dispose();item.trail.geometry.dispose();item.trail.material.dispose();
       if(item.ring){item.ring.geometry.dispose();item.ring.material.dispose();}
       if(item.reference){item.reference.geometry.dispose();item.reference.material.dispose();}
       if(item.glow)item.glow.material.dispose();
-      item.bounds.material.dispose();
+      item.bounds.material.dispose();item.marker.material.dispose();
       item.label.remove();this.items.delete(id);
     }
     let biggest=bodies.reduce((a,b)=>!a||b.mass>a.mass?b:a,null);
-    if(biggest)this.sunlight.position.fromArray(biggest.position);
+    const light=bodies.find(b=>b.id==='sun'||b.kind==='star')||biggest;
+    if(light)this.sunlight.position.fromArray(light.position);
     const labelCandidates=[];
     for(const b of bodies) {
       let item=this.items.get(b.id);
       if(!item){
-        const luminous=b.mass>.08;
+        const luminous=b.id==='sun'||b.kind==='star';
         const map=this.surfaceMaps.get(b.id) ?? null;
         const material=luminous?new THREE.MeshBasicMaterial({color:map?'#fff':b.color,map}):new THREE.MeshStandardMaterial({color:map?'#fff':b.color,map,roughness:.95,metalness:0});
         const mesh=new THREE.Mesh(this.sphere,material);mesh.userData.bodyId=b.id;
@@ -289,8 +296,9 @@ export class UniverseView {
         const arrow=new THREE.ArrowHelper(new THREE.Vector3(1,0,0),new THREE.Vector3(),1,b.color);this.scene.add(arrow);
         const bounds=new THREE.LineSegments(this.boundsGeometry,new THREE.LineBasicMaterial({color:'#ffb96e',transparent:true,opacity:.65,depthTest:false}));
         bounds.renderOrder=9;
-        item={mesh,label,glow,trail,trailCount:0,trailEndpoint:[NaN,NaN,NaN],reference,arrow,ring,bounds};
-        this.items.set(b.id,item);this.scene.add(mesh,trail,bounds);
+        const marker=new THREE.LineLoop(this.markerGeometry,new THREE.LineBasicMaterial({color:b.color,transparent:true,opacity:.8,depthTest:false}));marker.renderOrder=9;
+        item={mesh,label,glow,trail,trailCount:0,trailEndpoint:[NaN,NaN,NaN],reference,arrow,ring,bounds,marker};
+        this.items.set(b.id,item);this.scene.add(mesh,trail,bounds,marker);
       }
       item.mesh.position.fromArray(b.position);item.label.textContent=b.name;
       item.mesh.material.color.set(this.surfaceMaps.has(b.id)&&(!b.originalColor||b.originalColor===b.color)?'#ffffff':b.color);item.trail.material.color.set(b.color);
@@ -298,10 +306,13 @@ export class UniverseView {
       const distance=this.camera.position.distanceTo(item.mesh.position);
       const worldPixel=distance*2*Math.tan(this.camera.fov*Math.PI/360)/Math.max(this.height,1);
       const isolated=this.settings.isolateId;
-      const radius=this.settings.trueScale?b.radius:Math.max(b.radius,worldPixel*(isolated===b.id?Math.min(this.height*.17,this.width*.24):b.mass>.08?9:4.4)*this.settings.bodyScale);
+      const radius=b.radius; // Solid geometry and collision geometry always share this radius.
+      const markerRadius=worldPixel*5*this.settings.bodyScale;
       const shown=!isolated||isolated===b.id;
       item.mesh.visible=shown;
       item.mesh.scale.setScalar(radius);
+      item.marker.visible=shown&&this.settings.markers&&radius<markerRadius;
+      item.marker.position.copy(item.mesh.position);item.marker.quaternion.copy(this.camera.quaternion);item.marker.scale.setScalar(markerRadius);item.marker.material.color.set(b.color);
       item.bounds.visible=shown&&this.settings.showCollisionBounds;item.bounds.position.copy(item.mesh.position);item.bounds.scale.setScalar(b.radius);
       if(item.glow){item.glow.visible=shown;item.glow.position.copy(item.mesh.position);item.glow.scale.setScalar(radius*12);}
       this.updateTrail(item,b);
@@ -310,11 +321,12 @@ export class UniverseView {
       item.arrow.visible=this.settings.vectors&&shown;
       if(this.settings.vectors){const vel=v3(b.velocity);item.arrow.position.fromArray(b.position);if(vel.length()>0){item.arrow.setDirection(vel.clone().normalize());const len=Math.min(vel.length()*.035,this.viewScale*.6);item.arrow.setLength(len,len*.16,len*.07);}else item.arrow.visible=false;}
       const projected=item.mesh.position.clone().project(this.camera);
+      const labelRadius=item.marker.visible?markerRadius:radius;
       const onScreen=projected.z>-1&&projected.z<1&&Math.abs(projected.x)<1.1&&Math.abs(projected.y)<1.1;
       item.label.hidden=!this.settings.labels||!onScreen||!shown||(bodies.length>25&&b.id!==this.selectedId&&b!==biggest);
-      item.label.style.transform=`translate(${(projected.x+1)*this.width/2+radius/worldPixel+7}px,${(1-projected.y)*this.height/2-7}px)`;
+      item.label.style.transform=`translate(${(projected.x+1)*this.width/2+labelRadius/worldPixel+7}px,${(1-projected.y)*this.height/2-7}px)`;
       item.label.classList.toggle('selected',b.id===this.selectedId);
-      if(!item.label.hidden)labelCandidates.push({item,b,x:(projected.x+1)*this.width/2+radius/worldPixel+7,y:(1-projected.y)*this.height/2-7,w:b.name.length*10+18});
+      if(!item.label.hidden)labelCandidates.push({item,b,x:(projected.x+1)*this.width/2+labelRadius/worldPixel+7,y:(1-projected.y)*this.height/2-7,w:b.name.length*10+18});
     }
     const occupied=[];
     labelCandidates.sort((a,b)=>(b.b.id===this.selectedId)-(a.b.id===this.selectedId)||b.b.mass-a.b.mass).forEach(c=>{const overlap=occupied.some(o=>c.x<o.x+o.w+4&&c.x+c.w+4>o.x&&Math.abs(c.y-o.y)<19);if(overlap)c.item.label.hidden=true;else occupied.push(c);});

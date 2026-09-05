@@ -311,3 +311,5 @@
 }
 
 @media(max-width:960px),(max-width:1180px) and (pointer:coarse){.collision-log{font-size:12px;line-height:1.8}.impact-button{margin-top:0}.collision-log p{padding:8px 0}}
+
+@media(max-width:960px), (max-width:1180px) and (pointer:coarse){.relativity-readout{font-size:14px}.relativity-readout strong{font-size:14px}.relativity-readout small{font-size:12px}}

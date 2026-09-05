@@ -1,6 +1,6 @@
 import './style.css';
 import './mobile.css';
-import { PhysicsEngine, G, GM_SUN_SI } from './physics.js';
+import { PhysicsEngine, G, GM_SUN_SI, LIGHT_SPEED } from './physics.js';
 import { PRESETS, createPreset } from './presets.js';
 import { UniverseView } from './scene.js';
 import { textureUrls } from './surfaces.js';
@@ -37,10 +37,10 @@ document.querySelector('#app').innerHTML=`
     </aside>
     <section class="universe">
       <div class="viewport" id="viewport"></div>
-      <div class="scene-heading"><div class="eyebrow"><span class="status-dot"></span> LIVE SIMULATION <span id="scene-code">SCENE 01</span></div><h1 id="scene-title">太阳系</h1><p id="scene-description"></p><div class="scene-tags"><span>3D 牛顿引力</span><span id="integrator-badge">Velocity Verlet</span><span id="isolate-badge" hidden>单体观察 · 引力保持</span></div></div>
+      <div class="scene-heading"><div class="eyebrow"><span class="status-dot"></span> LIVE SIMULATION <span id="scene-code">SCENE 01</span></div><h1 id="scene-title">太阳系</h1><p id="scene-description"></p><div class="scene-tags"><span id="gravity-model-badge">广义相对论 · EIH 1PN</span><span id="integrator-badge">Velocity Verlet</span><span id="isolate-badge" hidden>单体观察 · 引力保持</span></div></div>
       <div class="view-toolbar"><button class="icon-button mobile-only" id="toggle-left" title="场景和天体">${icon('list')}</button><button id="view-top" class="tool-button" title="沿 Z 轴俯视">2D</button><button id="view-3d" class="tool-button active" title="三维视角">3D</button><span></span><button id="view-fit" class="icon-button" title="显示所有天体">${icon('expand')}</button><button id="capture" class="icon-button" title="保存画面">${icon('camera')}</button><button class="icon-button mobile-only" id="toggle-right" title="参数设置">${icon('sliders')}</button></div>
-      <div class="viewport-note"><span class="crosshair">＋</span><span>惯性参考系<small>拖动旋转 · 滚轮缩放 · 右键平移</small></span></div>
-      <div class="scale-key"><span id="scale-value">1 AU</span><i></i><small>天体显示大小已放大</small></div>
+      <div class="viewport-note"><span class="crosshair">＋</span><span><span id="coordinate-frame">太阳系谐和坐标</span><small>拖动旋转 · 滚轮缩放 · 右键平移</small></span></div>
+      <div class="scale-key"><span id="scale-value">1 AU</span><i></i><small>实心球为真实半径 · 圆环为定位标记</small></div>
       <button id="exit-isolate" class="exit-isolate" hidden>${icon('orbit')} 返回整个系统</button>
       <div id="physics-warning" class="physics-warning" hidden></div>
       <div class="transport">
@@ -56,14 +56,14 @@ document.querySelector('#app').innerHTML=`
         <section id="tab-body" class="tab-content">
           <div class="body-hero"><div id="body-orb" class="body-orb"></div><div><span class="eyebrow">SELECTED OBJECT</span><h2 id="selected-name">地球</h2><span id="body-type">行星</span></div><span id="body-index">03</span></div>
           <div class="body-view-buttons"><button id="isolate-body" class="outline-button">${icon('orbit')} 单独查看</button><button id="follow-body" class="outline-button">${icon('focus')} 跟随</button></div>
-          <button id="impact-body" class="outline-button impact-button">${icon('arrow')} 向此天体发射撞击体</button>
+          <button id="impact-body" class="outline-button impact-button">${icon('arrow')} 向此天体发射撞击体</button><button id="fall-sun" class="outline-button impact-button">${icon('star')} 让此天体向太阳坠落</button>
           <div class="live-stats"><div><span>速度</span><strong id="body-speed">—</strong><small>km/s</small></div><div><span>平均密度</span><strong id="body-density">—</strong><small>kg/m³</small></div></div>
           <form id="body-form">
             <div class="section-label">基本属性 <span>PROPERTIES</span></div>
             <div class="name-color"><label class="field"><span>名称</span><input id="body-name" type="text" maxlength="36" required/></label><label class="field color-field"><span>颜色</span><input id="body-color" type="color"/></label></div>
             ${number('body-mass','质量',1,1e-15,null,'any','M☉')}
             ${number('body-radius','实际半径',1,0,null,'any','km')}
-            <p class="field-hint">1 M☉ ≈ 332,946 个地球质量。碰撞使用实际半径。</p>
+            <p class="field-hint">质量与半径独立设置。只改质量时，体积保持不变，平均密度随之变化。碰撞按实际半径判断。</p>
             <button type="button" id="edit-orbit" class="outline-button orbit-edit-button">${icon('orbit')} 用轨道六根数设置此天体</button>
             <div class="section-label">空间位置 <span>AU</span></div>
             <div class="vector-fields">${['x','y','z'].map(k=>number(`body-p${k}`,k.toUpperCase(),0,null,null)).join('')}</div>
@@ -72,15 +72,18 @@ document.querySelector('#app').innerHTML=`
             <p class="field-hint">1 AU/年 ≈ 4.74047 km/s。修改时暂停，应用后继续操作。</p>
             <button type="submit" id="apply-body" class="primary-button">应用天体参数 ${icon('arrow')}</button>
           </form>
-          <div class="orbital-readout"><div class="section-label">相对主天体的瞬时轨道 <span>KEPLER</span></div><div><span>半长轴</span><strong id="orbit-a">—</strong></div><div><span>偏心率</span><strong id="orbit-e">—</strong></div><div><span>倾角</span><strong id="orbit-i">—</strong></div><div><span>二体估算周期</span><strong id="orbit-period">—</strong></div><p class="field-hint">瞬时二体近似；其他天体的扰动会改变轨道。</p></div>
+          <div class="relativity-readout"><span>外场时钟速率 dτ/dt</span><strong id="body-clock">—</strong><small>相对坐标时间的一阶估计，不含自身引力势</small><span>史瓦西半径（参照值）</span><strong id="body-schwarzschild">—</strong><small>只作相对论尺度参照，不改变天体实际半径</small></div><div class="orbital-readout"><div class="section-label">相对主天体的瞬时轨道 <span>KEPLER</span></div><div><span>半长轴</span><strong id="orbit-a">—</strong></div><div><span>偏心率</span><strong id="orbit-e">—</strong></div><div><span>倾角</span><strong id="orbit-i">—</strong></div><div><span>二体估算周期</span><strong id="orbit-period">—</strong></div><p class="field-hint">瞬时二体近似；其他天体的扰动会改变轨道。</p></div>
           <button id="delete-body" class="danger-button">移除此天体</button>
         </section>
         <section id="tab-physics" class="tab-content" hidden>
           <div class="section-label">引力与积分 <span>DYNAMICS</span></div>
+          ${select('gravity-model','引力模型',option('gr1pn','广义相对论 · EIH 1PN 弱场')+option('newtonian','牛顿引力 · 对照实验'))}
+          <p class="field-hint" id="gr-description">全体天体的 1PN 速度项与引力势耦合；光速固定为 299,792.458 km/s。近似适用于弱场慢速，不求解完整爱因斯坦场方程或黑洞合并。</p>
+          <div class="relativity-readout"><span>当前相对论参数</span><strong id="pn-parameter">—</strong><small>max(v²/c², U/c²)；≥ 0.01 时停止</small></div>
           ${number('gravity','引力常数倍率',1,0,1000,'any','× G')}
           <p class="field-hint">标准 G = ${G?.toFixed(6)} AU³ / (M☉ · 年²)。倍率改变物理系统。</p>
           ${select('integrator','积分算法',option('verlet','Velocity Verlet · 二阶辛积分')+option('rk4','Runge–Kutta 4 · 四阶'))}
-          ${number('timestep','固定物理步长',.0005,1e-8,1,'any','年')}
+          ${number('timestep','请求物理步长',.0005,1e-8,1,'any','年')}
           <p class="field-hint" id="step-hint">减小步长可提高近距离交会精度。</p>
           <div class="precision-presets"><button data-dt="0.00005">精细</button><button data-dt="0.0005">标准</button><button data-dt="0.005">快速</button></div>
           ${number('softening','引力软化长度 ε',0,0,100,'any','AU')}
@@ -92,7 +95,7 @@ document.querySelector('#app').innerHTML=`
           ${number('fragment-count','高能碰撞碎片数',6,2,12,1)}
           <p class="field-hint">碰撞默认开启。低能接触合并，高能接触可产生真实引力碎块，恒星可吸收撞击体。碎裂为能量约束下的引力聚合体近似，不包含真实材料与流体。</p>
           <div class="section-label">最近碰撞 <span id="destruction-count">0 次毁坏</span></div><div id="collision-log" class="collision-log">尚未发生碰撞。可在天体面板发射撞击体。</div>
-          <div class="model-note"><span class="status-dot"></span><strong>物理模型有清晰边界</strong><p>直接计算每对天体的引力，使用真实单位。当前不包含广义相对论、暗物质、辐射或宇宙膨胀。</p><button id="physics-help" class="inline-link">查看公式与数值说明 ↗</button></div>
+          <div class="model-note"><span class="status-dot"></span><strong>物理模型有清晰边界</strong><p>直接计算每对天体的引力，使用真实单位。默认 EIH 1PN 含广义相对论弱场修正；接触仍为低速聚合体近似，不模拟冲击流体、引力波或黑洞内部。</p><button id="physics-help" class="inline-link">查看公式与数值说明 ↗</button></div>
         </section>
         <section id="tab-display" class="tab-content" hidden>
           <div class="section-label">观察方式 <span>OBSERVATION</span></div>
@@ -101,11 +104,11 @@ document.querySelector('#app').innerHTML=`
           ${toggle('show-labels','天体名称',true)}
           ${toggle('show-grid','坐标网格',true,'参考平面 z = 0')}
           ${toggle('show-vectors','速度方向',false,'箭头长度为辅助显示尺度')}
-          ${toggle('true-scale','使用真实天体大小',false,'关闭最小显示尺寸与视觉放大')}
+          ${toggle('show-markers','显示天体定位标记',true,'空心圆环用于定位，不代表球体或碰撞边界')}
           ${toggle('collision-bounds','实际碰撞边界',false,'线框球半径与碰撞计算一致')}
           ${slider('trail-length','轨迹采样点数',900,60,2400,60)}
-          ${slider('body-scale','天体显示倍率',1,.4,4,.1,'×')}
-          <p class="field-hint">为便于观察，小天体设有最小显示尺寸；显示倍率不改变物理半径、引力与碰撞。</p>
+          ${slider('body-scale','定位标记大小',1,.4,4,.1,'×')}
+          <p class="field-hint">实心球面始终采用实际半径。小天体用空心圆环辅助定位；放大镜头可查看表面。单独查看会移动镜头，不改变天体大小。</p>
           <div class="section-label">画面操作 <span>CAMERA</span></div>
           <button id="clear-trails" class="outline-button wide">清除历史轨迹</button><button id="fullscreen" class="outline-button wide">${icon('expand')} 全屏实验室</button>
           <div class="keyboard-guide"><span>空格</span><p>播放 / 暂停</p><span>R</span><p>重置当前实验</p><span>F</span><p>显示全部天体</p><span>Esc</span><p>退出单体观察</p></div>
@@ -113,9 +116,9 @@ document.querySelector('#app').innerHTML=`
       </div>
       <div class="inspector-footer"><span class="status-dot"></span> 可编辑的宇宙，可测量的结果。</div>
     </aside>
-    <section class="telemetry"><div class="telemetry-title"><span class="eyebrow">CONSERVATION</span><strong>守恒量观测</strong><span id="energy-status">数值稳定</span></div><div class="energy-chart"><div><span>碰撞校正后相对能量误差</span><strong id="energy-error">0.0000%</strong></div><canvas id="energy-chart"></canvas><div class="chart-labels"><span>较早</span><span id="energy-range">±0.0001%</span><span>现在</span></div></div><div class="telemetry-numbers"><div><span>机械能 E</span><strong id="total-energy">—</strong><small>M☉ · AU²/年²</small></div><div><span>总线动量 |P|</span><strong id="total-momentum">—</strong><small>M☉ · AU/年</small></div><div><span>总角动量 |L|</span><strong id="total-angular">—</strong><small>M☉ · AU²/年</small></div><div><span>碰撞 / 能量交换</span><strong id="collision-count">0</strong><small id="collision-energy">0.000</small></div></div></section>
+    <section class="telemetry"><div class="telemetry-title"><span class="eyebrow">CONSERVATION</span><strong>守恒量观测</strong><span id="energy-status">数值稳定</span></div><div class="energy-chart"><div><span>碰撞校正后相对能量变化</span><strong id="energy-error">0.0000%</strong></div><canvas id="energy-chart"></canvas><div class="chart-labels"><span>较早</span><span id="energy-range">±0.0001%</span><span>现在</span></div></div><div class="telemetry-numbers"><div><span>机械能 E</span><strong id="total-energy">—</strong><small>M☉ · AU²/年²</small></div><div><span>总动量 |P|（1PN 含场项）</span><strong id="total-momentum">—</strong><small>M☉ · AU/年</small></div><div><span>总角动量 |L|（含 spin）</span><strong id="total-angular">—</strong><small>M☉ · AU²/年</small></div><div><span>碰撞 / 能量交换</span><strong id="collision-count">0</strong><small id="collision-energy">0.000</small></div></div></section>
   </main>
-  <dialog id="help-dialog" class="modal help-modal"><button class="modal-close icon-button" data-close>${icon('close')}</button><span class="eyebrow">THE SCIENCE BEHIND THE SCENE</span><h2>让每一条轨道，都有物理依据。</h2><p>这是一个三维牛顿多体引力实验室。每个天体都作为具有实际碰撞半径的质点参与成对引力计算，天体在共同的惯性参考系中运动。</p><div class="formula">aᵢ = G ∑ⱼ≠ᵢ mⱼ (rⱼ − rᵢ) / (|rⱼ − rᵢ|² + ε²)³ᐟ²</div><div class="help-columns"><section><h3>真实单位与算法</h3><p>距离：AU；质量：太阳质量；时间：儒略年（365.25 天）。默认二阶 Velocity Verlet 在固定步长和无碰撞时为辛积分。RK4 提供更高单步精度，但不是辛算法。</p><p>势能使用与软化引力一致的 −Gmᵢmⱼ/√(r²+ε²)。能量图给出 (E + 碰撞能量交换 − E₀)/|E₀|；E₀ 恰为零时以初始动能与势能幅值归一化。</p></section><section><h3>正确理解“物理正确”</h3><p>所有结果是此模型的数值近似。太阳系是轨道尺度和质量有依据的理想化初态，不是实时星历。初始参考轨道只辅助比较，实际运动由引力积分生成。</p><p>近距离掠过需要更小步长。界面会根据交会时间尺度提示精度风险；计算预算不足时降低实际演化速度，不偷偷增大物理步长。</p></section><section><h3>碰撞与单体观察</h3><p>默认开启合并与碎裂：低能撞击合并，高能撞击生成继续受引力作用的碎片，恒星可吸收小天体。连续接触检测结合近距离子步，减少高速穿透。碎裂采用可调束缚能阈值的引力聚合体近似，不解析材料、流体和冲击波。</p><p>质量与线动量守恒，未解析角动量存入自旋；碎裂速度受可用能量约束。单独查看只改变可见性，其他天体仍参与计算。可启用真实尺寸及碰撞边界，在天体面板发射撞击体观察接触。</p></section><section><h3>适用范围</h3><p>适合探索轨道、引力弹弓、三体混沌和星团演化。未模拟黑洞时空、光线弯曲、潮汐形变、恒星内部、磁场、辐射及宇宙学膨胀。表面纹理与土星环用于外观示意，不模拟自转、大气或环粒子动力学。</p><p>参数可自由实验；近碰撞误差大时暂停并减小步长。太阳系的长期天文预测需要专业星历和更完整模型。</p></section></div><div class="source-links"><a href="https://ssd.jpl.nasa.gov/astro_par.html" target="_blank" rel="noreferrer">JPL · 天文常数 ↗</a><a href="https://rebound.hanno-rein.de/integrators/leapfrog/" target="_blank" rel="noreferrer">REBOUND · 辛积分 ↗</a><a href="./SCIENCE.md" target="_blank">完整物理说明 ↗</a><a href="./TEXTURE-CREDITS.md" target="_blank">行星纹理 · Solar System Scope / CC BY 4.0 ↗</a></div></dialog>
+  <dialog id="help-dialog" class="modal help-modal"><button class="modal-close icon-button" data-close>${icon('close')}</button><span class="eyebrow">GENERAL RELATIVITY · 1PN</span><h2>太阳系的广义相对论弱场模拟</h2><p>默认使用谐和坐标下的 Einstein–Infeld–Hoffmann（EIH）一阶后牛顿方程。全部天体参与速度相关项和引力势耦合，太阳也会运动。</p><div class="formula">a = aₙ + a₁ᴾᴺ　　·　　c = 299,792.458 km/s</div><div class="help-columns"><section><h3>模型与积分</h3><p>这是广义相对论的弱场慢速近似，保留到 1/c² 阶；不是完整爱因斯坦场方程求解器。采用对速度相关力适用的 RK4，各中间阶段重新计算位置和速度。牛顿模式可用于同初值对照。</p><p>能量、正则动量和总角动量使用同阶 EIH 表达式。近日点进动可与 6πGM / [a(1−e²)c²] 比较；极小能量误差不保证任意长期星历精度。</p></section><section><h3>质量与体积</h3><p>质量和实际半径是独立参数。只改质量只改变密度与引力，不重设半径，也不会自动把行星画成恒星。表面球体与碰撞球体大小一致；空心圆环是定位标记。</p><p>单独查看通过移动镜头放大天体。史瓦西半径仅作参照值，不会自动替换实际半径。外场时钟速率不含该天体自身引力势。</p></section><section><h3>碰撞与碎裂</h3><p>修改位置或半径造成重叠时，即使暂停也会立即处理接触。运动中查找子步内最早接触，再推进剩余时间。立体投影重叠和定位标记重叠不代表球面相交。</p><p>接触采用低速引力聚合体近似：合并、反弹、吸收或有限能量碎裂。碎片继续受引力；碰撞后的正则动量匹配到幸存体，未解析角动量存入 spin。该模型不求解材料断裂、冲击波或相对论流体。</p></section><section><h3>适用边界</h3><p>保留 1PN 保守项，未包含高阶 PN、引力波辐射、黑洞合并、潮汐形变、流体和旋转耦合。初态仍为 JPL J2000 近似轨道元素与教学月球相位，并非实时精密星历。</p><p>当 v²/c²、外场 U/c² 或有限球体 GM/(Rc²) 达到 0.01 时暂停，明确提示超出本模型范围。物理半径保持用户设置，不用自动改变体积掩盖失效。</p></section></div><div class="source-links"><a href="https://fiteoweb.unige.ch/~maggiore/GWVol1/EIHLagrangian.pdf" target="_blank" rel="noreferrer">EIH 方程与作用量 ↗</a><a href="https://ssd.jpl.nasa.gov/astro_par.html" target="_blank" rel="noreferrer">JPL · 天文常数 ↗</a><a href="./SCIENCE.md" target="_blank">完整物理说明 ↗</a><a href="./TEXTURE-CREDITS.md" target="_blank">纹理署名 ↗</a></div></dialog>
   <dialog id="scene-dialog" class="modal"><button class="modal-close icon-button" data-close>${icon('close')}</button><span class="eyebrow">INITIAL CONDITIONS</span><h2>构造你的实验</h2><p id="scene-settings-description"></p><form id="scene-form"><div class="form-grid">${number('initial-count','星团天体数',64,8,160,1)}${number('initial-seed','随机种子',42,0,2147483647,1)}${number('initial-eccentricity','轨道偏心率',0,0,.9,.01)}${number('initial-separation','双星半长轴 / 间距',2,.05,100,'any','AU')}${number('initial-mass-ratio','双星质量比',.7,.01,10,.01)}${number('initial-velocity-scale','初始速度倍率',1,0,5,.05)}${number('initial-inclination','轨道倾角',0,0,180,1,'°')}${number('initial-virial-ratio','星团维里比 K / |U|',.5,0,2,.05)}</div><p class="field-hint" id="initial-scope"></p><button class="primary-button" type="submit">重新生成当前场景 ${icon('arrow')}</button></form></dialog>
   <dialog id="add-dialog" class="modal"><button class="modal-close icon-button" data-close>${icon('close')}</button><span class="eyebrow">CREATE A CELESTIAL BODY</span><h2>向宇宙中，添加一颗天体。</h2><form id="add-form"><div class="form-grid"><label class="field"><span>名称</span><input id="new-name" value="新行星" required maxlength="36"/></label><label class="field"><span>颜色</span><input type="color" id="new-color" value="#9ddfd3"/></label>${number('new-mass','质量',.000003,1e-15,null,'any','M☉')}${number('new-radius','实际半径',6371,0,null,'any','km')}</div>${select('new-method','初始状态',option('orbit','根据开普勒轨道参数生成')+option('manual','直接设置三维位置与速度'))}<div id="new-orbit-fields">${select('new-parent','环绕主天体','')}<div class="form-grid">${number('new-a','半长轴 a',1.5,.00001,null,'any','AU')}${number('new-e','偏心率 e',.1,0,.99,.01)}${number('new-i','轨道倾角 i',10,0,180,1,'°')}${number('new-node','升交点经度 Ω',0,0,360,1,'°')}${number('new-peri','近心点幅角 ω',0,0,360,1,'°')}${number('new-phase','真近点角 ν',0,0,360,1,'°')}</div><p class="field-hint">按主天体与新天体总质量计算相对开普勒速度；为保持原系统的总线动量，添加后整体重置质心速度。</p></div><div id="new-manual-fields" hidden><div class="section-label">位置 <span>AU</span></div><div class="vector-fields">${['x','y','z'].map(k=>number(`new-p${k}`,k,0,null,null)).join('')}</div><div class="section-label">速度 <span>AU / 年</span></div><div class="vector-fields">${['x','y','z'].map(k=>number(`new-v${k}`,k,0,null,null)).join('')}</div></div><button class="primary-button" type="submit">创建天体 ${icon('plus')}</button></form></dialog>
   <input type="file" id="import-file" accept="application/json,.json" hidden/>
@@ -125,7 +128,7 @@ document.querySelector('#app').innerHTML=`
 document.body.insertAdjacentHTML('beforeend',`<dialog id="orbit-dialog" class="modal"><button class="modal-close icon-button" id="orbit-close">${icon('close')}</button><span class="eyebrow">ORBITAL ELEMENTS</span><h2 id="orbit-edit-title">编辑天体轨道</h2><p>从当前状态计算瞬时二体轨道。应用后，位置和速度由六个参数重新计算，其他天体将继续对它施加引力。</p><form id="orbit-form">${select('edit-parent','参考主天体','')}<div class="form-grid">${number('edit-a','半长轴 a',1,.0000001,null,'any','AU')}${number('edit-e','偏心率 e',.1,0,.999,.001)}${number('edit-i','轨道倾角 i',0,0,180,'any','°')}${number('edit-node','升交点经度 Ω',0,0,360,'any','°')}${number('edit-peri','近心点幅角 ω',0,0,360,'any','°')}${number('edit-nu','真近点角 ν',0,0,360,'any','°')}</div><p class="field-hint">此编辑器生成束缚椭圆轨道（0 ≤ e &lt; 1）。改变轨道会改变系统能量和动量，应用后重新记录守恒参考点。</p><button class="primary-button" type="submit">应用轨道参数 ${icon('arrow')}</button></form></dialog>`);
 
 const mobileMedia=matchMedia('(max-width: 960px), (max-width: 1180px) and (pointer: coarse)');
-document.body.insertAdjacentHTML('beforeend',`<dialog id="impact-dialog" class="modal"><button class="modal-close icon-button" id="impact-close">${icon('close')}</button><span class="eyebrow">COLLISION EXPERIMENT</span><h2 id="impact-title">发射撞击体</h2><p>在目标附近生成一个真正参与引力计算的撞击体。根据碰撞能量，观察合并、吸收或碎裂。</p><form id="impact-form">${number('impact-mass','撞击体质量 / 目标质量',15,.1,100, .1,'%')}${number('impact-speed','初始相对速度',50,.01,1000,'any','km/s')}${number('impact-offset','偏移量 / 接触半径',.15,0,2,.05)}<p class="field-hint">0 为正面相撞，大于 1 可能掠过。撞击体采用目标的平均密度。发射时会切换到真实尺寸，并放慢演化以观察接触过程；底部重置可恢复初始太阳系。</p><button class="primary-button" type="submit">发射并观察 ${icon('arrow')}</button></form></dialog>`);
+document.body.insertAdjacentHTML('beforeend',`<dialog id="impact-dialog" class="modal"><button class="modal-close icon-button" id="impact-close">${icon('close')}</button><span class="eyebrow">COLLISION EXPERIMENT</span><h2 id="impact-title">发射撞击体</h2><p>在目标附近生成一个真正参与引力计算的撞击体。根据碰撞能量，观察合并、吸收或碎裂。</p><form id="impact-form">${number('impact-mass','撞击体质量 / 目标质量',15,.1,100, .1,'%')}${number('impact-radius','撞击体实际半径',3000,0.001,null,'any','km')}${number('impact-speed','初始相对速度',50,.01,1000,'any','km/s')}${number('impact-offset','偏移量 / 接触半径',.15,0,2,.05)}<p class="field-hint">0 为正面相撞，大于 1 可能掠过。撞击体的质量和半径独立设置，修改质量不会改变体积。发射时会靠近镜头、显示碰撞边界，并放慢演化以观察接触过程；底部重置可恢复初始太阳系。</p><button class="primary-button" type="submit">发射并观察 ${icon('arrow')}</button></form></dialog>`);
 document.body.insertAdjacentHTML('beforeend',`<button id="panel-backdrop" aria-label="关闭面板" hidden></button><nav class="mobile-nav" aria-label="实验室导航"><button id="mobile-bodies" data-mobile-panel="left" aria-controls="left-panel" aria-expanded="false">${icon('list')}<span>天体</span></button><button id="mobile-parameters" data-mobile-panel="right" data-mobile-tab="body" aria-controls="right-panel" aria-expanded="false">${icon('sliders')}<span>参数</span></button><button id="mobile-display" data-mobile-panel="right" data-mobile-tab="display" aria-controls="right-panel" aria-expanded="false">${icon('focus')}<span>显示</span></button><button id="mobile-data" data-mobile-panel="stats" aria-controls="telemetry" aria-expanded="false">${icon('orbit')}<span>数据</span></button></nav>`);
 $('.telemetry').id='telemetry';
 const mobilePanels={left:$('#left-panel'),right:$('#right-panel'),stats:$('.telemetry')};
@@ -167,6 +170,7 @@ let engine, selectedId, currentPreset='solar', initialOptions={}, running=true, 
 let energyHistory=[], lastTelemetry=0, lastWall=performance.now(), simAccum=0, frameCount=0, realWindow=0, simWindow=0, actualSpeed=0;
 let isolated=false, resetKind='preset', lastError='';
 let seenCollisionEvents=new Set();
+const editedBodyFields=new Set();
 const view=new UniverseView($('#viewport'),selectBody);
 const toast=message=>{$('#toast').textContent=message;$('#toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').hidden=true,4200);};
 function setRunning(value){running=value;$('#play').innerHTML=icon(running?'pause':'play');$('#play-state').textContent=running?'演化中':'已暂停';$('.running-state').classList.toggle('paused',!running);simAccum=0;}
@@ -176,7 +180,7 @@ function resetEnergy(){engine.resetReference();energyHistory=[];view.clearTrails
 function consumeCollisionEvents(){
   const events=engine.events??[],fresh=events.filter(event=>!seenCollisionEvents.has(event.id));
   if(!fresh.length)return;
-  seenCollisionEvents=new Set(events.map(event=>event.id));view.addCollisionEvents(fresh);
+  seenCollisionEvents=new Set(events.map(event=>event.id));view.addCollisionEvents(fresh);$('#collision-count').textContent=String(engine.collisionCount);
   $('#collision-log').replaceChildren(...events.slice(-5).reverse().map(event=>{
     const row=document.createElement('p');row.textContent=`${event.names.join(' + ')} · ${event.type==='fragment'?`碎裂 → ${event.resultIds.length} 个碎块`:event.type==='bounce'?'反弹':'合并 / 吸收'}`;return row;
   }));
@@ -189,6 +193,7 @@ function consumeCollisionEvents(){
 }
 function setSpeed(value){speed=value;$('#speed').value=Math.log10(speed);$('#speed-value').textContent=speed<.001?`${fmt(speed*365.25*86400,2)} 秒/秒`:`${fmt(speed,3)} 年/秒`;}
 function syncPhysicsInputs(){
+  const gr=engine.params.gravityModel==='gr1pn';$('#coordinate-frame').textContent=gr?'太阳系谐和坐标':'惯性坐标';$('#gravity-model').value=engine.params.gravityModel;$('#gravity-model-badge').textContent=gr?'广义相对论 · EIH 1PN':'牛顿引力 · 对照';$('#integrator').disabled=gr;$('#softening').disabled=gr;$('#gr-description').hidden=!gr;
   $('#gravity').value=engine.params.gravityScale;$('#integrator').value=engine.params.integrator;$('#timestep').value=engine.params.dt;$('#softening').value=engine.params.softening;$('#collision-mode').value=engine.params.collisionMode;$('#restitution').value=engine.params.restitution;
   $('#restitution').disabled=engine.params.collisionMode!=='elastic';$('#restitution-value').textContent=engine.params.restitution;
   $('#disruption-threshold').value=engine.params.disruptionThreshold??1;$('#fragment-count').value=engine.params.fragmentCount??6;
@@ -201,7 +206,7 @@ function loadPreset(id,options={}){
   const meta=PRESETS.find(v=>v.id===id);$('#scene-title').textContent=meta.name;$('#scene-description').textContent=p.description||meta.description;
   $('#scene-code').textContent=`SCENE 0${PRESETS.indexOf(meta)+1}`;document.querySelectorAll('[data-preset]').forEach(b=>b.classList.toggle('active',b.dataset.preset===id));
   isolated=false;view.settings.isolateId=null;$('#exit-isolate').hidden=true;$('#isolate-badge').hidden=true;
-  view.settings.trueScale=false;view.settings.showCollisionBounds=false;$('#true-scale').checked=false;$('#collision-bounds').checked=false;
+  view.settings.markers=true;view.settings.showCollisionBounds=false;$('#show-markers').checked=true;$('#collision-bounds').checked=false;
   view.sync([]);view.frame(id==='solar'?33:p.viewScale||meta.scale||6);view.clearTrails();view.recordStep(engine.bodies,engine.time);energyHistory=[];seenCollisionEvents.clear();$('#collision-log').textContent='尚未发生碰撞。可在天体面板发射撞击体。';$('#destruction-count').textContent='0 个天体毁坏';
   setSpeed(p.speed||meta.speed||.5);setRunning(true);dirty=false;
   syncPhysicsInputs();refreshList();selectBody((engine.bodies.find(b=>b.name==='地球')||engine.bodies[0]).id);lastError='';
@@ -220,13 +225,14 @@ function refreshList(){
 }
 function getSelected(){return engine.bodies.find(b=>b.id===selectedId);}
 function selectBody(id){
-  selectedId=id;dirty=false;view.select(id);const b=getSelected();if(!b)return;
+  selectedId=id;dirty=false;editedBodyFields.clear();view.select(id);const b=getSelected();if(!b)return;
   document.querySelectorAll('.body-list-item').forEach(el=>el.classList.toggle('selected',el.dataset.id===String(id)));
   $('#selected-name').textContent=b.name;$('#body-type').textContent=b.isFragment?'碰撞碎片 · 引力聚合体':b.id==='moon'?'天然卫星 · 地球':b.mass>=.08?'恒星质量天体':b.mass>=1e-7?'行星质量天体':'小质量天体';
+  $('#fall-sun').disabled=b.id==='sun'||engine.params.gravityScale===0||!engine.bodies.some(x=>x.id==='sun');
   $('#body-index').textContent=String(engine.bodies.indexOf(b)+1).padStart(2,'0');$('#body-orb').style.setProperty('--orb-color',b.color);
   $('#body-orb').style.backgroundImage=textureUrls[b.id]?`radial-gradient(circle at 30% 28%,transparent 30%,#010910c9 90%),url("${textureUrls[b.id]}")`:'';
   $('#body-orb').style.backgroundSize='auto 100%';
-  $('#body-name').value=b.name;$('#body-color').value=b.color;$('#body-mass').value=b.mass;$('#body-radius').value=+(b.radius*AU_KM).toPrecision(8);
+  $('#body-name').value=b.name;$('#body-color').value=b.color;$('#body-mass').value=b.mass;$('#body-radius').value=b.radius*AU_KM;
   syncBodyFields(b);$('#apply-body').classList.remove('pending');$('#mobile-apply').disabled=true;$('#mobile-parameters').setAttribute('aria-label',`${b.name}的参数`);switchTab('body');
   if(isolated){view.settings.isolateId=id;view.focus(b,true);setSceneHeading(b);}
 }
@@ -248,16 +254,22 @@ $('#play').onclick=()=>setRunning(!running);$('#step').onclick=()=>{setRunning(f
 $('#reset').onclick=()=>{if(resetKind==='preset')loadPreset(currentPreset,initialOptions);else restoreSnapshot(initialState);toast('实验已重置。');};
 $('#speed').oninput=e=>setSpeed(10**Number(e.target.value));
 $('#gravity').onchange=()=>modifyPhysics('#gravity','gravityScale',{reference:true});$('#softening').onchange=()=>modifyPhysics('#softening','softening',{reference:true});
+$('#gravity-model').onchange=()=>{engine.params.gravityModel=$('#gravity-model').value;if(engine.params.gravityModel==='gr1pn'){engine.params.integrator='rk4';engine.params.softening=0;}lastError='';resetEnergy();syncPhysicsInputs();};
 $('#integrator').onchange=()=>modifyPhysics('#integrator','integrator');$('#timestep').onchange=()=>modifyPhysics('#timestep','dt');
 $('#collision-mode').onchange=()=>modifyPhysics('#collision-mode','collisionMode',{reference:true});$('#restitution').oninput=()=>modifyPhysics('#restitution','restitution');
 $('#disruption-threshold').onchange=()=>modifyPhysics('#disruption-threshold','disruptionThreshold');$('#fragment-count').onchange=()=>modifyPhysics('#fragment-count','fragmentCount');
 document.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>{$('#timestep').value=b.dataset.dt;modifyPhysics('#timestep','dt');});
-$('#body-form').addEventListener('input',()=>{dirty=true;setRunning(false);$('#apply-body').classList.add('pending');$('#mobile-apply').disabled=false;});
+$('#body-form').addEventListener('input',event=>{editedBodyFields.add(event.target.id);dirty=true;setRunning(false);$('#apply-body').classList.add('pending');$('#mobile-apply').disabled=false;});
 $('#body-form').onsubmit=e=>{
   e.preventDefault();const b=getSelected();if(!b)return;
-  b.name=$('#body-name').value.trim()||'未命名天体';b.color=$('#body-color').value;b.mass=+$('#body-mass').value;b.radius=+$('#body-radius').value/AU_KM;
-  b.position=['x','y','z'].map(k=>+$(`#body-p${k}`).value);b.velocity=['x','y','z'].map(k=>+$(`#body-v${k}`).value);
-  b.referenceOrbit=undefined;view.sync([]);dirty=false;lastError='';resetEnergy();refreshList();selectBody(b.id);if(mobileMedia.matches)closeMobilePanels();toast('天体参数已应用；按播放继续演化。');
+  if(editedBodyFields.has('body-name'))b.name=$('#body-name').value.trim()||'未命名天体';
+  if(editedBodyFields.has('body-color'))b.color=$('#body-color').value;
+  if(editedBodyFields.has('body-mass'))b.mass=+$('#body-mass').value;
+  if(editedBodyFields.has('body-radius'))b.radius=+$('#body-radius').value/AU_KM;
+  ['x','y','z'].forEach((k,i)=>{if(editedBodyFields.has(`body-p${k}`))b.position[i]=+$(`#body-p${k}`).value;if(editedBodyFields.has(`body-v${k}`))b.velocity[i]=+$(`#body-v${k}`).value;});
+  b.referenceOrbit=undefined;view.sync([]);dirty=false;lastError='';resetEnergy();
+  engine.resolveContacts();consumeCollisionEvents();refreshList();selectBody(engine.bodies.some(x=>x.id===b.id)?b.id:engine.bodies[0].id);view.sync(engine.bodies);updateTelemetry(performance.now(),true);
+  if(mobileMedia.matches)closeMobilePanels();toast('已应用修改；半径仅在编辑半径时变化，重叠天体已处理接触。');
 };
 $('#isolate-body').onclick=()=>{const b=getSelected();if(!b)return;isolated=true;view.settings.isolateId=b.id;view.focus(b,true);setSceneHeading(b);$('#exit-isolate').hidden=false;$('#isolate-badge').hidden=false;if(mobileMedia.matches)closeMobilePanels();};
 $('#follow-body').onclick=()=>{view.focus(getSelected());if(mobileMedia.matches)closeMobilePanels();toast(`镜头跟随 ${getSelected().name}`);};
@@ -266,25 +278,41 @@ $('#delete-body').onclick=()=>{
   if(engine.bodies.length===1){toast('实验至少保留一个天体。');return;}
   const name=getSelected().name;engine.bodies=engine.bodies.filter(b=>b.id!==selectedId);resetEnergy();refreshList();selectBody(engine.bodies[0].id);toast(`已移除 ${name}，引力系统已更新。`);
 };
-const displayBindings={'show-trails':'trails','show-references':'references','show-labels':'labels','show-grid':'grid','show-vectors':'vectors','true-scale':'trueScale','collision-bounds':'showCollisionBounds'};
+const displayBindings={'show-trails':'trails','show-references':'references','show-labels':'labels','show-grid':'grid','show-vectors':'vectors','show-markers':'markers','collision-bounds':'showCollisionBounds'};
 $('#impact-close').onclick=()=>$('#impact-dialog').close();
 $('#impact-body').onclick=()=>{
   const target=getSelected();
   if(target.radius<=0){toast('先设置非零实际半径，再进行接触撞击实验。');return;}
-  setRunning(false);$('#impact-title').textContent=`撞击「${target.name}」`;$('#impact-dialog').showModal();
+  setRunning(false);$('#impact-radius').value=target.radius*AU_KM/2;$('#impact-title').textContent=`撞击「${target.name}」`;$('#impact-dialog').showModal();
 };
 $('#impact-form').onsubmit=event=>{
   event.preventDefault();const target=getSelected(),ratio=+$('#impact-mass').value/100,velocity=+$('#impact-speed').value/V_KMS;
-  const radius=target.radius*Math.cbrt(ratio),contactRadius=target.radius+radius,distance=contactRadius*7;
+  const radius=+$('#impact-radius').value/AU_KM,contactRadius=target.radius+radius,distance=contactRadius*7;
   const impactor={id:crypto.randomUUID(),name:`${target.name}撞击体`,mass:target.mass*ratio,radius,color:'#ffab79',position:target.position.map((x,i)=>x+(i===0?distance:i===1?contactRadius*+$('#impact-offset').value:0)),velocity:target.velocity.map((v,i)=>v-(i===0?velocity:0)),spin:[0,0,0],parentId:target.id};
   engine.bodies.push(impactor);engine.params.collisionMode='fragment';
   const flightTime=distance/velocity;engine.params.dt=Math.max(1e-8,Math.min(engine.params.dt,flightTime/240));
   resetEnergy();syncPhysicsInputs();refreshList();selectBody(target.id);
   isolated=false;view.settings.isolateId=null;$('#exit-isolate').hidden=true;$('#isolate-badge').hidden=true;
-  view.settings.trueScale=true;view.settings.showCollisionBounds=true;$('#true-scale').checked=true;$('#collision-bounds').checked=true;
+  view.settings.markers=false;view.settings.showCollisionBounds=true;$('#show-markers').checked=false;$('#collision-bounds').checked=true;
   view.frame(distance*1.1);view.controls.target.fromArray(target.position);view.camera.position.add(view.controls.target);view.followId=target.id;
   $('#scene-title').textContent=`${target.name} · 撞击实验`;$('#scene-description').textContent='按实际物理半径观察接触；碰撞结果由动力学与简化碎裂模型计算。';
   setSpeed(Math.max(1e-8,Math.min(100,flightTime/5)));$('#impact-dialog').close();if(mobileMedia.matches)closeMobilePanels();setRunning(true);
+};
+$('#fall-sun').onclick=()=>{
+  const target=getSelected(),sun=engine.bodies.find(b=>b.id==='sun');
+  if(engine.params.gravityScale===0){toast('自由落体需要非零引力。');return;}
+  target.velocity=[...sun.velocity];delete target.referenceOrbit;delete target.orbitalElements;
+  engine.params.collisionMode='fragment';
+  resetEnergy();engine.resolveContacts();consumeCollisionEvents();
+  if(!engine.bodies.includes(target)){refreshList();selectBody(sun.id);view.sync(engine.bodies);updateTelemetry(performance.now(),true);return;}
+  const distance=norm(target.position.map((x,i)=>x-sun.position[i]));
+  const fallTime=Math.PI/(2*Math.sqrt(2))*Math.sqrt(distance**3/(G*engine.params.gravityScale*(sun.mass+target.mass)));
+  engine.params.dt=Math.min(engine.params.dt,fallTime/1000);
+  resetEnergy();engine.resolveContacts();consumeCollisionEvents();syncPhysicsInputs();refreshList();selectBody(engine.bodies.some(b=>b.id===target.id)?target.id:sun.id);
+  isolated=false;view.settings.isolateId=null;$('#exit-isolate').hidden=true;$('#isolate-badge').hidden=true;
+  view.frame(Math.max(distance,sun.radius*10));view.controls.target.fromArray(sun.position);view.camera.position.add(view.controls.target);view.followId=sun.id;
+  $('#scene-title').textContent=`${target.name} → 太阳`;$('#scene-description').textContent='移除相对太阳的初始速度，质量与体积保持不变，随后由引力决定是否接触。';
+  setSpeed(Math.max(1e-8,Math.min(100,fallTime/8)));if(mobileMedia.matches)closeMobilePanels();setRunning(true);toast('已移除相对太阳的初始速度；质量和实际半径保持不变。');
 };
 document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>{
   isolated=false;view.settings.isolateId=null;$('#exit-isolate').hidden=true;$('#isolate-badge').hidden=true;setSceneHeading();
@@ -405,7 +433,9 @@ function updateTelemetry(now,force=false){
   $('#physics-warning').hidden=!risk&&!lastError;
   if(!lastError)$('#physics-warning').textContent=`近距离交会：建议将物理步长减小到 ${sci(d.suggestedDt)} 年以下。`;
   $('#scale-value').textContent=`网格 ${fmt(view.gridStep)} AU`;
-  $('.scale-key small').textContent=view.settings.trueScale?'真实尺寸 · 碰撞半径一致':'视觉已放大 · 碰撞按实际半径';
+  $('.scale-key small').textContent='实心球为真实半径 · 圆环为定位标记';
+  $('#pn-parameter').textContent=engine.params.gravityModel==='gr1pn'?sci(d.pnParameter):'牛顿对照';
+  if(b){const index=engine.bodies.indexOf(b);$('#body-clock').textContent=engine.params.gravityModel==='gr1pn'?d.clockRates[index].toFixed(12):'—';$('#body-schwarzschild').textContent=`${sci(2*G*engine.params.gravityScale*b.mass/LIGHT_SPEED**2*AU_KM)} km`;}
   if(b){
     $('#body-speed').textContent=fmt(norm(b.velocity)*V_KMS,2);
     $('#body-density').textContent=b.radius>0?fmt(b.mass*(GM_SUN_SI/6.67430e-11)/(4/3*Math.PI*(b.radius*AU_KM*1000)**3),1):'质点';

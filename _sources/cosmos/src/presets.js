@@ -5,7 +5,7 @@ const AU_KM = 149597870.7;
 const SOLAR_GM = 132712440041.27942; // km³/s²; JPL DE440
 
 export const PRESETS = [
-  { id: 'solar', name: '太阳系', subtitle: 'SOLAR SYSTEM', description: '太阳、八大行星与月球的相互引力模拟。行星采用 JPL 的 J2000 近似轨道元素；月球采用平均地心椭圆与人为相位。不是实时或高精度星历。', scale: 35, dt: 0.00005, softening: 0, speed: 0.35 },
+  { id: 'solar', name: '太阳系', subtitle: 'SOLAR SYSTEM', description: '太阳、八大行星与月球的 EIH 1PN 广义相对论弱场模拟。行星采用 JPL 的 J2000 近似轨道元素；月球采用平均地心椭圆与人为相位。不是实时或高精度星历。', scale: 35, dt: 0.00005, softening: 0, speed: 0.35 },
 ];
 
 function body(id, name, mass, radius, color, position, velocity) {
@@ -131,7 +131,7 @@ export function createPreset(id, options = {}) {
   recenter(result.bodies);
   return {
     ...result,
-    params: { dt: preset.dt, softening, gravityScale: 1, integrator: 'verlet', collisionMode: 'fragment', restitution: 1 },
+    params: { dt: preset.dt, softening, gravityScale: 1, gravityModel: 'gr1pn', integrator: 'rk4', collisionMode: 'fragment', restitution: 1 },
     viewScale: result.viewScale ?? preset.scale,
     speed: preset.speed,
     description: preset.description,

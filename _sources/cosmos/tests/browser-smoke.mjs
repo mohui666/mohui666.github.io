@@ -33,7 +33,7 @@ async function visibleSelectedLabel(page, name) {
 try {
   const page = await browser.newPage({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 1 });
   record(page);
-  await page.goto('http://localhost:4182/', { waitUntil: 'networkidle' });
+  await page.goto((process.argv[2]||'http://localhost:4186/cosmos/'), { waitUntil: 'networkidle' });
   await page.locator('#body-count').filter({ hasText: '10' }).waitFor();
   await pause(page);
   const start = await savedState(page);
@@ -134,6 +134,7 @@ try {
 
   phase = 'physics controls';
   await page.locator('[data-tab="physics"]').click();
+  await page.locator('#gravity-model').selectOption('newtonian');
   await page.locator('#gravity').fill('0.8');
   await page.locator('#gravity').press('Tab');
   await page.locator('#integrator').selectOption('rk4');
@@ -144,7 +145,7 @@ try {
   await page.locator('#collision-mode').selectOption('elastic');
   await page.locator('#restitution').fill('0.6');
   const physics = await savedState(page);
-  assert.deepEqual(physics.params, {dt:0.0001,softening:0.001,gravityScale:0.8,integrator:'rk4',collisionMode:'elastic',restitution:0.6});
+  assert.deepEqual(physics.params, {dt:0.0001,softening:0.001,gravityScale:0.8,gravityModel:'newtonian',integrator:'rk4',collisionMode:'elastic',restitution:0.6,disruptionThreshold:1,fragmentCount:6});
   check(phase, 'gravity / integrator / dt / softening / contact / restitution update physical state');
 
   phase = 'JSON export/import round-trip';
@@ -160,14 +161,13 @@ try {
   phase = 'mobile 390×844';
   const mobile = await browser.newPage({ viewport:{width:390,height:844}, deviceScaleFactor:1, isMobile:true, hasTouch:true });
   record(mobile);
-  await mobile.goto('http://localhost:4182/', {waitUntil:'networkidle'});
+  await mobile.goto((process.argv[2]||'http://localhost:4186/cosmos/'), {waitUntil:'networkidle'});
   await pause(mobile);
-  await mobile.locator('#toggle-left').click();
+  await mobile.locator('#mobile-bodies').click();
   await mobile.locator('.body-list-item[data-id="mars"]').click();
-  await mobile.locator('#toggle-right').click();
   await mobile.locator('#body-name').fill('手机火星');
   await mobile.locator('#body-radius').fill('3400');
-  await mobile.locator('#apply-body').click();
+  await mobile.locator('#mobile-apply').click();
   assert.equal(await mobile.locator('#selected-name').textContent(), '手机火星');
   assert.equal(await mobile.locator('#body-radius').inputValue(), '3400');
   check(phase, 'sidebar selection, name/radius input and application work by touch-sized viewport');

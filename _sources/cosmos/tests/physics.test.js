@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { G, PhysicsEngine } from '../src/physics.js';
 import { createPreset } from '../src/presets.js';
+const newtonian = (bodies, params = {}) => new PhysicsEngine(bodies, { integrator: 'verlet', ...params, gravityModel: 'newtonian' });
 
 const norm = v => Math.hypot(...v);
 const difference = (a, b) => norm(a.map((x, axis) => x - b[axis]));
@@ -13,7 +14,7 @@ function circularOrbit(integrator, steps) {
     particle('primary', 1, [-mass / totalMass, 0, 0], [0, -relativeSpeed * mass / totalMass, 0]),
     particle('secondary', mass, [1 / totalMass, 0, 0], [0, relativeSpeed / totalMass, 0]),
   ], params: { collisionMode: 'none', softening: 0 } };
-  const engine = new PhysicsEngine(initial.bodies, { ...initial.params, integrator });
+  const engine = newtonian(initial.bodies, { ...initial.params, integrator });
   const reference = engine.diagnostics();
   const period = 2 * Math.PI * Math.sqrt(1 / (G * 1.001));
   let maxEnergyError = 0;
@@ -49,11 +50,11 @@ test('softened acceleration matches the gradient of the reported potential', () 
   const potentialAt = x => {
     const sample = structuredClone(bodies);
     sample[0].position[0] = x;
-    return new PhysicsEngine(sample, params).diagnostics().potential;
+    return newtonian(sample, params).diagnostics().potential;
   };
   const h = 1e-5;
   const forceFromPotential = -(potentialAt(h) - potentialAt(-h)) / (2 * h);
-  const engine = new PhysicsEngine(bodies, params);
+  const engine = newtonian(bodies, params);
   const dt = 1e-7;
   engine.step(dt);
   assert.ok(Math.abs(engine.bodies[0].mass * engine.bodies[0].velocity[0] / dt - forceFromPotential) < 1e-7);
@@ -64,7 +65,7 @@ test('merging preserves mass, linear and total angular momentum and records ener
   const b = particle('b', 3, [0.08, 0, 0], [-0.4, -0.2, 0], 0.1);
   a.spin = [0, 0, 0.3];
   b.spin = [0, 0, -0.1];
-  const engine = new PhysicsEngine([a, b], { gravityScale: 0, collisionMode: 'merge' });
+  const engine = newtonian([a, b], { gravityScale: 0, collisionMode: 'merge' });
   const before = engine.diagnostics();
   engine.step(1e-8);
   const after = engine.diagnostics();
@@ -80,7 +81,7 @@ test('merging preserves mass, linear and total angular momentum and records ener
 test('oblique elastic contact preserves kinetic energy and total momentum', () => {
   const a = particle('a', 2, [-0.1, 0, 0], [1, 0.2, 0], 0.1);
   const b = particle('b', 1, [0.1, 0, 0], [-0.8, -0.1, 0], 0.1);
-  const engine = new PhysicsEngine([a, b], { gravityScale: 0, collisionMode: 'elastic', restitution: 1 });
+  const engine = newtonian([a, b], { gravityScale: 0, collisionMode: 'elastic', restitution: 1 });
   const before = engine.diagnostics();
   engine.step(1e-5);
   const after = engine.diagnostics();
@@ -92,7 +93,7 @@ test('oblique elastic contact preserves kinetic energy and total momentum', () =
 
 test('J2000 solar initialization preserves Kepler elements, the Earth–Moon barycenter and zero total momentum', () => {
   const initial = createPreset('solar');
-  const engine = new PhysicsEngine(initial.bodies, initial.params);
+  const engine = newtonian(initial.bodies, initial.params);
   assert.equal(engine.bodies.length, 10);
   const d = engine.diagnostics();
   assert.ok(norm(d.com) < 1e-14);
@@ -129,7 +130,7 @@ test('J2000 solar initialization preserves Kepler elements, the Earth–Moon bar
 
 test('the complete ten-body solar system keeps a bound Moon and conserves energy over one Julian year', () => {
   const initial = createPreset('solar');
-  const engine = new PhysicsEngine(initial.bodies, initial.params);
+  const engine = newtonian(initial.bodies, initial.params);
   const reference = engine.diagnostics();
   let maxEnergyError = 0;
   let minimumLunarDistance = Infinity;
