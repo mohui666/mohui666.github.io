@@ -19,6 +19,7 @@
         var w = 0;
         var h = 0;
         var orbs = [];
+        var animationFrame = null;
         var mouse = { x: -9999, y: -9999 };
         var tints = [
             [255, 255, 255],
@@ -87,7 +88,7 @@
                 if (o.y > h + 60) o.y = -60;
                 drawOrb(o, t);
             }
-            window.requestAnimationFrame(step);
+            animationFrame = window.requestAnimationFrame(step);
         }
 
         resize();
@@ -109,7 +110,18 @@
             }
             return;
         }
-        window.requestAnimationFrame(step);
+        function syncAnimation() {
+            if (animationFrame !== null) {
+                window.cancelAnimationFrame(animationFrame);
+                animationFrame = null;
+            }
+            if (!document.hidden) {
+                animationFrame = window.requestAnimationFrame(step);
+            }
+        }
+
+        document.addEventListener("visibilitychange", syncAnimation);
+        syncAnimation();
     }
 
     /* ---------- 滚动渐入 ---------- */
