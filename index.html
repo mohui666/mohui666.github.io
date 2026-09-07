@@ -1,163 +1,27 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="mohui666 的个人主页，收录个人项目、ASOUL 相关内容、小说和友情链接。">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f1e">
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eceff8">
-    <link rel="icon" href="images/cover.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/style.css?v=20260814" type="text/css">
-    <script src="js/background.js" type="text/javascript" defer></script>
-    <script src="js/time.js" type="text/javascript" defer></script>
-    <script src="js/effects.js" type="text/javascript" defer></script>
-    <title>mohui666 的个人主页</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="mohui666 的个人主页：AI 与本地工具、Android 应用、游戏 Mod、交互网页，还有 ASOUL 收藏、博客和朋友们。关注嘉然，顿顿解馋。">
+  <meta name="theme-color" content="#001b89">
+  <link rel="icon" href="images/cover.ico" type="image/x-icon">
+  <link rel="preload" href="persona/fonts/anton.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="persona/site.css">
+  <script type="module" src="persona/site.js"></script>
+  <title>个人主页 · mohui666</title>
 </head>
-<body>
-    <main class="site-shell">
-        <section class="hero-panel" aria-labelledby="hero-title">
-            <div class="hero-copy">
-                <p class="kicker">mohui666 · Personal Homepage</p>
-                <h1 id="hero-title"><span class="line" data-typing>关注嘉然，</span><span class="line grad" data-typing>顿顿解馋</span></h1>
-                <p class="hero-text">大家好啊，我是 mohui666。这里是我的个人主页：项目入口、ASOUL 相关收藏和友站链接都放在这里。</p>
-                <div class="hero-actions" aria-label="主要入口">
-                    <a class="action primary" href="blog/index.html">Blog</a>
-                    <a class="action" href="projects/index.html">Projects</a>
-                    <a class="action ghost" href="motion/index.html">Motion Lab</a>
-                </div>
-            </div>
-
-            <aside class="profile-card" aria-label="个人信息卡片">
-                <img class="avatar" src="images/Dianafufu.jpg" alt="mohui666 头像">
-                <div>
-                    <p class="profile-name">mohui666</p>
-                    <p class="profile-note">写点项目，收点链接，也喜欢 ASOUL。</p>
-                </div>
-                <div id="divBottom" class="time-pill" aria-live="polite">正在加载时间…</div>
-            </aside>
-        </section>
-
-        <section class="project-section" aria-label="最新项目">
-            <div class="project-grid">
-                <a class="link-card project-card" href="cosmos/">
-                    <div class="card-head">
-                        <span class="icon-badge" aria-hidden="true">
-                            <svg viewBox="0 0 40 40" width="34" height="34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <ellipse cx="20" cy="20" rx="18" ry="8" transform="rotate(-30 20 20)" stroke="currentColor" stroke-width="1.2"/>
-                                <ellipse cx="20" cy="20" rx="8" ry="18" transform="rotate(-30 20 20)" stroke="currentColor" stroke-width="1.2" opacity=".55"/>
-                                <circle cx="20" cy="20" r="4" fill="currentColor"/>
-                                <circle cx="34" cy="12" r="2.5" fill="#7dd3fc"/>
-                            </svg>
-                        </span>
-                        <div>
-                            <p class="label">COSMOS LAB · 交互模拟</p>
-                            <h2>宇宙引力实验室</h2>
-                        </div>
-                    </div>
-                    <p class="card-desc">太阳系物理模拟：探索太阳、八大行星与月球，逐个查看和编辑天体，观测真实轨道与守恒量。</p>
-                </a>
-                <a class="link-card project-card" href="https://github.com/mohui666/lom_modkit" target="_blank" rel="noopener noreferrer">
-                    <div class="card-head">
-                        <span class="icon-badge">🗡️</span>
-                        <div>
-                            <p class="label">活侠传 · Mod 工具</p>
-                            <h2>lom_modkit</h2>
-                        </div>
-                    </div>
-                    <p class="card-desc">图形化剧情 Mod 编辑器 + BepInEx 加载器，导出 .lommod 包互相分享。</p>
-                </a>
-                <a class="link-card project-card" href="https://mohui666.github.io/lom_save_analyzer/" target="_blank" rel="noopener noreferrer">
-                    <div class="card-head">
-                        <span class="icon-badge">🧭</span>
-                        <div>
-                            <p class="label">活侠传 · 在线工具</p>
-                            <h2>lom_save_analyzer</h2>
-                        </div>
-                    </div>
-                    <p class="card-desc">存档分析器网页版，点开即用：收集进度一览，与官方全量剧情对比未读对话。</p>
-                </a>
-                <a class="link-card project-card" href="https://github.com/mohui666/MortalInstantWin" target="_blank" rel="noopener noreferrer">
-                    <div class="card-head">
-                        <span class="icon-badge">⚔️</span>
-                        <div>
-                            <p class="label">活侠传 · 补丁</p>
-                            <h2>MortalInstantWin</h2>
-                        </div>
-                    </div>
-                    <p class="card-desc">战斗直接勝利/失敗补丁，水墨风游戏原生 UI（BepInEx 插件）。</p>
-                </a>
-            </div>
-        </section>
-
-        <section class="content-grid" aria-label="主页内容入口">
-            <article class="link-card feature-card">
-                <div class="card-head">
-                    <span class="icon-badge">✨</span>
-                    <div>
-                        <p class="label">About</p>
-                        <h2>关于我</h2>
-                    </div>
-                </div>
-                <p class="card-desc">常用入口、项目合集和个人站外主页。</p>
-                <div class="link-list">
-                    <a href="blog/index.html">Blog</a>
-                    <a href="projects/index.html">Projects</a>
-                    <a href="cosmos/">宇宙引力实验室</a>
-                    <a href="motion/index.html">动效实验场</a>
-                    <a href="palace/">宫阙 · 故宫三维漫游</a>
-                    <a href="dongyun/">东云漫研社 · 招新</a>
-                    <a href="projects/VideoPlayer/html/main.html">大家想看的东西</a>
-                    <a href="https://b23.tv/NfPPuQr">B站</a>
-                    <a href="https://mcbbs.wiki/wiki/mohui666">MCBBSWIKI</a>
-                    <a href="projects/ShanHaiJing/index.html">山海经</a>
-                    <a href="projects/mogai-quiz/index.html">毛概刷题</a>
-                </div>
-                <a class="github-link" href="https://github.com/mohui666" target="_blank" rel="noopener noreferrer">GitHub @mohui666</a>
-            </article>
-
-            <article class="link-card asoul-card">
-                <div class="card-head">
-                    <span class="icon-badge">🎤</span>
-                    <div>
-                        <p class="label">A-SOUL</p>
-                        <h2>ASOUL 相关</h2>
-                    </div>
-                </div>
-                <p class="card-desc">一键直达官方账号、成员主页和同人小说。</p>
-                <div class="member-grid">
-                    <a class="member ava" href="https://space.bilibili.com/672346917">向晚</a>
-                    <a class="member bella" href="https://space.bilibili.com/672353429">贝拉</a>
-                    <a class="member carol" href="https://space.bilibili.com/351609538">珈乐</a>
-                    <a class="member diana" href="https://space.bilibili.com/672328094">嘉然</a>
-                    <a class="member eileen" href="https://space.bilibili.com/672342685">乃琳</a>
-                </div>
-                <a class="novel-link" href="projects/Novel/-1.html">ASOUL 同人小说 · 魂归故里</a>
-            </article>
-
-            <article class="link-card friends-card">
-                <div class="card-head">
-                    <span class="icon-badge">🌐</span>
-                    <div>
-                        <p class="label">Links</p>
-                        <h2>友站</h2>
-                    </div>
-                </div>
-                <p class="card-desc">一些值得逛逛的朋友与社区链接。</p>
-                <div class="link-list compact">
-                    <a href="https://mcbbs.wiki/wiki/">MCBBSWIKI</a>
-                    <a href="https://jimmma.top">JimaLink</a>
-                    <a href="https://steve7811d.github.io">Steve7811D</a>
-                </div>
-            </article>
-        </section>
+<body data-start-view="home">
+  <div id="persona-app">
+    <main class="static-directory">
+      <p>MOHUI666 / PERSONAL HOMEPAGE</p>
+      <h1>关注嘉然，顿顿解馋。</h1>
+      <p>写点项目，收点链接，也喜欢 ASOUL。</p>
+      <nav aria-label="主页入口"><a href="projects/index.html">项目大厅</a><a href="blog/index.html">博客</a><a href="https://github.com/mohui666">GitHub</a></nav>
+      <h2>项目与收藏</h2>
+      <nav aria-label="项目与收藏"><a href="palace/">宫阙 · 故宫三维漫游</a><a href="cosmos/">宇宙引力实验室</a><a href="motion/index.html">Motion Field</a><a href="games/">默绘街机厅</a><a href="dongyun/">东云漫研社</a><a href="projects/Novel/-1.html">魂归故里</a><a href="projects/VideoPlayer/html/main.html">视频</a></nav>
+      <noscript><p>开启 JavaScript 可以进入 Persona 风格交互主页；上面的链接可直接访问。</p></noscript>
     </main>
-
-    <footer class="site-footer">
-        <nav class="footer-links" aria-label="页脚链接">
-            <a href="html/thanks.html">感谢名单</a>
-            <a href="blog/index.html">Blog</a>
-        </nav>
-        <p>本网站内容依据 CC-BY-NC 协议进行授权</p>
-    </footer>
+  </div>
 </body>
 </html>
