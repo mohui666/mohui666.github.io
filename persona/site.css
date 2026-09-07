@@ -342,3 +342,4 @@ button { touch-action: manipulation; }
   .about-scene .sc-main, .socials-scene .sc-main { left: 58%; right: 16px; }
   .about-scene .sc-label, .socials-scene .sc-label { font-size: 21px; line-height: 1.15; letter-spacing: 1px; }
 }
+.home-signature { padding: 8px 12px; background: #00184cbb; clip-path: polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%); }
