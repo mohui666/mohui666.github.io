@@ -4,7 +4,8 @@ Persona 3 风格的静态个人主页，展示公开项目、ASOUL 收藏、博�
 
 - `index.html`：主菜单；`#about`、`#archive`、`#socials`、`#projects` 可直接分享。
 - `projects/index.html`：项目大厅，兼容原入口。
-- `persona/content.js`：个人介绍、26 个项目、分类和收藏链接；中英文内容在这里维护。
+- `persona/content.js`：个人介绍、27 个项目、分类和收藏链接；中英文内容在这里维护。
+- `island/`：默绘岛，开放世界驾驶作品集；六个地区展示个人档案与 22 个公开项目，支持越野车、摩托、快艇、跟随镜头和手机摇杆。
 - `persona/site.js`、`persona/site.css`：原生浏览器模块、场景交互和响应式样式。
 - 原有博客、故宫、宇宙实验室、动效、游戏等子项目保持各自入口与实现。
 

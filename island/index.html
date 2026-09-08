@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#354c3c">
+  <meta name="description" content="驾驶越野车、摩托或快艇，探索 mohui666 的开放世界作品集：山野、海岸，以及沿途的产品与项目。">
+  <link rel="icon" href="../images/cover.ico">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./main.js"></script>
+  <title>默绘岛 · 开放世界作品集</title>
+</head>
+<body>
+  <main id="island-app">
+    <canvas id="world" aria-label="开放世界作品集。WASD 或方向键驾驶，Shift 加速，空格刹车，拖动调整视角，靠近地点按 E 查看。" tabindex="0"></canvas>
+    <div class="vignette" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="../" aria-label="返回 mohui666 主页"><span class="brand-mark" aria-hidden="true">m.</span><div class="brand-copy"><h1 id="island-title">默绘岛</h1><span class="brand-caption">MOHUI666 · 山野漫游</span></div></a>
+      <nav class="top-actions" aria-label="漫游工具"><button id="vehicles" class="pill">交通工具</button><button id="directory" class="pill">项目手册 <span>↗</span></button><button id="help" class="round-button" aria-label="操作说明">?</button><a class="round-button home-link" href="../" aria-label="返回个人主页">⌂</a></nav>
+    </header>
+    <div id="landmarks" aria-label="沿途地标"></div>
+    <div class="world-status" id="world-status" role="status">正在准备漫游…</div>
+    <div class="journey"><span id="journey-count">00 / 06</span><span>区域已探索</span><div class="journey-track"><i id="journey-progress"></i></div></div>
+    <aside class="map-widget" aria-label="岛屿地图">
+      <div class="map-heading"><span>沿途地图</span><span>N ↑</span></div>
+      <svg id="minimap" viewBox="0 0 160 112" role="img" aria-label="金色箭头表示你的位置"><path d="M16 44 28 23 48 16 60 10 92 12 111 23 138 33 149 54 137 73 119 82 99 97 68 101 43 89 24 76 10 60Z" fill="#c9d7b4" stroke="#f0e6c6" stroke-width="8"/><path d="M30 48Q33 26 61 26L105 28Q132 34 132 54Q128 79 104 80L51 80Q24 70 30 48ZM36 55 122 55M78 28 78 82" fill="none" stroke="#f1e9cd" stroke-width="3"/><g id="map-stations"></g><path id="map-car" d="M0 -5 3.5 4 0 2 -3.5 4Z" fill="#d68236" stroke="#fff9e9" stroke-width="1.2"/></svg>
+      <div class="map-actions"><button class="view-button" id="camera" aria-pressed="false" aria-label="切换全岛地图与漫游"><span>全岛</span><kbd>M</kbd></button><button id="reset" aria-label="返回营地">回营地 <kbd>R</kbd></button></div>
+    </aside>
+    <div class="touch-drive" id="joystick" role="group" aria-label="拖动摇杆驾驶"><span id="joystick-knob"></span><i aria-hidden="true">✣</i></div>
+    <div class="touch-actions" aria-label="驾驶控制"><button id="sprint" aria-label="切换加速" aria-pressed="false"><span aria-hidden="true">»</span>加速</button><button id="brake" aria-label="按住刹车"><span aria-hidden="true">Ⅱ</span>刹车</button></div>
+    <div class="touch-look-hint" aria-hidden="true">右侧拖动 · 看四周</div>
+    <button id="interact" class="interact" hidden><kbd>E</kbd><span>查看地点</span><b>↗</b></button>
+    <footer class="bottom-bar"><div class="drive-hint"><span><kbd>WASD</kbd> 驾驶</span><span><kbd>Shift</kbd> 加速</span><span><kbd>Space</kbd> 刹车</span><small>拖动看四周</small></div><nav class="destinations" id="destinations" aria-label="直接阅读六个区域的介绍"></nav></footer>
+    <dialog id="detail" aria-labelledby="detail-title"><div class="dialog-toolbar"><span id="detail-meta"></span><button class="close-button" aria-label="关闭面板">✕</button></div><div class="dialog-scroll" id="detail-body"></div></dialog>
+    <dialog id="garage" aria-labelledby="vehicle-title">
+      <div class="dialog-toolbar"><span>交通工具 / GARAGE</span><button class="close-button" aria-label="关闭车库">✕</button></div>
+      <div class="dialog-scroll"><p class="eyebrow">换一种方式，继续探索</p><h2 id="vehicle-title">今天开什么？</h2><p>沿山路穿过森林，或者从港口驶向海面。三种交通工具有各自的速度和转向手感。</p>
+        <div class="vehicle-list">
+          <button class="vehicle-card" data-vehicle="car" aria-pressed="true"><span class="vehicle-icon" aria-hidden="true"><svg viewBox="0 0 48 32"><path d="M7 23V13h7l5-8h15l5 8h4v10H7Z M14 13h24 M22 5v8 M32 5v8"/><circle cx="15" cy="24" r="5"/><circle cx="35" cy="24" r="5"/></svg></span><span class="vehicle-copy"><strong>越野车</strong><small>稳稳开过山路，转向从容。</small><em>陆地 · 稳定驾驶</em></span><span class="vehicle-arrow" aria-hidden="true">↗</span></button>
+          <button class="vehicle-card" data-vehicle="bike" aria-pressed="false"><span class="vehicle-icon" aria-hidden="true"><svg viewBox="0 0 48 32"><circle cx="11" cy="23" r="7"/><circle cx="38" cy="23" r="7"/><path d="m11 23 11-13 6 13H11 M20 10h10l8 13 M27 5h7l4 18 M19 10h-5"/></svg></span><span class="vehicle-copy"><strong>越野摩托</strong><small>轻快转向，体验不同的节奏。</small><em>陆地 · 灵活探索</em></span><span class="vehicle-arrow" aria-hidden="true">↗</span></button>
+          <button class="vehicle-card" data-vehicle="boat" aria-pressed="false"><span class="vehicle-icon" aria-hidden="true"><svg viewBox="0 0 48 32"><path d="m4 18 39-3-8 10H13L4 18Z M14 17l7-9h10l4 8 M23 8v8 M4 29q5-4 10 0t10 0 10 0 10 0"/></svg></span><span class="vehicle-copy"><strong>快艇</strong><small>从港口下水，绕着海岸兜风。</small><em>海面 · 开阔航行</em></span><span class="vehicle-arrow" aria-hidden="true">↗</span></button>
+        </div><p class="credit">选择快艇会前往港口下水。陆地交通工具与快艇的活动范围不同。</p>
+      </div>
+    </dialog>
+    <dialog id="guide" aria-labelledby="guide-title"><div class="dialog-toolbar"><span>漫游指南 / FIELD GUIDE</span><button class="close-button" aria-label="关闭操作说明">✕</button></div><div class="dialog-scroll"><p class="eyebrow">山路很长，慢慢来</p><h2 id="guide-title">挑一条路，<br>开出去看看。</h2><p>山坡、森林和海岸之间，散落着我的产品与项目。可以开车探索，也可以随时翻开手册。</p><dl class="controls-list"><div><dt>WASD / 方向键</dt><dd>前进、倒车与转向</dd></div><div><dt>Shift / 空格</dt><dd>加速 / 刹车</dd></div><div><dt>鼠标拖动</dt><dd>转动视角，看看四周</dd></div><div><dt>手机操作</dt><dd>左下摇杆驾驶；右侧空白处拖动视角；右下加速与刹车</dd></div><div><dt>E / Enter</dt><dd>靠近地标，打开介绍</dd></div><div><dt>M / R / Esc</dt><dd>全岛地图 / 回营地 / 关闭介绍</dd></div><div><dt>地点底栏 / 项目手册</dt><dd>直接阅读作品；介绍中的「前往这个地点」可带你到附近</dd></div><div><dt>交通工具</dt><dd>在越野车、越野摩托与快艇之间切换</dd></div></dl><p class="credit">探索式作品集的灵感来自 <a href="https://bruno-simon.com/" target="_blank" rel="noopener noreferrer">Bruno Simon ↗</a>。场景与交互独立实现；项目资料来自我的公开 GitHub 与个人主页。</p><button id="start-driving" class="solid-button">出发 <span>→</span></button></div></dialog>
+    <noscript><section class="no-js"><h2>默绘岛</h2><p>三维漫游需要 JavaScript。你仍可直接浏览我的作品。</p><a href="../projects/">打开项目大厅 →</a><a href="https://github.com/mohui666">查看 GitHub →</a></section></noscript>
+  </main>
+</body>
+</html>
