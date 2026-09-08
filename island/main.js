@@ -73,7 +73,7 @@ function openBook(filter = 'all') {
 document.addEventListener('click', (event) => {
   const travel = event.target.closest('[data-travel]');
   if (travel) travelTo(travel.dataset.travel);
-  const vehicle = event.target.closest('[data-vehicle]');
+  const vehicle = event.target.closest('.vehicle-card[data-vehicle]');
   if (vehicle) selectVehicle(vehicle.dataset.vehicle);
   const place = event.target.closest('[data-place]');
   if (place) openPlace(place.dataset.place);
@@ -137,7 +137,7 @@ function selectVehicle(mode) {
   toast(mode === 'boat' ? '快艇已在港口下水。WASD 驾驶，Shift 加速。' : `已换上${vehicleSpecs[mode].name}。W 前进，S 倒车，A / D 转向。`);
 }
 function updateVehicleUI() {
-  document.querySelectorAll('[data-vehicle]').forEach((el) => el.setAttribute('aria-pressed', String(el.dataset.vehicle === vehicleMode)));
+  document.querySelectorAll('.vehicle-card[data-vehicle]').forEach((el) => el.setAttribute('aria-pressed', String(el.dataset.vehicle === vehicleMode)));
   $('#vehicles').setAttribute('aria-label', `交通工具，当前${vehicleSpecs[vehicleMode].name}`);
 }
 function travelTo(id) {
